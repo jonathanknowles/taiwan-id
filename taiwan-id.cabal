@@ -1,10 +1,10 @@
 cabal-version:  3.0
-name:           roc-id
+name:           taiwan-id
 version:        0.4.0.0
 synopsis:       Implementation of the ROC (Taiwan) Uniform ID Number format.
 category:       Identification
-homepage:       https://github.com/jonathanknowles/roc-id#readme
-bug-reports:    https://github.com/jonathanknowles/roc-id/issues
+homepage:       https://github.com/jonathanknowles/taiwan-id#readme
+bug-reports:    https://github.com/jonathanknowles/taiwan-id/issues
 author:         Jonathan Knowles
 maintainer:     mail@jonathanknowles.net
 copyright:      Jonathan Knowles
@@ -69,7 +69,7 @@ custom-setup
 
 source-repository head
   type: git
-  location: https://github.com/jonathanknowles/roc-id
+  location: https://github.com/jonathanknowles/taiwan-id
 
 library
   import:
@@ -94,11 +94,11 @@ library
       ROC.ID.Unchecked
       ROC.ID.Utilities
   hs-source-dirs:
-      components/roc-id
+      components/taiwan-id
   ghc-options: -Wall
   default-language: Haskell2010
 
-test-suite roc-id-test
+test-suite taiwan-id-test
   import:
     , dependency-base
     , dependency-finitary
@@ -114,22 +114,22 @@ test-suite roc-id-test
   other-modules:
       Test.QuickCheck.Classes.Hspec
   hs-source-dirs:
-      components/roc-id-test
+      components/taiwan-id-test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-    , roc-id
+    , taiwan-id
   default-language: Haskell2010
 
-test-suite roc-id-test-docs
+test-suite taiwan-id-test-docs
   import:
     , dependency-base
     , dependency-doctest
   build-depends:
-    , roc-id
+    , taiwan-id
   x-doctest-options: --verbose
   type: exitcode-stdio-1.0
   main-is: Main.hs
   hs-source-dirs:
-    components/roc-id-test-docs
+    components/taiwan-id-test-docs
   ghc-options: -threaded
   default-language: Haskell2010

@@ -2,4 +2,4 @@ import Distribution.Extra.Doctest
   ( defaultMainWithDoctests )
 
 main :: IO ()
-main = defaultMainWithDoctests "roc-id-test-docs"
+main = defaultMainWithDoctests "taiwan-id-test-docs"
