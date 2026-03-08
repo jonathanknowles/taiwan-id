@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.CharIndex.html"><span class="hs-identifier">Taiwan.ID.CharIndex</span></a></span><span>
+</span><span id="line-5"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.CharIndex.html#CharIndex"><span class="hs-identifier">CharIndex</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>  </span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-comment">-- | Specifies the zero-based position of a character within a string.</span><span>
+</span><span id="line-10"></span><span class="hs-comment">--</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">newtype</span><span> </span><span id="CharIndex"><span class="annot"><a href="Taiwan.ID.CharIndex.html#CharIndex"><span class="hs-identifier hs-var">CharIndex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CharIndex"><span class="annot"><a href="Taiwan.ID.CharIndex.html#CharIndex"><span class="hs-identifier hs-var">CharIndex</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-12"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679159635"><span id="local-6989586621679159639"><span id="local-6989586621679159642"><span id="local-6989586621679159650"><span class="annot"><span class="annottext">ReadPrec [CharIndex]
+ReadPrec CharIndex
+Int -&gt; ReadS CharIndex
+ReadS [CharIndex]
+(Int -&gt; ReadS CharIndex)
+-&gt; ReadS [CharIndex]
+-&gt; ReadPrec CharIndex
+-&gt; ReadPrec [CharIndex]
+-&gt; Read CharIndex
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS CharIndex
+readsPrec :: Int -&gt; ReadS CharIndex
+$creadList :: ReadS [CharIndex]
+readList :: ReadS [CharIndex]
+$creadPrec :: ReadPrec CharIndex
+readPrec :: ReadPrec CharIndex
+$creadListPrec :: ReadPrec [CharIndex]
+readListPrec :: ReadPrec [CharIndex]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159657"><span id="local-6989586621679159663"><span id="local-6989586621679159667"><span class="annot"><span class="annottext">Int -&gt; CharIndex -&gt; ShowS
+[CharIndex] -&gt; ShowS
+CharIndex -&gt; String
+(Int -&gt; CharIndex -&gt; ShowS)
+-&gt; (CharIndex -&gt; String)
+-&gt; ([CharIndex] -&gt; ShowS)
+-&gt; Show CharIndex
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; CharIndex -&gt; ShowS
+showsPrec :: Int -&gt; CharIndex -&gt; ShowS
+$cshow :: CharIndex -&gt; String
+show :: CharIndex -&gt; String
+$cshowList :: [CharIndex] -&gt; ShowS
+showList :: [CharIndex] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">newtype</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679159672"><span id="local-6989586621679159677"><span id="local-6989586621679159681"><span id="local-6989586621679159685"><span id="local-6989586621679159689"><span id="local-6989586621679159693"><span id="local-6989586621679159697"><span id="local-6989586621679159701"><span class="annot"><span class="annottext">Int -&gt; CharIndex
+CharIndex -&gt; Int
+CharIndex -&gt; [CharIndex]
+CharIndex -&gt; CharIndex
+CharIndex -&gt; CharIndex -&gt; [CharIndex]
+CharIndex -&gt; CharIndex -&gt; CharIndex -&gt; [CharIndex]
+(CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex)
+-&gt; (Int -&gt; CharIndex)
+-&gt; (CharIndex -&gt; Int)
+-&gt; (CharIndex -&gt; [CharIndex])
+-&gt; (CharIndex -&gt; CharIndex -&gt; [CharIndex])
+-&gt; (CharIndex -&gt; CharIndex -&gt; [CharIndex])
+-&gt; (CharIndex -&gt; CharIndex -&gt; CharIndex -&gt; [CharIndex])
+-&gt; Enum CharIndex
+forall a.
+(a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Int -&gt; a)
+-&gt; (a -&gt; Int)
+-&gt; (a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; a -&gt; [a])
+-&gt; Enum a
+$csucc :: CharIndex -&gt; CharIndex
+succ :: CharIndex -&gt; CharIndex
+$cpred :: CharIndex -&gt; CharIndex
+pred :: CharIndex -&gt; CharIndex
+$ctoEnum :: Int -&gt; CharIndex
+toEnum :: Int -&gt; CharIndex
+$cfromEnum :: CharIndex -&gt; Int
+fromEnum :: CharIndex -&gt; Int
+$cenumFrom :: CharIndex -&gt; [CharIndex]
+enumFrom :: CharIndex -&gt; [CharIndex]
+$cenumFromThen :: CharIndex -&gt; CharIndex -&gt; [CharIndex]
+enumFromThen :: CharIndex -&gt; CharIndex -&gt; [CharIndex]
+$cenumFromTo :: CharIndex -&gt; CharIndex -&gt; [CharIndex]
+enumFromTo :: CharIndex -&gt; CharIndex -&gt; [CharIndex]
+$cenumFromThenTo :: CharIndex -&gt; CharIndex -&gt; CharIndex -&gt; [CharIndex]
+enumFromThenTo :: CharIndex -&gt; CharIndex -&gt; CharIndex -&gt; [CharIndex]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159711"><span id="local-6989586621679159716"><span class="annot"><span class="annottext">CharIndex -&gt; CharIndex -&gt; Bool
+(CharIndex -&gt; CharIndex -&gt; Bool)
+-&gt; (CharIndex -&gt; CharIndex -&gt; Bool) -&gt; Eq CharIndex
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: CharIndex -&gt; CharIndex -&gt; Bool
+== :: CharIndex -&gt; CharIndex -&gt; Bool
+$c/= :: CharIndex -&gt; CharIndex -&gt; Bool
+/= :: CharIndex -&gt; CharIndex -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159723"><span id="local-6989586621679159728"><span id="local-6989586621679159732"><span id="local-6989586621679159736"><span id="local-6989586621679159740"><span id="local-6989586621679159744"><span id="local-6989586621679159748"><span class="annot"><span class="annottext">Integer -&gt; CharIndex
+CharIndex -&gt; CharIndex
+CharIndex -&gt; CharIndex -&gt; CharIndex
+(CharIndex -&gt; CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex)
+-&gt; (Integer -&gt; CharIndex)
+-&gt; Num CharIndex
+forall a.
+(a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Integer -&gt; a)
+-&gt; Num a
+$c+ :: CharIndex -&gt; CharIndex -&gt; CharIndex
++ :: CharIndex -&gt; CharIndex -&gt; CharIndex
+$c- :: CharIndex -&gt; CharIndex -&gt; CharIndex
+- :: CharIndex -&gt; CharIndex -&gt; CharIndex
+$c* :: CharIndex -&gt; CharIndex -&gt; CharIndex
+* :: CharIndex -&gt; CharIndex -&gt; CharIndex
+$cnegate :: CharIndex -&gt; CharIndex
+negate :: CharIndex -&gt; CharIndex
+$cabs :: CharIndex -&gt; CharIndex
+abs :: CharIndex -&gt; CharIndex
+$csignum :: CharIndex -&gt; CharIndex
+signum :: CharIndex -&gt; CharIndex
+$cfromInteger :: Integer -&gt; CharIndex
+fromInteger :: Integer -&gt; CharIndex
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Num</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159760"><span id="local-6989586621679159764"><span id="local-6989586621679159768"><span id="local-6989586621679159772"><span id="local-6989586621679159776"><span id="local-6989586621679159780"><span id="local-6989586621679159784"><span class="annot"><span class="annottext">Eq CharIndex
+Eq CharIndex =&gt;
+(CharIndex -&gt; CharIndex -&gt; Ordering)
+-&gt; (CharIndex -&gt; CharIndex -&gt; Bool)
+-&gt; (CharIndex -&gt; CharIndex -&gt; Bool)
+-&gt; (CharIndex -&gt; CharIndex -&gt; Bool)
+-&gt; (CharIndex -&gt; CharIndex -&gt; Bool)
+-&gt; (CharIndex -&gt; CharIndex -&gt; CharIndex)
+-&gt; (CharIndex -&gt; CharIndex -&gt; CharIndex)
+-&gt; Ord CharIndex
+CharIndex -&gt; CharIndex -&gt; Bool
+CharIndex -&gt; CharIndex -&gt; Ordering
+CharIndex -&gt; CharIndex -&gt; CharIndex
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: CharIndex -&gt; CharIndex -&gt; Ordering
+compare :: CharIndex -&gt; CharIndex -&gt; Ordering
+$c&lt; :: CharIndex -&gt; CharIndex -&gt; Bool
+&lt; :: CharIndex -&gt; CharIndex -&gt; Bool
+$c&lt;= :: CharIndex -&gt; CharIndex -&gt; Bool
+&lt;= :: CharIndex -&gt; CharIndex -&gt; Bool
+$c&gt; :: CharIndex -&gt; CharIndex -&gt; Bool
+&gt; :: CharIndex -&gt; CharIndex -&gt; Bool
+$c&gt;= :: CharIndex -&gt; CharIndex -&gt; Bool
+&gt;= :: CharIndex -&gt; CharIndex -&gt; Bool
+$cmax :: CharIndex -&gt; CharIndex -&gt; CharIndex
+max :: CharIndex -&gt; CharIndex -&gt; CharIndex
+$cmin :: CharIndex -&gt; CharIndex -&gt; CharIndex
+min :: CharIndex -&gt; CharIndex -&gt; CharIndex
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span></pre></body></html>

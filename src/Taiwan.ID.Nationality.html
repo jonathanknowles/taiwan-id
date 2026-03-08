@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679160183"><span id="local-6989586621679160184"></span></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
+</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html"><span class="hs-identifier">Taiwan.ID.Nationality</span></a></span><span>
+</span><span id="line-6"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier">Nationality</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#generate"><span class="hs-identifier">generate</span></a></span><span>
+</span><span id="line-8"></span><span>  </span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Random.Class</span></span><span>
+</span><span id="line-12"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">MonadRandom</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Finitary</span></span><span>
+</span><span id="line-14"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Finitary</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.Generics</span></span><span>
+</span><span id="line-16"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Generic</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html"><span class="hs-identifier">Taiwan.ID.Utilities</span></a></span><span>
+</span><span id="line-18"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier">randomFinitary</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-comment">-- | Specifies a person's nationality.</span><span>
+</span><span id="line-21"></span><span class="hs-comment">--</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">data</span><span> </span><span id="Nationality"><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier hs-var">Nationality</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="National"><span class="annot"><a href="Taiwan.ID.Nationality.html#National"><span class="hs-identifier hs-var">National</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NonNational"><span class="annot"><a href="Taiwan.ID.Nationality.html#NonNational"><span class="hs-identifier hs-var">NonNational</span></a></span></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160190"><span id="local-6989586621679160192"><span class="annot"><span class="annottext">Nationality
+Nationality -&gt; Nationality -&gt; Bounded Nationality
+forall a. a -&gt; a -&gt; Bounded a
+$cminBound :: Nationality
+minBound :: Nationality
+$cmaxBound :: Nationality
+maxBound :: Nationality
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160198"><span id="local-6989586621679160206"><span id="local-6989586621679160211"><span id="local-6989586621679160217"><span id="local-6989586621679160220"><span id="local-6989586621679160225"><span id="local-6989586621679160232"><span id="local-6989586621679160236"><span class="annot"><span class="annottext">Int -&gt; Nationality
+Nationality -&gt; Int
+Nationality -&gt; [Nationality]
+Nationality -&gt; Nationality
+Nationality -&gt; Nationality -&gt; [Nationality]
+Nationality -&gt; Nationality -&gt; Nationality -&gt; [Nationality]
+(Nationality -&gt; Nationality)
+-&gt; (Nationality -&gt; Nationality)
+-&gt; (Int -&gt; Nationality)
+-&gt; (Nationality -&gt; Int)
+-&gt; (Nationality -&gt; [Nationality])
+-&gt; (Nationality -&gt; Nationality -&gt; [Nationality])
+-&gt; (Nationality -&gt; Nationality -&gt; [Nationality])
+-&gt; (Nationality -&gt; Nationality -&gt; Nationality -&gt; [Nationality])
+-&gt; Enum Nationality
+forall a.
+(a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Int -&gt; a)
+-&gt; (a -&gt; Int)
+-&gt; (a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; a -&gt; [a])
+-&gt; Enum a
+$csucc :: Nationality -&gt; Nationality
+succ :: Nationality -&gt; Nationality
+$cpred :: Nationality -&gt; Nationality
+pred :: Nationality -&gt; Nationality
+$ctoEnum :: Int -&gt; Nationality
+toEnum :: Int -&gt; Nationality
+$cfromEnum :: Nationality -&gt; Int
+fromEnum :: Nationality -&gt; Int
+$cenumFrom :: Nationality -&gt; [Nationality]
+enumFrom :: Nationality -&gt; [Nationality]
+$cenumFromThen :: Nationality -&gt; Nationality -&gt; [Nationality]
+enumFromThen :: Nationality -&gt; Nationality -&gt; [Nationality]
+$cenumFromTo :: Nationality -&gt; Nationality -&gt; [Nationality]
+enumFromTo :: Nationality -&gt; Nationality -&gt; [Nationality]
+$cenumFromThenTo :: Nationality -&gt; Nationality -&gt; Nationality -&gt; [Nationality]
+enumFromThenTo :: Nationality -&gt; Nationality -&gt; Nationality -&gt; [Nationality]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160244"><span id="local-6989586621679160248"><span class="annot"><span class="annottext">Nationality -&gt; Nationality -&gt; Bool
+(Nationality -&gt; Nationality -&gt; Bool)
+-&gt; (Nationality -&gt; Nationality -&gt; Bool) -&gt; Eq Nationality
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: Nationality -&gt; Nationality -&gt; Bool
+== :: Nationality -&gt; Nationality -&gt; Bool
+$c/= :: Nationality -&gt; Nationality -&gt; Bool
+/= :: Nationality -&gt; Nationality -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160255"><span id="local-6989586621679160257"><span id="local-6989586621679160259"><span id="local-6989586621679160263"><span id="local-6989586621679160266"><span id="local-6989586621679160269"><span id="local-6989586621679160272"><span class="annot"><span class="annottext">Eq Nationality
+Eq Nationality =&gt;
+(Nationality -&gt; Nationality -&gt; Ordering)
+-&gt; (Nationality -&gt; Nationality -&gt; Bool)
+-&gt; (Nationality -&gt; Nationality -&gt; Bool)
+-&gt; (Nationality -&gt; Nationality -&gt; Bool)
+-&gt; (Nationality -&gt; Nationality -&gt; Bool)
+-&gt; (Nationality -&gt; Nationality -&gt; Nationality)
+-&gt; (Nationality -&gt; Nationality -&gt; Nationality)
+-&gt; Ord Nationality
+Nationality -&gt; Nationality -&gt; Bool
+Nationality -&gt; Nationality -&gt; Ordering
+Nationality -&gt; Nationality -&gt; Nationality
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: Nationality -&gt; Nationality -&gt; Ordering
+compare :: Nationality -&gt; Nationality -&gt; Ordering
+$c&lt; :: Nationality -&gt; Nationality -&gt; Bool
+&lt; :: Nationality -&gt; Nationality -&gt; Bool
+$c&lt;= :: Nationality -&gt; Nationality -&gt; Bool
+&lt;= :: Nationality -&gt; Nationality -&gt; Bool
+$c&gt; :: Nationality -&gt; Nationality -&gt; Bool
+&gt; :: Nationality -&gt; Nationality -&gt; Bool
+$c&gt;= :: Nationality -&gt; Nationality -&gt; Bool
+&gt;= :: Nationality -&gt; Nationality -&gt; Bool
+$cmax :: Nationality -&gt; Nationality -&gt; Nationality
+max :: Nationality -&gt; Nationality -&gt; Nationality
+$cmin :: Nationality -&gt; Nationality -&gt; Nationality
+min :: Nationality -&gt; Nationality -&gt; Nationality
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160280"><span id="local-6989586621679160282"><span class="annot"><span class="annottext">(forall x. Nationality -&gt; Rep Nationality x)
+-&gt; (forall x. Rep Nationality x -&gt; Nationality)
+-&gt; Generic Nationality
+forall x. Rep Nationality x -&gt; Nationality
+forall x. Nationality -&gt; Rep Nationality x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Nationality -&gt; Rep Nationality x
+from :: forall x. Nationality -&gt; Rep Nationality x
+$cto :: forall x. Rep Nationality x -&gt; Nationality
+to :: forall x. Rep Nationality x -&gt; Nationality
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160288"><span id="local-6989586621679160292"><span id="local-6989586621679160295"><span id="local-6989586621679160300"><span class="annot"><span class="annottext">ReadPrec [Nationality]
+ReadPrec Nationality
+Int -&gt; ReadS Nationality
+ReadS [Nationality]
+(Int -&gt; ReadS Nationality)
+-&gt; ReadS [Nationality]
+-&gt; ReadPrec Nationality
+-&gt; ReadPrec [Nationality]
+-&gt; Read Nationality
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS Nationality
+readsPrec :: Int -&gt; ReadS Nationality
+$creadList :: ReadS [Nationality]
+readList :: ReadS [Nationality]
+$creadPrec :: ReadPrec Nationality
+readPrec :: ReadPrec Nationality
+$creadListPrec :: ReadPrec [Nationality]
+readListPrec :: ReadPrec [Nationality]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160307"><span id="local-6989586621679160309"><span id="local-6989586621679160313"><span class="annot"><span class="annottext">Int -&gt; Nationality -&gt; ShowS
+[Nationality] -&gt; ShowS
+Nationality -&gt; String
+(Int -&gt; Nationality -&gt; ShowS)
+-&gt; (Nationality -&gt; String)
+-&gt; ([Nationality] -&gt; ShowS)
+-&gt; Show Nationality
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Nationality -&gt; ShowS
+showsPrec :: Int -&gt; Nationality -&gt; ShowS
+$cshow :: Nationality -&gt; String
+show :: Nationality -&gt; String
+$cshowList :: [Nationality] -&gt; ShowS
+showList :: [Nationality] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679160323"><span id="local-6989586621679160332"><span id="local-6989586621679160340"><span id="local-6989586621679160346"><span id="local-6989586621679160352"><span id="local-6989586621679160355"><span class="annot"><span class="annottext">Eq Nationality
+KnownNat (Cardinality Nationality)
+(Eq Nationality, KnownNat (Cardinality Nationality)) =&gt;
+(Finite (Cardinality Nationality) -&gt; Nationality)
+-&gt; (Nationality -&gt; Finite (Cardinality Nationality))
+-&gt; ((1 &lt;= Cardinality Nationality) =&gt; Nationality)
+-&gt; ((1 &lt;= Cardinality Nationality) =&gt; Nationality)
+-&gt; (Nationality -&gt; Maybe Nationality)
+-&gt; (Nationality -&gt; Maybe Nationality)
+-&gt; Finitary Nationality
+(1 &lt;= Cardinality Nationality) =&gt; Nationality
+Finite (Cardinality Nationality) -&gt; Nationality
+Nationality -&gt; Maybe Nationality
+Nationality -&gt; Finite (Cardinality Nationality)
+forall a.
+(Eq a, KnownNat (Cardinality a)) =&gt;
+(Finite (Cardinality a) -&gt; a)
+-&gt; (a -&gt; Finite (Cardinality a))
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; (a -&gt; Maybe a)
+-&gt; (a -&gt; Maybe a)
+-&gt; Finitary a
+$cfromFinite :: Finite (Cardinality Nationality) -&gt; Nationality
+fromFinite :: Finite (Cardinality Nationality) -&gt; Nationality
+$ctoFinite :: Nationality -&gt; Finite (Cardinality Nationality)
+toFinite :: Nationality -&gt; Finite (Cardinality Nationality)
+$cstart :: (1 &lt;= Cardinality Nationality) =&gt; Nationality
+start :: (1 &lt;= Cardinality Nationality) =&gt; Nationality
+$cend :: (1 &lt;= Cardinality Nationality) =&gt; Nationality
+end :: (1 &lt;= Cardinality Nationality) =&gt; Nationality
+$cprevious :: Nationality -&gt; Maybe Nationality
+previous :: Nationality -&gt; Maybe Nationality
+$cnext :: Nationality -&gt; Maybe Nationality
+next :: Nationality -&gt; Maybe Nationality
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Finitary</span></span></span></span></span></span></span></span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | Generates a random 'Nationality'.</span><span>
+</span><span id="line-27"></span><span class="hs-comment">--</span><span>
+</span><span id="line-28"></span><span id="local-6989586621679160178"><span class="annot"><a href="Taiwan.ID.Nationality.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679160178"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679160178"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier hs-type">Nationality</span></a></span></span><span>
+</span><span id="line-29"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m Nationality
+</span><a href="Taiwan.ID.Nationality.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Nationality
+forall (m :: * -&gt; *) a.
+(MonadRandom m, Finitary a, 1 &lt;= Cardinality a) =&gt;
+m a
+</span><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier hs-var">randomFinitary</span></a></span><span>
+</span><span id="line-30"></span></pre></body></html>

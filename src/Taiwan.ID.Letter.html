@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679160454"><span id="local-6989586621679160455"></span></span><span class="hs-pragma">{-# LANGUAGE DataKinds #-}</span><span>
+</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
+</span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-4"></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE TypeFamilies #-}</span><span>
+</span><span id="line-6"></span><span class="hs-pragma">{-# LANGUAGE UndecidableInstances #-}</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html"><span class="hs-identifier">Taiwan.ID.Letter</span></a></span><span>
+</span><span id="line-9"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier">Letter</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#fromChar"><span class="hs-identifier">fromChar</span></a></span><span>
+</span><span id="line-11"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#toChar"><span class="hs-identifier">toChar</span></a></span><span>
+</span><span id="line-12"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#generate"><span class="hs-identifier">generate</span></a></span><span>
+</span><span id="line-13"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier">FromChar</span></a></span><span>
+</span><span id="line-14"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Random.Class</span></span><span>
+</span><span id="line-17"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">MonadRandom</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Finitary</span></span><span>
+</span><span id="line-19"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Finitary</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.Generics</span></span><span>
+</span><span id="line-21"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Generic</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html"><span class="hs-identifier">Taiwan.ID.Utilities</span></a></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier">randomFinitary</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Read</span></span><span>
+</span><span id="line-25"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">readMaybe</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="hs-comment">-- | Represents a letter in the latin alphabet.</span><span>
+</span><span id="line-28"></span><span class="hs-comment">--</span><span>
+</span><span id="line-29"></span><span class="hs-keyword">data</span><span> </span><span id="Letter"><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-var">Letter</span></a></span></span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="A"><span class="annot"><a href="Taiwan.ID.Letter.html#A"><span class="hs-identifier hs-var">A</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="B"><span class="annot"><a href="Taiwan.ID.Letter.html#B"><span class="hs-identifier hs-var">B</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="C"><span class="annot"><a href="Taiwan.ID.Letter.html#C"><span class="hs-identifier hs-var">C</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="D"><span class="annot"><a href="Taiwan.ID.Letter.html#D"><span class="hs-identifier hs-var">D</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="E"><span class="annot"><a href="Taiwan.ID.Letter.html#E"><span class="hs-identifier hs-var">E</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="F"><span class="annot"><a href="Taiwan.ID.Letter.html#F"><span class="hs-identifier hs-var">F</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="G"><span class="annot"><a href="Taiwan.ID.Letter.html#G"><span class="hs-identifier hs-var">G</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="H"><span class="annot"><a href="Taiwan.ID.Letter.html#H"><span class="hs-identifier hs-var">H</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="I"><span class="annot"><a href="Taiwan.ID.Letter.html#I"><span class="hs-identifier hs-var">I</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="J"><span class="annot"><a href="Taiwan.ID.Letter.html#J"><span class="hs-identifier hs-var">J</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="K"><span class="annot"><a href="Taiwan.ID.Letter.html#K"><span class="hs-identifier hs-var">K</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="L"><span class="annot"><a href="Taiwan.ID.Letter.html#L"><span class="hs-identifier hs-var">L</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="M"><span class="annot"><a href="Taiwan.ID.Letter.html#M"><span class="hs-identifier hs-var">M</span></a></span></span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="N"><span class="annot"><a href="Taiwan.ID.Letter.html#N"><span class="hs-identifier hs-var">N</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="O"><span class="annot"><a href="Taiwan.ID.Letter.html#O"><span class="hs-identifier hs-var">O</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="P"><span class="annot"><a href="Taiwan.ID.Letter.html#P"><span class="hs-identifier hs-var">P</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Q"><span class="annot"><a href="Taiwan.ID.Letter.html#Q"><span class="hs-identifier hs-var">Q</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="R"><span class="annot"><a href="Taiwan.ID.Letter.html#R"><span class="hs-identifier hs-var">R</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="S"><span class="annot"><a href="Taiwan.ID.Letter.html#S"><span class="hs-identifier hs-var">S</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="T"><span class="annot"><a href="Taiwan.ID.Letter.html#T"><span class="hs-identifier hs-var">T</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="U"><span class="annot"><a href="Taiwan.ID.Letter.html#U"><span class="hs-identifier hs-var">U</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="V"><span class="annot"><a href="Taiwan.ID.Letter.html#V"><span class="hs-identifier hs-var">V</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="W"><span class="annot"><a href="Taiwan.ID.Letter.html#W"><span class="hs-identifier hs-var">W</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="X"><span class="annot"><a href="Taiwan.ID.Letter.html#X"><span class="hs-identifier hs-var">X</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Y"><span class="annot"><a href="Taiwan.ID.Letter.html#Y"><span class="hs-identifier hs-var">Y</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Z"><span class="annot"><a href="Taiwan.ID.Letter.html#Z"><span class="hs-identifier hs-var">Z</span></a></span></span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160495"><span id="local-6989586621679160497"><span class="annot"><span class="annottext">Letter
+Letter -&gt; Letter -&gt; Bounded Letter
+forall a. a -&gt; a -&gt; Bounded a
+$cminBound :: Letter
+minBound :: Letter
+$cmaxBound :: Letter
+maxBound :: Letter
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160503"><span id="local-6989586621679160511"><span id="local-6989586621679160516"><span id="local-6989586621679160522"><span id="local-6989586621679160525"><span id="local-6989586621679160530"><span id="local-6989586621679160537"><span id="local-6989586621679160541"><span class="annot"><span class="annottext">Int -&gt; Letter
+Letter -&gt; Int
+Letter -&gt; [Letter]
+Letter -&gt; Letter
+Letter -&gt; Letter -&gt; [Letter]
+Letter -&gt; Letter -&gt; Letter -&gt; [Letter]
+(Letter -&gt; Letter)
+-&gt; (Letter -&gt; Letter)
+-&gt; (Int -&gt; Letter)
+-&gt; (Letter -&gt; Int)
+-&gt; (Letter -&gt; [Letter])
+-&gt; (Letter -&gt; Letter -&gt; [Letter])
+-&gt; (Letter -&gt; Letter -&gt; [Letter])
+-&gt; (Letter -&gt; Letter -&gt; Letter -&gt; [Letter])
+-&gt; Enum Letter
+forall a.
+(a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Int -&gt; a)
+-&gt; (a -&gt; Int)
+-&gt; (a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; a -&gt; [a])
+-&gt; Enum a
+$csucc :: Letter -&gt; Letter
+succ :: Letter -&gt; Letter
+$cpred :: Letter -&gt; Letter
+pred :: Letter -&gt; Letter
+$ctoEnum :: Int -&gt; Letter
+toEnum :: Int -&gt; Letter
+$cfromEnum :: Letter -&gt; Int
+fromEnum :: Letter -&gt; Int
+$cenumFrom :: Letter -&gt; [Letter]
+enumFrom :: Letter -&gt; [Letter]
+$cenumFromThen :: Letter -&gt; Letter -&gt; [Letter]
+enumFromThen :: Letter -&gt; Letter -&gt; [Letter]
+$cenumFromTo :: Letter -&gt; Letter -&gt; [Letter]
+enumFromTo :: Letter -&gt; Letter -&gt; [Letter]
+$cenumFromThenTo :: Letter -&gt; Letter -&gt; Letter -&gt; [Letter]
+enumFromThenTo :: Letter -&gt; Letter -&gt; Letter -&gt; [Letter]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160549"><span id="local-6989586621679160553"><span class="annot"><span class="annottext">Letter -&gt; Letter -&gt; Bool
+(Letter -&gt; Letter -&gt; Bool)
+-&gt; (Letter -&gt; Letter -&gt; Bool) -&gt; Eq Letter
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: Letter -&gt; Letter -&gt; Bool
+== :: Letter -&gt; Letter -&gt; Bool
+$c/= :: Letter -&gt; Letter -&gt; Bool
+/= :: Letter -&gt; Letter -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160558"><span id="local-6989586621679160560"><span class="annot"><span class="annottext">(forall x. Letter -&gt; Rep Letter x)
+-&gt; (forall x. Rep Letter x -&gt; Letter) -&gt; Generic Letter
+forall x. Rep Letter x -&gt; Letter
+forall x. Letter -&gt; Rep Letter x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Letter -&gt; Rep Letter x
+from :: forall x. Letter -&gt; Rep Letter x
+$cto :: forall x. Rep Letter x -&gt; Letter
+to :: forall x. Rep Letter x -&gt; Letter
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160568"><span id="local-6989586621679160572"><span id="local-6989586621679160576"><span id="local-6989586621679160580"><span id="local-6989586621679160583"><span id="local-6989586621679160586"><span id="local-6989586621679160589"><span class="annot"><span class="annottext">Eq Letter
+Eq Letter =&gt;
+(Letter -&gt; Letter -&gt; Ordering)
+-&gt; (Letter -&gt; Letter -&gt; Bool)
+-&gt; (Letter -&gt; Letter -&gt; Bool)
+-&gt; (Letter -&gt; Letter -&gt; Bool)
+-&gt; (Letter -&gt; Letter -&gt; Bool)
+-&gt; (Letter -&gt; Letter -&gt; Letter)
+-&gt; (Letter -&gt; Letter -&gt; Letter)
+-&gt; Ord Letter
+Letter -&gt; Letter -&gt; Bool
+Letter -&gt; Letter -&gt; Ordering
+Letter -&gt; Letter -&gt; Letter
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: Letter -&gt; Letter -&gt; Ordering
+compare :: Letter -&gt; Letter -&gt; Ordering
+$c&lt; :: Letter -&gt; Letter -&gt; Bool
+&lt; :: Letter -&gt; Letter -&gt; Bool
+$c&lt;= :: Letter -&gt; Letter -&gt; Bool
+&lt;= :: Letter -&gt; Letter -&gt; Bool
+$c&gt; :: Letter -&gt; Letter -&gt; Bool
+&gt; :: Letter -&gt; Letter -&gt; Bool
+$c&gt;= :: Letter -&gt; Letter -&gt; Bool
+&gt;= :: Letter -&gt; Letter -&gt; Bool
+$cmax :: Letter -&gt; Letter -&gt; Letter
+max :: Letter -&gt; Letter -&gt; Letter
+$cmin :: Letter -&gt; Letter -&gt; Letter
+min :: Letter -&gt; Letter -&gt; Letter
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160597"><span id="local-6989586621679160600"><span id="local-6989586621679160603"><span id="local-6989586621679160632"><span class="annot"><span class="annottext">ReadPrec [Letter]
+ReadPrec Letter
+Int -&gt; ReadS Letter
+ReadS [Letter]
+(Int -&gt; ReadS Letter)
+-&gt; ReadS [Letter]
+-&gt; ReadPrec Letter
+-&gt; ReadPrec [Letter]
+-&gt; Read Letter
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS Letter
+readsPrec :: Int -&gt; ReadS Letter
+$creadList :: ReadS [Letter]
+readList :: ReadS [Letter]
+$creadPrec :: ReadPrec Letter
+readPrec :: ReadPrec Letter
+$creadListPrec :: ReadPrec [Letter]
+readListPrec :: ReadPrec [Letter]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160639"><span id="local-6989586621679160641"><span id="local-6989586621679160644"><span class="annot"><span class="annottext">Int -&gt; Letter -&gt; ShowS
+[Letter] -&gt; ShowS
+Letter -&gt; String
+(Int -&gt; Letter -&gt; ShowS)
+-&gt; (Letter -&gt; String) -&gt; ([Letter] -&gt; ShowS) -&gt; Show Letter
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Letter -&gt; ShowS
+showsPrec :: Int -&gt; Letter -&gt; ShowS
+$cshow :: Letter -&gt; String
+show :: Letter -&gt; String
+$cshowList :: [Letter] -&gt; ShowS
+showList :: [Letter] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679160654"><span id="local-6989586621679160663"><span id="local-6989586621679160671"><span id="local-6989586621679160677"><span id="local-6989586621679160683"><span id="local-6989586621679160686"><span class="annot"><span class="annottext">Eq Letter
+KnownNat (Cardinality Letter)
+(Eq Letter, KnownNat (Cardinality Letter)) =&gt;
+(Finite (Cardinality Letter) -&gt; Letter)
+-&gt; (Letter -&gt; Finite (Cardinality Letter))
+-&gt; ((1 &lt;= Cardinality Letter) =&gt; Letter)
+-&gt; ((1 &lt;= Cardinality Letter) =&gt; Letter)
+-&gt; (Letter -&gt; Maybe Letter)
+-&gt; (Letter -&gt; Maybe Letter)
+-&gt; Finitary Letter
+(1 &lt;= Cardinality Letter) =&gt; Letter
+Finite (Cardinality Letter) -&gt; Letter
+Letter -&gt; Maybe Letter
+Letter -&gt; Finite (Cardinality Letter)
+forall a.
+(Eq a, KnownNat (Cardinality a)) =&gt;
+(Finite (Cardinality a) -&gt; a)
+-&gt; (a -&gt; Finite (Cardinality a))
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; (a -&gt; Maybe a)
+-&gt; (a -&gt; Maybe a)
+-&gt; Finitary a
+$cfromFinite :: Finite (Cardinality Letter) -&gt; Letter
+fromFinite :: Finite (Cardinality Letter) -&gt; Letter
+$ctoFinite :: Letter -&gt; Finite (Cardinality Letter)
+toFinite :: Letter -&gt; Finite (Cardinality Letter)
+$cstart :: (1 &lt;= Cardinality Letter) =&gt; Letter
+start :: (1 &lt;= Cardinality Letter) =&gt; Letter
+$cend :: (1 &lt;= Cardinality Letter) =&gt; Letter
+end :: (1 &lt;= Cardinality Letter) =&gt; Letter
+$cprevious :: Letter -&gt; Maybe Letter
+previous :: Letter -&gt; Maybe Letter
+$cnext :: Letter -&gt; Maybe Letter
+next :: Letter -&gt; Maybe Letter
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Finitary</span></span></span></span></span></span></span></span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- | Attempts to parse a 'Letter' from a character.</span><span>
+</span><span id="line-36"></span><span class="hs-comment">--</span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- Returns 'Nothing' if the specified character is not an uppercase alphabetic</span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- character.</span><span>
+</span><span id="line-39"></span><span class="hs-comment">--</span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Taiwan.ID.Letter.html#fromChar"><span class="hs-identifier hs-type">fromChar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span>
+</span><span id="line-41"></span><span id="fromChar"><span class="annot"><span class="annottext">fromChar :: Char -&gt; Maybe Letter
+</span><a href="Taiwan.ID.Letter.html#fromChar"><span class="hs-identifier hs-var hs-var">fromChar</span></a></span></span><span> </span><span id="local-6989586621679160796"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679160796"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Maybe Letter
+forall a. Read a =&gt; String -&gt; Maybe a
+</span><span class="hs-identifier hs-var">readMaybe</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679160796"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="hs-comment">-- | Converts the specified 'Letter' to a character.</span><span>
+</span><span id="line-44"></span><span class="hs-comment">--</span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Taiwan.ID.Letter.html#toChar"><span class="hs-identifier hs-type">toChar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span>
+</span><span id="line-46"></span><span id="toChar"><span class="annot"><span class="annottext">toChar :: Letter -&gt; Char
+</span><a href="Taiwan.ID.Letter.html#toChar"><span class="hs-identifier hs-var hs-var">toChar</span></a></span></span><span> </span><span id="local-6989586621679160797"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679160797"><span class="hs-identifier hs-var">letter</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter -&gt; String
+forall a. Show a =&gt; a -&gt; String
+</span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679160797"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-47"></span><span>  </span><span class="hs-special">[</span><span id="local-6989586621679160799"><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679160799"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Char
+</span><a href="#local-6989586621679160799"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Char
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;toChar&quot;</span></span><span>
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span class="hs-comment">-- | Generates a random 'Letter'.</span><span>
+</span><span id="line-51"></span><span class="hs-comment">--</span><span>
+</span><span id="line-52"></span><span id="local-6989586621679160449"><span class="annot"><a href="Taiwan.ID.Letter.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679160449"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679160449"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span></span><span>
+</span><span id="line-53"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m Letter
+</span><a href="Taiwan.ID.Letter.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Letter
+forall (m :: * -&gt; *) a.
+(MonadRandom m, Finitary a, 1 &lt;= Cardinality a) =&gt;
+m a
+</span><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier hs-var">randomFinitary</span></a></span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="hs-keyword">type</span><span> </span><span class="hs-keyword">family</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160806"><span class="annot"><a href="#local-6989586621679160806"><span class="hs-identifier hs-type">c</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-56"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'A'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#A"><span class="hs-identifier hs-type">A</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'N'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#N"><span class="hs-identifier hs-type">N</span></a></span><span>
+</span><span id="line-57"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'B'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#B"><span class="hs-identifier hs-type">B</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'O'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#O"><span class="hs-identifier hs-type">O</span></a></span><span>
+</span><span id="line-58"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'C'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#C"><span class="hs-identifier hs-type">C</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'P'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#P"><span class="hs-identifier hs-type">P</span></a></span><span>
+</span><span id="line-59"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'D'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#D"><span class="hs-identifier hs-type">D</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'Q'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Q"><span class="hs-identifier hs-type">Q</span></a></span><span>
+</span><span id="line-60"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'E'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#E"><span class="hs-identifier hs-type">E</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'R'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#R"><span class="hs-identifier hs-type">R</span></a></span><span>
+</span><span id="line-61"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'F'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#F"><span class="hs-identifier hs-type">F</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'S'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#S"><span class="hs-identifier hs-type">S</span></a></span><span>
+</span><span id="line-62"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'G'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#G"><span class="hs-identifier hs-type">G</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'T'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#T"><span class="hs-identifier hs-type">T</span></a></span><span>
+</span><span id="line-63"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'H'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#H"><span class="hs-identifier hs-type">H</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'U'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#U"><span class="hs-identifier hs-type">U</span></a></span><span>
+</span><span id="line-64"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'I'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#I"><span class="hs-identifier hs-type">I</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'V'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#V"><span class="hs-identifier hs-type">V</span></a></span><span>
+</span><span id="line-65"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'J'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#J"><span class="hs-identifier hs-type">J</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'W'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#W"><span class="hs-identifier hs-type">W</span></a></span><span>
+</span><span id="line-66"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'K'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#K"><span class="hs-identifier hs-type">K</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'X'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#X"><span class="hs-identifier hs-type">X</span></a></span><span>
+</span><span id="line-67"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'L'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#L"><span class="hs-identifier hs-type">L</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'Y'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Y"><span class="hs-identifier hs-type">Y</span></a></span><span>
+</span><span id="line-68"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'M'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#M"><span class="hs-identifier hs-type">M</span></a></span><span class="hs-special">;</span><span> </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-char">'Z'</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Z"><span class="hs-identifier hs-type">Z</span></a></span><span>
+</span><span id="line-69"></span><span>  </span><span id="FromChar"><span class="annot"><a href="Taiwan.ID.Letter.html#FromChar"><span class="hs-identifier hs-var">FromChar</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Nothing</span></span><span>
+</span><span id="line-70"></span></pre></body></html>

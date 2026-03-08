@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679161290"><span id="local-6989586621679161291"></span></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
+</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><span id="line-4"></span><span class="hs-pragma">{-# LANGUAGE LambdaCase #-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE OverloadedStrings #-}</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html"><span class="hs-identifier">Taiwan.ID.Gender</span></a></span><span>
+</span><span id="line-8"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier">Gender</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#toText"><span class="hs-identifier">toText</span></a></span><span>
+</span><span id="line-10"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#generate"><span class="hs-identifier">generate</span></a></span><span>
+</span><span id="line-11"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Random.Class</span></span><span>
+</span><span id="line-14"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">MonadRandom</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Finitary</span></span><span>
+</span><span id="line-16"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Finitary</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span>
+</span><span id="line-18"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Text</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.Generics</span></span><span>
+</span><span id="line-20"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Generic</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html"><span class="hs-identifier">Taiwan.ID.Language</span></a></span><span>
+</span><span id="line-22"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier">Language</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html"><span class="hs-identifier">Taiwan.ID.Utilities</span></a></span><span>
+</span><span id="line-24"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier">randomFinitary</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | A person's gender, encodable within a Taiwan national identification</span><span>
+</span><span id="line-27"></span><span class="hs-comment">--   number.</span><span>
+</span><span id="line-28"></span><span class="hs-comment">--</span><span>
+</span><span id="line-29"></span><span class="hs-keyword">data</span><span> </span><span id="Gender"><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-var">Gender</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Male"><span class="annot"><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Female"><span class="annot"><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span></span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679161303"><span id="local-6989586621679161305"><span class="annot"><span class="annottext">Gender
+Gender -&gt; Gender -&gt; Bounded Gender
+forall a. a -&gt; a -&gt; Bounded a
+$cminBound :: Gender
+minBound :: Gender
+$cmaxBound :: Gender
+maxBound :: Gender
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161311"><span id="local-6989586621679161319"><span id="local-6989586621679161324"><span id="local-6989586621679161330"><span id="local-6989586621679161333"><span id="local-6989586621679161338"><span id="local-6989586621679161345"><span id="local-6989586621679161349"><span class="annot"><span class="annottext">Int -&gt; Gender
+Gender -&gt; Int
+Gender -&gt; [Gender]
+Gender -&gt; Gender
+Gender -&gt; Gender -&gt; [Gender]
+Gender -&gt; Gender -&gt; Gender -&gt; [Gender]
+(Gender -&gt; Gender)
+-&gt; (Gender -&gt; Gender)
+-&gt; (Int -&gt; Gender)
+-&gt; (Gender -&gt; Int)
+-&gt; (Gender -&gt; [Gender])
+-&gt; (Gender -&gt; Gender -&gt; [Gender])
+-&gt; (Gender -&gt; Gender -&gt; [Gender])
+-&gt; (Gender -&gt; Gender -&gt; Gender -&gt; [Gender])
+-&gt; Enum Gender
+forall a.
+(a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Int -&gt; a)
+-&gt; (a -&gt; Int)
+-&gt; (a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; a -&gt; [a])
+-&gt; Enum a
+$csucc :: Gender -&gt; Gender
+succ :: Gender -&gt; Gender
+$cpred :: Gender -&gt; Gender
+pred :: Gender -&gt; Gender
+$ctoEnum :: Int -&gt; Gender
+toEnum :: Int -&gt; Gender
+$cfromEnum :: Gender -&gt; Int
+fromEnum :: Gender -&gt; Int
+$cenumFrom :: Gender -&gt; [Gender]
+enumFrom :: Gender -&gt; [Gender]
+$cenumFromThen :: Gender -&gt; Gender -&gt; [Gender]
+enumFromThen :: Gender -&gt; Gender -&gt; [Gender]
+$cenumFromTo :: Gender -&gt; Gender -&gt; [Gender]
+enumFromTo :: Gender -&gt; Gender -&gt; [Gender]
+$cenumFromThenTo :: Gender -&gt; Gender -&gt; Gender -&gt; [Gender]
+enumFromThenTo :: Gender -&gt; Gender -&gt; Gender -&gt; [Gender]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161357"><span id="local-6989586621679161361"><span class="annot"><span class="annottext">Gender -&gt; Gender -&gt; Bool
+(Gender -&gt; Gender -&gt; Bool)
+-&gt; (Gender -&gt; Gender -&gt; Bool) -&gt; Eq Gender
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: Gender -&gt; Gender -&gt; Bool
+== :: Gender -&gt; Gender -&gt; Bool
+$c/= :: Gender -&gt; Gender -&gt; Bool
+/= :: Gender -&gt; Gender -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161366"><span id="local-6989586621679161368"><span class="annot"><span class="annottext">(forall x. Gender -&gt; Rep Gender x)
+-&gt; (forall x. Rep Gender x -&gt; Gender) -&gt; Generic Gender
+forall x. Rep Gender x -&gt; Gender
+forall x. Gender -&gt; Rep Gender x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Gender -&gt; Rep Gender x
+from :: forall x. Gender -&gt; Rep Gender x
+$cto :: forall x. Rep Gender x -&gt; Gender
+to :: forall x. Rep Gender x -&gt; Gender
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161376"><span id="local-6989586621679161378"><span id="local-6989586621679161380"><span id="local-6989586621679161384"><span id="local-6989586621679161387"><span id="local-6989586621679161390"><span id="local-6989586621679161393"><span class="annot"><span class="annottext">Eq Gender
+Eq Gender =&gt;
+(Gender -&gt; Gender -&gt; Ordering)
+-&gt; (Gender -&gt; Gender -&gt; Bool)
+-&gt; (Gender -&gt; Gender -&gt; Bool)
+-&gt; (Gender -&gt; Gender -&gt; Bool)
+-&gt; (Gender -&gt; Gender -&gt; Bool)
+-&gt; (Gender -&gt; Gender -&gt; Gender)
+-&gt; (Gender -&gt; Gender -&gt; Gender)
+-&gt; Ord Gender
+Gender -&gt; Gender -&gt; Bool
+Gender -&gt; Gender -&gt; Ordering
+Gender -&gt; Gender -&gt; Gender
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: Gender -&gt; Gender -&gt; Ordering
+compare :: Gender -&gt; Gender -&gt; Ordering
+$c&lt; :: Gender -&gt; Gender -&gt; Bool
+&lt; :: Gender -&gt; Gender -&gt; Bool
+$c&lt;= :: Gender -&gt; Gender -&gt; Bool
+&lt;= :: Gender -&gt; Gender -&gt; Bool
+$c&gt; :: Gender -&gt; Gender -&gt; Bool
+&gt; :: Gender -&gt; Gender -&gt; Bool
+$c&gt;= :: Gender -&gt; Gender -&gt; Bool
+&gt;= :: Gender -&gt; Gender -&gt; Bool
+$cmax :: Gender -&gt; Gender -&gt; Gender
+max :: Gender -&gt; Gender -&gt; Gender
+$cmin :: Gender -&gt; Gender -&gt; Gender
+min :: Gender -&gt; Gender -&gt; Gender
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161401"><span id="local-6989586621679161405"><span id="local-6989586621679161408"><span id="local-6989586621679161413"><span class="annot"><span class="annottext">ReadPrec [Gender]
+ReadPrec Gender
+Int -&gt; ReadS Gender
+ReadS [Gender]
+(Int -&gt; ReadS Gender)
+-&gt; ReadS [Gender]
+-&gt; ReadPrec Gender
+-&gt; ReadPrec [Gender]
+-&gt; Read Gender
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS Gender
+readsPrec :: Int -&gt; ReadS Gender
+$creadList :: ReadS [Gender]
+readList :: ReadS [Gender]
+$creadPrec :: ReadPrec Gender
+readPrec :: ReadPrec Gender
+$creadListPrec :: ReadPrec [Gender]
+readListPrec :: ReadPrec [Gender]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161420"><span id="local-6989586621679161422"><span id="local-6989586621679161426"><span class="annot"><span class="annottext">Int -&gt; Gender -&gt; ShowS
+[Gender] -&gt; ShowS
+Gender -&gt; String
+(Int -&gt; Gender -&gt; ShowS)
+-&gt; (Gender -&gt; String) -&gt; ([Gender] -&gt; ShowS) -&gt; Show Gender
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Gender -&gt; ShowS
+showsPrec :: Int -&gt; Gender -&gt; ShowS
+$cshow :: Gender -&gt; String
+show :: Gender -&gt; String
+$cshowList :: [Gender] -&gt; ShowS
+showList :: [Gender] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679161436"><span id="local-6989586621679161445"><span id="local-6989586621679161453"><span id="local-6989586621679161459"><span id="local-6989586621679161465"><span id="local-6989586621679161468"><span class="annot"><span class="annottext">Eq Gender
+KnownNat (Cardinality Gender)
+(Eq Gender, KnownNat (Cardinality Gender)) =&gt;
+(Finite (Cardinality Gender) -&gt; Gender)
+-&gt; (Gender -&gt; Finite (Cardinality Gender))
+-&gt; ((1 &lt;= Cardinality Gender) =&gt; Gender)
+-&gt; ((1 &lt;= Cardinality Gender) =&gt; Gender)
+-&gt; (Gender -&gt; Maybe Gender)
+-&gt; (Gender -&gt; Maybe Gender)
+-&gt; Finitary Gender
+(1 &lt;= Cardinality Gender) =&gt; Gender
+Finite (Cardinality Gender) -&gt; Gender
+Gender -&gt; Maybe Gender
+Gender -&gt; Finite (Cardinality Gender)
+forall a.
+(Eq a, KnownNat (Cardinality a)) =&gt;
+(Finite (Cardinality a) -&gt; a)
+-&gt; (a -&gt; Finite (Cardinality a))
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; (a -&gt; Maybe a)
+-&gt; (a -&gt; Maybe a)
+-&gt; Finitary a
+$cfromFinite :: Finite (Cardinality Gender) -&gt; Gender
+fromFinite :: Finite (Cardinality Gender) -&gt; Gender
+$ctoFinite :: Gender -&gt; Finite (Cardinality Gender)
+toFinite :: Gender -&gt; Finite (Cardinality Gender)
+$cstart :: (1 &lt;= Cardinality Gender) =&gt; Gender
+start :: (1 &lt;= Cardinality Gender) =&gt; Gender
+$cend :: (1 &lt;= Cardinality Gender) =&gt; Gender
+end :: (1 &lt;= Cardinality Gender) =&gt; Gender
+$cprevious :: Gender -&gt; Maybe Gender
+previous :: Gender -&gt; Maybe Gender
+$cnext :: Gender -&gt; Maybe Gender
+next :: Gender -&gt; Maybe Gender
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Finitary</span></span></span></span></span></span></span></span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- | Prints the specified 'Gender'.</span><span>
+</span><span id="line-34"></span><span class="hs-comment">--</span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Taiwan.ID.Gender.html#toText"><span class="hs-identifier hs-type">toText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier hs-type">Language</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-36"></span><span id="toText"><span class="annot"><span class="annottext">toText :: Language -&gt; Gender -&gt; Text
+</span><a href="Taiwan.ID.Gender.html#toText"><span class="hs-identifier hs-var hs-var">toText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">Language
+</span><a href="Taiwan.ID.Language.html#English"><span class="hs-identifier hs-var">English</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Gender -&gt; Text
+</span><a href="Taiwan.ID.Gender.html#toTextEnglish"><span class="hs-identifier hs-var">toTextEnglish</span></a></span><span>
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">Language
+</span><a href="Taiwan.ID.Language.html#Chinese"><span class="hs-identifier hs-var">Chinese</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Gender -&gt; Text
+</span><a href="Taiwan.ID.Gender.html#toTextChinese"><span class="hs-identifier hs-var">toTextChinese</span></a></span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Taiwan.ID.Gender.html#toTextEnglish"><span class="hs-identifier hs-type">toTextEnglish</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-41"></span><span id="toTextEnglish"><span class="annot"><span class="annottext">toTextEnglish :: Gender -&gt; Text
+</span><a href="Taiwan.ID.Gender.html#toTextEnglish"><span class="hs-identifier hs-var hs-var">toTextEnglish</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Male&quot;</span></span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Female&quot;</span></span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Taiwan.ID.Gender.html#toTextChinese"><span class="hs-identifier hs-type">toTextChinese</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-46"></span><span id="toTextChinese"><span class="annot"><span class="annottext">toTextChinese :: Gender -&gt; Text
+</span><a href="Taiwan.ID.Gender.html#toTextChinese"><span class="hs-identifier hs-var hs-var">toTextChinese</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#30007;&#24615;&quot;</span></span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#22899;&#24615;&quot;</span></span><span>
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span class="hs-comment">-- | Generates a random 'Gender'.</span><span>
+</span><span id="line-51"></span><span class="hs-comment">--</span><span>
+</span><span id="line-52"></span><span id="local-6989586621679161285"><span class="annot"><a href="Taiwan.ID.Gender.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679161285"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679161285"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span></span><span>
+</span><span id="line-53"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m Gender
+</span><a href="Taiwan.ID.Gender.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Gender
+forall (m :: * -&gt; *) a.
+(MonadRandom m, Finitary a, 1 &lt;= Cardinality a) =&gt;
+m a
+</span><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier hs-var">randomFinitary</span></a></span><span>
+</span><span id="line-54"></span></pre></body></html>

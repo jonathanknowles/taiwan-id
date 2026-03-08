@@ -1,0 +1,481 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
+</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><span id="line-4"></span><span class="hs-pragma">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE LambdaCase #-}</span><span>
+</span><span id="line-6"></span><span class="hs-pragma">{-# LANGUAGE OverloadedStrings #-}</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html"><span class="hs-identifier">Taiwan.ID.Location</span></a></span><span>
+</span><span id="line-9"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier">Location</span></a></span><span>
+</span><span id="line-10"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#fromLetter"><span class="hs-identifier">fromLetter</span></a></span><span>
+</span><span id="line-11"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#toLetter"><span class="hs-identifier">toLetter</span></a></span><span>
+</span><span id="line-12"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#toText"><span class="hs-identifier">toText</span></a></span><span>
+</span><span id="line-13"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#generate"><span class="hs-identifier">generate</span></a></span><span>
+</span><span id="line-14"></span><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Random.Class</span></span><span>
+</span><span id="line-17"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">MonadRandom</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Finitary</span></span><span>
+</span><span id="line-19"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Finitary</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span>
+</span><span id="line-21"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Text</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.Generics</span></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Generic</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html"><span class="hs-identifier">Taiwan.ID.Language</span></a></span><span>
+</span><span id="line-25"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier">Language</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html"><span class="hs-identifier">Taiwan.ID.Letter</span></a></span><span>
+</span><span id="line-27"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier">Letter</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html"><span class="hs-identifier">Taiwan.ID.Utilities</span></a></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier">randomFinitary</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Read</span></span><span>
+</span><span id="line-31"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Lexeme</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Ident</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Symbol</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Read</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">readPrec</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lexP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parens</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- | Represents a location, encodable within a Taiwan national identification</span><span>
+</span><span id="line-34"></span><span class="hs-comment">--   number.</span><span>
+</span><span id="line-35"></span><span class="hs-comment">--</span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- == Location codes</span><span>
+</span><span id="line-37"></span><span class="hs-comment">--</span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- Every location that can be represented in a Taiwan national identification</span><span>
+</span><span id="line-39"></span><span class="hs-comment">-- number has a unique code:</span><span>
+</span><span id="line-40"></span><span class="hs-comment">--</span><span>
+</span><span id="line-41"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-42"></span><span class="hs-comment">-- | Code | Chinese | English           |</span><span>
+</span><span id="line-43"></span><span class="hs-comment">-- +======+=========+===================+</span><span>
+</span><span id="line-44"></span><span class="hs-comment">-- | @A@  | &#33274;&#21271;&#24066;     | Taipei City       |</span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- | @B@  | &#33274;&#20013;&#24066;     | Taichung City     |</span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-48"></span><span class="hs-comment">-- | @C@  | &#22522;&#38534;&#24066;     | Keelung City      |</span><span>
+</span><span id="line-49"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-50"></span><span class="hs-comment">-- | @D@  | &#33274;&#21335;&#24066;     | Tainan City       |</span><span>
+</span><span id="line-51"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-52"></span><span class="hs-comment">-- | @E@  | &#39640;&#38596;&#24066;     | Kaohsiung City    |</span><span>
+</span><span id="line-53"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-54"></span><span class="hs-comment">-- | @F@  | &#26032;&#21271;&#24066;     | New Taipei City   |</span><span>
+</span><span id="line-55"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-56"></span><span class="hs-comment">-- | @G@  | &#23452;&#34349;&#32291;     | Yilan County      |</span><span>
+</span><span id="line-57"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-58"></span><span class="hs-comment">-- | @H@  | &#26691;&#22290;&#24066;     | Taoyuan City      |</span><span>
+</span><span id="line-59"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-60"></span><span class="hs-comment">-- | @I@  | &#22025;&#32681;&#24066;     | Chiayi City       |</span><span>
+</span><span id="line-61"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | @J@  | &#26032;&#31481;&#32291;     | Hsinchu County    |</span><span>
+</span><span id="line-63"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-64"></span><span class="hs-comment">-- | @K@  | &#33495;&#26647;&#32291;     | Miaoli County     |</span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-66"></span><span class="hs-comment">-- | @L@  | &#33274;&#20013;&#32291;     | Taichung County   |</span><span>
+</span><span id="line-67"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-68"></span><span class="hs-comment">-- | @M@  | &#21335;&#25237;&#32291;     | Nantou County     |</span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-70"></span><span class="hs-comment">-- | @N@  | &#24432;&#21270;&#32291;     | Changhua County   |</span><span>
+</span><span id="line-71"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-72"></span><span class="hs-comment">-- | @O@  | &#26032;&#31481;&#24066;     | Hsinchu City      |</span><span>
+</span><span id="line-73"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-74"></span><span class="hs-comment">-- | @P@  | &#38642;&#26519;&#32291;     | Yunlin County     |</span><span>
+</span><span id="line-75"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-76"></span><span class="hs-comment">-- | @Q@  | &#22025;&#32681;&#32291;     | Chiayi County     |</span><span>
+</span><span id="line-77"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-78"></span><span class="hs-comment">-- | @R@  | &#33274;&#21335;&#32291;     | Tainan County     |</span><span>
+</span><span id="line-79"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-80"></span><span class="hs-comment">-- | @S@  | &#39640;&#38596;&#32291;     | Kaohsiung County  |</span><span>
+</span><span id="line-81"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-82"></span><span class="hs-comment">-- | @T@  | &#23631;&#26481;&#32291;     | Pingtung County   |</span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-84"></span><span class="hs-comment">-- | @U@  | &#33457;&#34030;&#32291;     | Hualien County    |</span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-86"></span><span class="hs-comment">-- | @V@  | &#33274;&#26481;&#32291;     | Taitung County    |</span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-88"></span><span class="hs-comment">-- | @W@  | &#37329;&#38272;&#32291;     | Kinmen County     |</span><span>
+</span><span id="line-89"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- | @X@  | &#28558;&#28246;&#32291;     | Penghu County     |</span><span>
+</span><span id="line-91"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-92"></span><span class="hs-comment">-- | @Y@  | &#38525;&#26126;&#23665;     | Yangmingshan      |</span><span>
+</span><span id="line-93"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-94"></span><span class="hs-comment">-- | @Z@  | &#36899;&#27743;&#32291;     | Lienchiang County |</span><span>
+</span><span id="line-95"></span><span class="hs-comment">-- +------+---------+-------------------+</span><span>
+</span><span id="line-96"></span><span class="hs-comment">--</span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- == Usage</span><span>
+</span><span id="line-98"></span><span class="hs-comment">--</span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- To construct a 'Location' from its letter code, use the 'fromLetter'</span><span>
+</span><span id="line-100"></span><span class="hs-comment">-- function.</span><span>
+</span><span id="line-101"></span><span class="hs-comment">--</span><span>
+</span><span id="line-102"></span><span class="hs-comment">-- To print the full name of a 'Location', use the 'toText' function.</span><span>
+</span><span id="line-103"></span><span class="hs-comment">--</span><span>
+</span><span id="line-104"></span><span class="hs-comment">-- To generate a random 'Location', use the 'generate' function.</span><span>
+</span><span id="line-105"></span><span class="hs-comment">--</span><span>
+</span><span id="line-106"></span><span class="hs-keyword">newtype</span><span> </span><span id="Location"><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-var">Location</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Location"><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-var">Location</span></a></span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span>
+</span><span id="line-107"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160966"><span id="local-6989586621679160970"><span class="annot"><span class="annottext">Location -&gt; Location -&gt; Bool
+(Location -&gt; Location -&gt; Bool)
+-&gt; (Location -&gt; Location -&gt; Bool) -&gt; Eq Location
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: Location -&gt; Location -&gt; Bool
+== :: Location -&gt; Location -&gt; Bool
+$c/= :: Location -&gt; Location -&gt; Bool
+/= :: Location -&gt; Location -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160975"><span id="local-6989586621679160977"><span class="annot"><span class="annottext">(forall x. Location -&gt; Rep Location x)
+-&gt; (forall x. Rep Location x -&gt; Location) -&gt; Generic Location
+forall x. Rep Location x -&gt; Location
+forall x. Location -&gt; Rep Location x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. Location -&gt; Rep Location x
+from :: forall x. Location -&gt; Rep Location x
+$cto :: forall x. Rep Location x -&gt; Location
+to :: forall x. Rep Location x -&gt; Location
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160985"><span id="local-6989586621679160989"><span id="local-6989586621679160992"><span id="local-6989586621679160996"><span id="local-6989586621679160999"><span id="local-6989586621679161002"><span id="local-6989586621679161005"><span class="annot"><span class="annottext">Eq Location
+Eq Location =&gt;
+(Location -&gt; Location -&gt; Ordering)
+-&gt; (Location -&gt; Location -&gt; Bool)
+-&gt; (Location -&gt; Location -&gt; Bool)
+-&gt; (Location -&gt; Location -&gt; Bool)
+-&gt; (Location -&gt; Location -&gt; Bool)
+-&gt; (Location -&gt; Location -&gt; Location)
+-&gt; (Location -&gt; Location -&gt; Location)
+-&gt; Ord Location
+Location -&gt; Location -&gt; Bool
+Location -&gt; Location -&gt; Ordering
+Location -&gt; Location -&gt; Location
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: Location -&gt; Location -&gt; Ordering
+compare :: Location -&gt; Location -&gt; Ordering
+$c&lt; :: Location -&gt; Location -&gt; Bool
+&lt; :: Location -&gt; Location -&gt; Bool
+$c&lt;= :: Location -&gt; Location -&gt; Bool
+&lt;= :: Location -&gt; Location -&gt; Bool
+$c&gt; :: Location -&gt; Location -&gt; Bool
+&gt; :: Location -&gt; Location -&gt; Bool
+$c&gt;= :: Location -&gt; Location -&gt; Bool
+&gt;= :: Location -&gt; Location -&gt; Bool
+$cmax :: Location -&gt; Location -&gt; Location
+max :: Location -&gt; Location -&gt; Location
+$cmin :: Location -&gt; Location -&gt; Location
+min :: Location -&gt; Location -&gt; Location
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-108"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">newtype</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679161013"><span id="local-6989586621679161018"><span class="annot"><span class="annottext">Location
+Location -&gt; Location -&gt; Bounded Location
+forall a. a -&gt; a -&gt; Bounded a
+$cminBound :: Location
+minBound :: Location
+$cmaxBound :: Location
+maxBound :: Location
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161026"><span id="local-6989586621679161031"><span id="local-6989586621679161035"><span id="local-6989586621679161039"><span id="local-6989586621679161043"><span id="local-6989586621679161047"><span id="local-6989586621679161051"><span id="local-6989586621679161055"><span class="annot"><span class="annottext">Int -&gt; Location
+Location -&gt; Int
+Location -&gt; [Location]
+Location -&gt; Location
+Location -&gt; Location -&gt; [Location]
+Location -&gt; Location -&gt; Location -&gt; [Location]
+(Location -&gt; Location)
+-&gt; (Location -&gt; Location)
+-&gt; (Int -&gt; Location)
+-&gt; (Location -&gt; Int)
+-&gt; (Location -&gt; [Location])
+-&gt; (Location -&gt; Location -&gt; [Location])
+-&gt; (Location -&gt; Location -&gt; [Location])
+-&gt; (Location -&gt; Location -&gt; Location -&gt; [Location])
+-&gt; Enum Location
+forall a.
+(a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Int -&gt; a)
+-&gt; (a -&gt; Int)
+-&gt; (a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; a -&gt; [a])
+-&gt; Enum a
+$csucc :: Location -&gt; Location
+succ :: Location -&gt; Location
+$cpred :: Location -&gt; Location
+pred :: Location -&gt; Location
+$ctoEnum :: Int -&gt; Location
+toEnum :: Int -&gt; Location
+$cfromEnum :: Location -&gt; Int
+fromEnum :: Location -&gt; Int
+$cenumFrom :: Location -&gt; [Location]
+enumFrom :: Location -&gt; [Location]
+$cenumFromThen :: Location -&gt; Location -&gt; [Location]
+enumFromThen :: Location -&gt; Location -&gt; [Location]
+$cenumFromTo :: Location -&gt; Location -&gt; [Location]
+enumFromTo :: Location -&gt; Location -&gt; [Location]
+$cenumFromThenTo :: Location -&gt; Location -&gt; Location -&gt; [Location]
+enumFromThenTo :: Location -&gt; Location -&gt; Location -&gt; [Location]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-109"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679161070"><span id="local-6989586621679161079"><span id="local-6989586621679161087"><span id="local-6989586621679161093"><span id="local-6989586621679161099"><span id="local-6989586621679161102"><span class="annot"><span class="annottext">Eq Location
+KnownNat (Cardinality Location)
+(Eq Location, KnownNat (Cardinality Location)) =&gt;
+(Finite (Cardinality Location) -&gt; Location)
+-&gt; (Location -&gt; Finite (Cardinality Location))
+-&gt; ((1 &lt;= Cardinality Location) =&gt; Location)
+-&gt; ((1 &lt;= Cardinality Location) =&gt; Location)
+-&gt; (Location -&gt; Maybe Location)
+-&gt; (Location -&gt; Maybe Location)
+-&gt; Finitary Location
+(1 &lt;= Cardinality Location) =&gt; Location
+Finite (Cardinality Location) -&gt; Location
+Location -&gt; Maybe Location
+Location -&gt; Finite (Cardinality Location)
+forall a.
+(Eq a, KnownNat (Cardinality a)) =&gt;
+(Finite (Cardinality a) -&gt; a)
+-&gt; (a -&gt; Finite (Cardinality a))
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; (a -&gt; Maybe a)
+-&gt; (a -&gt; Maybe a)
+-&gt; Finitary a
+$cfromFinite :: Finite (Cardinality Location) -&gt; Location
+fromFinite :: Finite (Cardinality Location) -&gt; Location
+$ctoFinite :: Location -&gt; Finite (Cardinality Location)
+toFinite :: Location -&gt; Finite (Cardinality Location)
+$cstart :: (1 &lt;= Cardinality Location) =&gt; Location
+start :: (1 &lt;= Cardinality Location) =&gt; Location
+$cend :: (1 &lt;= Cardinality Location) =&gt; Location
+end :: (1 &lt;= Cardinality Location) =&gt; Location
+$cprevious :: Location -&gt; Maybe Location
+previous :: Location -&gt; Maybe Location
+$cnext :: Location -&gt; Maybe Location
+next :: Location -&gt; Maybe Location
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Finitary</span></span></span></span></span></span></span></span><span>
+</span><span id="line-110"></span><span>
+</span><span id="line-111"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679161117"><span id="local-6989586621679161121"><span id="local-6989586621679161125"><span class="annot"><span class="hs-identifier hs-type">Read</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-112"></span><span>  </span><span id="local-6989586621679161151"><span class="annot"><span class="annottext">readPrec :: ReadPrec Location
+</span><span class="hs-identifier hs-var hs-var hs-var">readPrec</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReadPrec Location -&gt; ReadPrec Location
+forall a. ReadPrec a -&gt; ReadPrec a
+</span><span class="hs-identifier hs-var">parens</span></span><span> </span><span class="annot"><span class="annottext">(ReadPrec Location -&gt; ReadPrec Location)
+-&gt; ReadPrec Location -&gt; ReadPrec Location
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-113"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Ident</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Location&quot;</span></span><span>   </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ReadPrec Lexeme
+</span><span class="hs-identifier hs-var">lexP</span></span><span>
+</span><span id="line-114"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.&quot;</span></span><span>         </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="hs-identifier hs-type">lexP</span></span><span>
+</span><span id="line-115"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Ident</span></span><span> </span><span class="annot"><span class="hs-string">&quot;fromLetter&quot;</span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="hs-identifier hs-type">lexP</span></span><span>
+</span><span id="line-116"></span><span>    </span><span class="annot"><a href="Taiwan.ID.Location.html#fromLetter"><span class="hs-identifier hs-type">fromLetter</span></a></span><span> </span><span class="annot"><span class="hs-operator hs-type">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">readPrec</span></span><span>
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679161155"><span id="local-6989586621679161159"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-119"></span><span>  </span><span id="local-6989586621679161164"><span class="annot"><span class="annottext">showsPrec :: Int -&gt; Location -&gt; String -&gt; String
+</span><a href="#local-6989586621679161164"><span class="hs-identifier hs-var hs-var hs-var">showsPrec</span></a></span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679161166"><span class="annot"><span class="annottext">Location
+</span><a href="#local-6989586621679161166"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-120"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><span class="hs-identifier hs-var">showString</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;Location.fromLetter &quot;</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; (String -&gt; String) -&gt; String -&gt; String
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Letter -&gt; String -&gt; String
+forall a. Show a =&gt; a -&gt; String -&gt; String
+</span><span class="hs-identifier hs-var">shows</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Location -&gt; Letter
+</span><a href="Taiwan.ID.Location.html#toLetter"><span class="hs-identifier hs-var">toLetter</span></a></span><span> </span><span class="annot"><span class="annottext">Location
+</span><a href="#local-6989586621679161166"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-121"></span><span>
+</span><span id="line-122"></span><span class="hs-comment">-- | Constructs a 'Location' from its corresponding letter code.</span><span>
+</span><span id="line-123"></span><span class="hs-comment">--</span><span>
+</span><span id="line-124"></span><span class="annot"><a href="Taiwan.ID.Location.html#fromLetter"><span class="hs-identifier hs-type">fromLetter</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span>
+</span><span id="line-125"></span><span id="fromLetter"><span class="annot"><span class="annottext">fromLetter :: Letter -&gt; Location
+</span><a href="Taiwan.ID.Location.html#fromLetter"><span class="hs-identifier hs-var hs-var">fromLetter</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Letter -&gt; Location
+</span><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-var">Location</span></a></span><span>
+</span><span id="line-126"></span><span>
+</span><span id="line-127"></span><span class="hs-comment">-- | Converts a 'Location' to its corresponding letter code.</span><span>
+</span><span id="line-128"></span><span class="hs-comment">--</span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Taiwan.ID.Location.html#toLetter"><span class="hs-identifier hs-type">toLetter</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span>
+</span><span id="line-130"></span><span id="toLetter"><span class="annot"><span class="annottext">toLetter :: Location -&gt; Letter
+</span><a href="Taiwan.ID.Location.html#toLetter"><span class="hs-identifier hs-var hs-var">toLetter</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span id="local-6989586621679161170"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161170"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161170"><span class="hs-identifier hs-var">letter</span></a></span><span>
+</span><span id="line-131"></span><span>
+</span><span id="line-132"></span><span class="annot"><span class="hs-comment">-- | Prints the specified 'Location'.</span></span><span>
+</span><span id="line-133"></span><span class="annot"><a href="Taiwan.ID.Location.html#toText"><span class="hs-identifier hs-type">toText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier hs-type">Language</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-134"></span><span id="toText"><span class="annot"><span class="annottext">toText :: Language -&gt; Location -&gt; Text
+</span><a href="Taiwan.ID.Location.html#toText"><span class="hs-identifier hs-var hs-var">toText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-135"></span><span>  </span><span class="annot"><span class="annottext">Language
+</span><a href="Taiwan.ID.Language.html#English"><span class="hs-identifier hs-var">English</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Location -&gt; Text
+</span><a href="Taiwan.ID.Location.html#toTextEnglish"><span class="hs-identifier hs-var">toTextEnglish</span></a></span><span>
+</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">Language
+</span><a href="Taiwan.ID.Language.html#Chinese"><span class="hs-identifier hs-var">Chinese</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Location -&gt; Text
+</span><a href="Taiwan.ID.Location.html#toTextChinese"><span class="hs-identifier hs-var">toTextChinese</span></a></span><span>
+</span><span id="line-137"></span><span>
+</span><span id="line-138"></span><span class="annot"><a href="Taiwan.ID.Location.html#toTextChinese"><span class="hs-identifier hs-type">toTextChinese</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-139"></span><span id="toTextChinese"><span class="annot"><span class="annottext">toTextChinese :: Location -&gt; Text
+</span><a href="Taiwan.ID.Location.html#toTextChinese"><span class="hs-identifier hs-var hs-var">toTextChinese</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span id="local-6989586621679161175"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161175"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161175"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-140"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#A"><span class="hs-identifier hs-var">A</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33274;&#21271;&#24066;&quot;</span></span><span>
+</span><span id="line-141"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#B"><span class="hs-identifier hs-var">B</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33274;&#20013;&#24066;&quot;</span></span><span>
+</span><span id="line-142"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#C"><span class="hs-identifier hs-var">C</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#22522;&#38534;&#24066;&quot;</span></span><span>
+</span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#D"><span class="hs-identifier hs-var">D</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33274;&#21335;&#24066;&quot;</span></span><span>
+</span><span id="line-144"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#E"><span class="hs-identifier hs-var">E</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#39640;&#38596;&#24066;&quot;</span></span><span>
+</span><span id="line-145"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#F"><span class="hs-identifier hs-var">F</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#26032;&#21271;&#24066;&quot;</span></span><span>
+</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#G"><span class="hs-identifier hs-var">G</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#23452;&#34349;&#32291;&quot;</span></span><span>
+</span><span id="line-147"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#H"><span class="hs-identifier hs-var">H</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#26691;&#22290;&#24066;&quot;</span></span><span>
+</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#I"><span class="hs-identifier hs-var">I</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#22025;&#32681;&#24066;&quot;</span></span><span>
+</span><span id="line-149"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#J"><span class="hs-identifier hs-var">J</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#26032;&#31481;&#32291;&quot;</span></span><span>
+</span><span id="line-150"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#K"><span class="hs-identifier hs-var">K</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33495;&#26647;&#32291;&quot;</span></span><span>
+</span><span id="line-151"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#L"><span class="hs-identifier hs-var">L</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33274;&#20013;&#32291;&quot;</span></span><span>
+</span><span id="line-152"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#M"><span class="hs-identifier hs-var">M</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#21335;&#25237;&#32291;&quot;</span></span><span>
+</span><span id="line-153"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#N"><span class="hs-identifier hs-var">N</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#24432;&#21270;&#32291;&quot;</span></span><span>
+</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#O"><span class="hs-identifier hs-var">O</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#26032;&#31481;&#24066;&quot;</span></span><span>
+</span><span id="line-155"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#P"><span class="hs-identifier hs-var">P</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#38642;&#26519;&#32291;&quot;</span></span><span>
+</span><span id="line-156"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#Q"><span class="hs-identifier hs-var">Q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#22025;&#32681;&#32291;&quot;</span></span><span>
+</span><span id="line-157"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#R"><span class="hs-identifier hs-var">R</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33274;&#21335;&#32291;&quot;</span></span><span>
+</span><span id="line-158"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#S"><span class="hs-identifier hs-var">S</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#39640;&#38596;&#32291;&quot;</span></span><span>
+</span><span id="line-159"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#T"><span class="hs-identifier hs-var">T</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#23631;&#26481;&#32291;&quot;</span></span><span>
+</span><span id="line-160"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#U"><span class="hs-identifier hs-var">U</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33457;&#34030;&#32291;&quot;</span></span><span>
+</span><span id="line-161"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#V"><span class="hs-identifier hs-var">V</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#33274;&#26481;&#32291;&quot;</span></span><span>
+</span><span id="line-162"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#W"><span class="hs-identifier hs-var">W</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#37329;&#38272;&#32291;&quot;</span></span><span>
+</span><span id="line-163"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#X"><span class="hs-identifier hs-var">X</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#28558;&#28246;&#32291;&quot;</span></span><span>
+</span><span id="line-164"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#Y"><span class="hs-identifier hs-var">Y</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#38525;&#26126;&#23665;&quot;</span></span><span>
+</span><span id="line-165"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#Z"><span class="hs-identifier hs-var">Z</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;&#36899;&#27743;&#32291;&quot;</span></span><span>
+</span><span id="line-166"></span><span>
+</span><span id="line-167"></span><span class="annot"><a href="Taiwan.ID.Location.html#toTextEnglish"><span class="hs-identifier hs-type">toTextEnglish</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-168"></span><span id="toTextEnglish"><span class="annot"><span class="annottext">toTextEnglish :: Location -&gt; Text
+</span><a href="Taiwan.ID.Location.html#toTextEnglish"><span class="hs-identifier hs-var hs-var">toTextEnglish</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span id="local-6989586621679161202"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161202"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161202"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-169"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#A"><span class="hs-identifier hs-var">A</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Taipei City&quot;</span></span><span>
+</span><span id="line-170"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#B"><span class="hs-identifier hs-var">B</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Taichung City&quot;</span></span><span>
+</span><span id="line-171"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#C"><span class="hs-identifier hs-var">C</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Keelung City&quot;</span></span><span>
+</span><span id="line-172"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#D"><span class="hs-identifier hs-var">D</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Tainan City&quot;</span></span><span>
+</span><span id="line-173"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#E"><span class="hs-identifier hs-var">E</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Kaohsiung City&quot;</span></span><span>
+</span><span id="line-174"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#F"><span class="hs-identifier hs-var">F</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;New Taipei City&quot;</span></span><span>
+</span><span id="line-175"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#G"><span class="hs-identifier hs-var">G</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Yilan County&quot;</span></span><span>
+</span><span id="line-176"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#H"><span class="hs-identifier hs-var">H</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Taoyuan City&quot;</span></span><span>
+</span><span id="line-177"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#I"><span class="hs-identifier hs-var">I</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Chiayi City&quot;</span></span><span>
+</span><span id="line-178"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#J"><span class="hs-identifier hs-var">J</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Hsinchu County&quot;</span></span><span>
+</span><span id="line-179"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#K"><span class="hs-identifier hs-var">K</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Miaoli County&quot;</span></span><span>
+</span><span id="line-180"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#L"><span class="hs-identifier hs-var">L</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Taichung County&quot;</span></span><span>
+</span><span id="line-181"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#M"><span class="hs-identifier hs-var">M</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Nantou County&quot;</span></span><span>
+</span><span id="line-182"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#N"><span class="hs-identifier hs-var">N</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Changhua County&quot;</span></span><span>
+</span><span id="line-183"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#O"><span class="hs-identifier hs-var">O</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Hsinchu City&quot;</span></span><span>
+</span><span id="line-184"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#P"><span class="hs-identifier hs-var">P</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Yunlin County&quot;</span></span><span>
+</span><span id="line-185"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#Q"><span class="hs-identifier hs-var">Q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Chiayi County&quot;</span></span><span>
+</span><span id="line-186"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#R"><span class="hs-identifier hs-var">R</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Tainan County&quot;</span></span><span>
+</span><span id="line-187"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#S"><span class="hs-identifier hs-var">S</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Kaohsiung County&quot;</span></span><span>
+</span><span id="line-188"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#T"><span class="hs-identifier hs-var">T</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Pingtung County&quot;</span></span><span>
+</span><span id="line-189"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#U"><span class="hs-identifier hs-var">U</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Hualien County&quot;</span></span><span>
+</span><span id="line-190"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#V"><span class="hs-identifier hs-var">V</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Taitung County&quot;</span></span><span>
+</span><span id="line-191"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#W"><span class="hs-identifier hs-var">W</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Kinmen County&quot;</span></span><span>
+</span><span id="line-192"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#X"><span class="hs-identifier hs-var">X</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Penghu County&quot;</span></span><span>
+</span><span id="line-193"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#Y"><span class="hs-identifier hs-var">Y</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Yangmingshan&quot;</span></span><span>
+</span><span id="line-194"></span><span>  </span><span class="annot"><span class="annottext">Letter
+</span><a href="Taiwan.ID.Letter.html#Z"><span class="hs-identifier hs-var">Z</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Lienchiang County&quot;</span></span><span>
+</span><span id="line-195"></span><span>
+</span><span id="line-196"></span><span class="hs-comment">-- | Generates a random 'Location'.</span><span>
+</span><span id="line-197"></span><span class="hs-comment">--</span><span>
+</span><span id="line-198"></span><span id="local-6989586621679160896"><span class="annot"><a href="Taiwan.ID.Location.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679160896"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679160896"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span></span><span>
+</span><span id="line-199"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m Location
+</span><a href="Taiwan.ID.Location.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Location
+forall (m :: * -&gt; *) a.
+(MonadRandom m, Finitary a, 1 &lt;= Cardinality a) =&gt;
+m a
+</span><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier hs-var">randomFinitary</span></a></span><span>
+</span><span id="line-200"></span></pre></body></html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE AllowAmbiguousTypes #-}</span><span>
+</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DataKinds #-}</span><span>
+</span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
+</span><span id="line-4"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
+</span><span id="line-5"></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
+</span><span id="line-6"></span><span class="hs-pragma">{-# LANGUAGE LambdaCase #-}</span><span>
+</span><span id="line-7"></span><span class="hs-pragma">{-# LANGUAGE NamedFieldPuns #-}</span><span>
+</span><span id="line-8"></span><span class="hs-pragma">{-# LANGUAGE ScopedTypeVariables #-}</span><span>
+</span><span id="line-9"></span><span class="hs-pragma">{-# LANGUAGE TypeApplications #-}</span><span>
+</span><span id="line-10"></span><span class="hs-pragma">{-# LANGUAGE TypeFamilies #-}</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.html"><span class="hs-identifier">Taiwan.ID</span></a></span><span>
+</span><span id="line-13"></span><span>  </span><span class="hs-special">(</span><span>
+</span><span id="line-14"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Type</span></span><span>
+</span><span id="line-15"></span><span>    </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier">ID</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Construction</span></span><span>
+</span><span id="line-18"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#fromSymbol"><span class="hs-identifier">fromSymbol</span></a></span><span>
+</span><span id="line-19"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#fromText"><span class="hs-identifier">fromText</span></a></span><span>
+</span><span id="line-20"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#FromTextError"><span class="hs-identifier">FromTextError</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Conversion</span></span><span>
+</span><span id="line-23"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#toText"><span class="hs-identifier">toText</span></a></span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Validity</span></span><span>
+</span><span id="line-26"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#checksum"><span class="hs-identifier">checksum</span></a></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Generation</span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#generate"><span class="hs-identifier">generate</span></a></span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Inspection</span></span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#getGender"><span class="hs-identifier">getGender</span></a></span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#getLocation"><span class="hs-identifier">getLocation</span></a></span><span>
+</span><span id="line-34"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#getNationality"><span class="hs-identifier">getNationality</span></a></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="hs-comment">-- * Modification</span></span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#setGender"><span class="hs-identifier">setGender</span></a></span><span>
+</span><span id="line-38"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#setLocation"><span class="hs-identifier">setLocation</span></a></span><span>
+</span><span id="line-39"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#setNationality"><span class="hs-identifier">setNationality</span></a></span><span>
+</span><span id="line-40"></span><span>  </span><span class="hs-special">)</span><span>
+</span><span id="line-41"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.Random.Class</span></span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">MonadRandom</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-45"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Bifunctor</span></span><span>
+</span><span id="line-46"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Bifunctor</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">first</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-47"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Finitary</span></span><span>
+</span><span id="line-48"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Finitary</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Proxy</span></span><span>
+</span><span id="line-50"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Proxy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Proxy</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-51"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span>
+</span><span id="line-52"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Text</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-53"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.Generics</span></span><span>
+</span><span id="line-54"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Generic</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GHC.TypeLits</span></span><span>
+</span><span id="line-56"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Symbol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">symbolVal</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-57"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.CharIndex.html"><span class="hs-identifier">Taiwan.ID.CharIndex</span></a></span><span>
+</span><span id="line-58"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.CharIndex.html#CharIndex"><span class="hs-identifier">CharIndex</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.CharSet.html"><span class="hs-identifier">Taiwan.ID.CharSet</span></a></span><span>
+</span><span id="line-60"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.CharSet.html#CharSet"><span class="hs-identifier">CharSet</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-61"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit.html"><span class="hs-identifier">Taiwan.ID.Digit</span></a></span><span>
+</span><span id="line-62"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier">Digit</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-63"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit1289.html"><span class="hs-identifier">Taiwan.ID.Digit1289</span></a></span><span>
+</span><span id="line-64"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit1289.html#Digit1289"><span class="hs-identifier">Digit1289</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-65"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html"><span class="hs-identifier">Taiwan.ID.Gender</span></a></span><span>
+</span><span id="line-66"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier">Gender</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-67"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html"><span class="hs-identifier">Taiwan.ID.Letter</span></a></span><span>
+</span><span id="line-68"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier">Letter</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-69"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html"><span class="hs-identifier">Taiwan.ID.Location</span></a></span><span>
+</span><span id="line-70"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier">Location</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-71"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html"><span class="hs-identifier">Taiwan.ID.Nationality</span></a></span><span>
+</span><span id="line-72"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier">Nationality</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html"><span class="hs-identifier">Taiwan.ID.Unchecked</span></a></span><span>
+</span><span id="line-74"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier">UncheckedID</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier">UncheckedID</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#ValidID"><span class="hs-identifier">ValidID</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-75"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html"><span class="hs-identifier">Taiwan.ID.Utilities</span></a></span><span>
+</span><span id="line-76"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html#guard"><span class="hs-identifier">guard</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier">randomFinitary</span></a></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.Read</span></span><span>
+</span><span id="line-78"></span><span>  </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-identifier">Lexeme</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Ident</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Symbol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Punc</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Read</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">readPrec</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lexP</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parens</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">prec</span></span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span>
+</span><span id="line-80"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">T</span></span><span>
+</span><span id="line-81"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html"><span class="hs-identifier">Taiwan.ID.Location</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Location</span></span><span>
+</span><span id="line-82"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html"><span class="hs-identifier">Taiwan.ID.Unchecked</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">U</span></span><span>
+</span><span id="line-83"></span><span>
+</span><span id="line-84"></span><span class="annot"><span class="hs-comment">-- |</span></span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- $setup</span><span>
+</span><span id="line-86"></span><span class="hs-comment">-- &gt;&gt;&gt; :set -XDataKinds</span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- &gt;&gt;&gt; :set -XOverloadedStrings</span><span>
+</span><span id="line-88"></span><span class="hs-comment">-- &gt;&gt;&gt; :set -XTypeApplications</span><span>
+</span><span id="line-89"></span><span class="hs-comment">-- &gt;&gt;&gt; import Taiwan.ID</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- &gt;&gt;&gt; import qualified Taiwan.ID as ID</span><span>
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-93"></span><span class="hs-comment">-- Type</span><span>
+</span><span id="line-94"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span class="hs-comment">-- | Represents a __valid__ 10-digit Taiwan national identification number of</span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- the form __@A123456789@__.</span><span>
+</span><span id="line-98"></span><span class="hs-comment">--</span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- By construction, invalid identification numbers are __not representable__ by</span><span>
+</span><span id="line-100"></span><span class="hs-comment">-- this data type.</span><span>
+</span><span id="line-101"></span><span class="hs-comment">--</span><span>
+</span><span id="line-102"></span><span class="hs-comment">-- To guarantee correctness, an 'ID' value does __not__ store the terminal</span><span>
+</span><span id="line-103"></span><span class="hs-comment">-- checksum digit of the identification number it represents.</span><span>
+</span><span id="line-104"></span><span class="hs-comment">--</span><span>
+</span><span id="line-105"></span><span class="hs-comment">-- To compute the checksum digit, use 'checksum'.</span><span>
+</span><span id="line-106"></span><span class="hs-comment">--</span><span>
+</span><span id="line-107"></span><span class="hs-keyword">data</span><span> </span><span id="ID"><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-var">ID</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="ID"><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-var">ID</span></a></span></span><span>
+</span><span id="line-108"></span><span>  </span><span class="hs-special">{</span><span> </span><span id="c0"><span class="annot"><span class="annottext">ID -&gt; Letter
+</span><a href="Taiwan.ID.html#c0"><span class="hs-identifier hs-var hs-var">c0</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span>
+</span><span id="line-109"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c1"><span class="annot"><span class="annottext">ID -&gt; Digit1289
+</span><a href="Taiwan.ID.html#c1"><span class="hs-identifier hs-var hs-var">c1</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit1289.html#Digit1289"><span class="hs-identifier hs-type">Digit1289</span></a></span><span>
+</span><span id="line-110"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c2"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c2"><span class="hs-identifier hs-var hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-111"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c3"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c3"><span class="hs-identifier hs-var hs-var">c3</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-112"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c4"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c4"><span class="hs-identifier hs-var hs-var">c4</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-113"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c5"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c5"><span class="hs-identifier hs-var hs-var">c5</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-114"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c6"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c6"><span class="hs-identifier hs-var hs-var">c6</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-115"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c7"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c7"><span class="hs-identifier hs-var hs-var">c7</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-116"></span><span>  </span><span class="hs-special">,</span><span> </span><span id="c8"><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#c8"><span class="hs-identifier hs-var hs-var">c8</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-glyph">!</span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-117"></span><span>  </span><span class="hs-special">}</span><span>
+</span><span id="line-118"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679163052"><span id="local-6989586621679163066"><span class="annot"><span class="annottext">ID -&gt; ID -&gt; Bool
+(ID -&gt; ID -&gt; Bool) -&gt; (ID -&gt; ID -&gt; Bool) -&gt; Eq ID
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: ID -&gt; ID -&gt; Bool
+== :: ID -&gt; ID -&gt; Bool
+$c/= :: ID -&gt; ID -&gt; Bool
+/= :: ID -&gt; ID -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679163073"><span id="local-6989586621679163087"><span id="local-6989586621679163098"><span id="local-6989586621679163102"><span id="local-6989586621679163105"><span id="local-6989586621679163108"><span id="local-6989586621679163111"><span class="annot"><span class="annottext">Eq ID
+Eq ID =&gt;
+(ID -&gt; ID -&gt; Ordering)
+-&gt; (ID -&gt; ID -&gt; Bool)
+-&gt; (ID -&gt; ID -&gt; Bool)
+-&gt; (ID -&gt; ID -&gt; Bool)
+-&gt; (ID -&gt; ID -&gt; Bool)
+-&gt; (ID -&gt; ID -&gt; ID)
+-&gt; (ID -&gt; ID -&gt; ID)
+-&gt; Ord ID
+ID -&gt; ID -&gt; Bool
+ID -&gt; ID -&gt; Ordering
+ID -&gt; ID -&gt; ID
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: ID -&gt; ID -&gt; Ordering
+compare :: ID -&gt; ID -&gt; Ordering
+$c&lt; :: ID -&gt; ID -&gt; Bool
+&lt; :: ID -&gt; ID -&gt; Bool
+$c&lt;= :: ID -&gt; ID -&gt; Bool
+&lt;= :: ID -&gt; ID -&gt; Bool
+$c&gt; :: ID -&gt; ID -&gt; Bool
+&gt; :: ID -&gt; ID -&gt; Bool
+$c&gt;= :: ID -&gt; ID -&gt; Bool
+&gt;= :: ID -&gt; ID -&gt; Bool
+$cmax :: ID -&gt; ID -&gt; ID
+max :: ID -&gt; ID -&gt; ID
+$cmin :: ID -&gt; ID -&gt; ID
+min :: ID -&gt; ID -&gt; ID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679163119"><span id="local-6989586621679163121"><span class="annot"><span class="annottext">(forall x. ID -&gt; Rep ID x)
+-&gt; (forall x. Rep ID x -&gt; ID) -&gt; Generic ID
+forall x. Rep ID x -&gt; ID
+forall x. ID -&gt; Rep ID x
+forall a.
+(forall x. a -&gt; Rep a x) -&gt; (forall x. Rep a x -&gt; a) -&gt; Generic a
+$cfrom :: forall x. ID -&gt; Rep ID x
+from :: forall x. ID -&gt; Rep ID x
+$cto :: forall x. Rep ID x -&gt; ID
+to :: forall x. Rep ID x -&gt; ID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-119"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679163132"><span id="local-6989586621679163141"><span id="local-6989586621679163149"><span id="local-6989586621679163155"><span id="local-6989586621679163161"><span id="local-6989586621679163164"><span class="annot"><span class="annottext">Eq ID
+KnownNat (Cardinality ID)
+(Eq ID, KnownNat (Cardinality ID)) =&gt;
+(Finite (Cardinality ID) -&gt; ID)
+-&gt; (ID -&gt; Finite (Cardinality ID))
+-&gt; ((1 &lt;= Cardinality ID) =&gt; ID)
+-&gt; ((1 &lt;= Cardinality ID) =&gt; ID)
+-&gt; (ID -&gt; Maybe ID)
+-&gt; (ID -&gt; Maybe ID)
+-&gt; Finitary ID
+(1 &lt;= Cardinality ID) =&gt; ID
+Finite (Cardinality ID) -&gt; ID
+ID -&gt; Maybe ID
+ID -&gt; Finite (Cardinality ID)
+forall a.
+(Eq a, KnownNat (Cardinality a)) =&gt;
+(Finite (Cardinality a) -&gt; a)
+-&gt; (a -&gt; Finite (Cardinality a))
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; ((1 &lt;= Cardinality a) =&gt; a)
+-&gt; (a -&gt; Maybe a)
+-&gt; (a -&gt; Maybe a)
+-&gt; Finitary a
+$cfromFinite :: Finite (Cardinality ID) -&gt; ID
+fromFinite :: Finite (Cardinality ID) -&gt; ID
+$ctoFinite :: ID -&gt; Finite (Cardinality ID)
+toFinite :: ID -&gt; Finite (Cardinality ID)
+$cstart :: (1 &lt;= Cardinality ID) =&gt; ID
+start :: (1 &lt;= Cardinality ID) =&gt; ID
+$cend :: (1 &lt;= Cardinality ID) =&gt; ID
+end :: (1 &lt;= Cardinality ID) =&gt; ID
+$cprevious :: ID -&gt; Maybe ID
+previous :: ID -&gt; Maybe ID
+$cnext :: ID -&gt; Maybe ID
+next :: ID -&gt; Maybe ID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Finitary</span></span></span></span></span></span></span></span><span>
+</span><span id="line-120"></span><span>
+</span><span id="line-121"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679163222"><span id="local-6989586621679163226"><span id="local-6989586621679163230"><span class="annot"><span class="hs-identifier hs-type">Read</span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-122"></span><span>  </span><span id="local-6989586621679163247"><span class="annot"><span class="annottext">readPrec :: ReadPrec ID
+</span><span class="hs-identifier hs-var hs-var hs-var">readPrec</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReadPrec ID -&gt; ReadPrec ID
+forall a. ReadPrec a -&gt; ReadPrec a
+</span><span class="hs-identifier hs-var">parens</span></span><span> </span><span class="annot"><span class="annottext">(ReadPrec ID -&gt; ReadPrec ID) -&gt; ReadPrec ID -&gt; ReadPrec ID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; ReadPrec ID -&gt; ReadPrec ID
+forall a. Int -&gt; ReadPrec a -&gt; ReadPrec a
+</span><span class="hs-identifier hs-var">prec</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">(ReadPrec ID -&gt; ReadPrec ID) -&gt; ReadPrec ID -&gt; ReadPrec ID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-123"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Ident</span></span><span>  </span><span class="annot"><span class="hs-string">&quot;ID&quot;</span></span><span>         </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ReadPrec Lexeme
+</span><span class="hs-identifier hs-var">lexP</span></span><span>
+</span><span id="line-124"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.&quot;</span></span><span>          </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="hs-identifier hs-type">lexP</span></span><span>
+</span><span id="line-125"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Ident</span></span><span>  </span><span class="annot"><span class="hs-string">&quot;fromSymbol&quot;</span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="hs-identifier hs-type">lexP</span></span><span>
+</span><span id="line-126"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Punc</span></span><span>   </span><span class="annot"><span class="hs-string">&quot;@&quot;</span></span><span>          </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="hs-identifier hs-type">lexP</span></span><span>
+</span><span id="line-127"></span><span>    </span><span class="annot"><a href="Taiwan.ID.html#unsafeFromText"><span class="hs-identifier hs-type">unsafeFromText</span></a></span><span> </span><span class="annot"><span class="hs-operator hs-type">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">readPrec</span></span><span>
+</span><span id="line-128"></span><span>
+</span><span id="line-129"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679163252"><span id="local-6989586621679163256"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-130"></span><span>  </span><span id="local-6989586621679163265"><span class="annot"><span class="annottext">showsPrec :: Int -&gt; ID -&gt; ShowS
+</span><a href="#local-6989586621679163265"><span class="hs-identifier hs-var hs-var hs-var">showsPrec</span></a></span></span><span> </span><span id="local-6989586621679163267"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679163267"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679163268"><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163268"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-131"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; ShowS -&gt; ShowS
+</span><span class="hs-identifier hs-var">showParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679163267"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">&gt;</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ShowS -&gt; ShowS) -&gt; ShowS -&gt; ShowS
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-132"></span><span>      </span><span class="annot"><span class="annottext">String -&gt; ShowS
+</span><span class="hs-identifier hs-var">showString</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;ID.fromSymbol @&quot;</span></span><span> </span><span class="annot"><span class="annottext">ShowS -&gt; ShowS -&gt; ShowS
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; ShowS
+forall a. Show a =&gt; a -&gt; ShowS
+</span><span class="hs-identifier hs-var">shows</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ID -&gt; Text
+</span><a href="Taiwan.ID.html#toText"><span class="hs-identifier hs-var">toText</span></a></span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163268"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-133"></span><span>
+</span><span id="line-134"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-135"></span><span class="hs-comment">-- Construction</span><span>
+</span><span id="line-136"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-137"></span><span>
+</span><span id="line-138"></span><span class="hs-comment">-- | Constructs an 'ID' from a type-level textual symbol.</span><span>
+</span><span id="line-139"></span><span class="hs-comment">--</span><span>
+</span><span id="line-140"></span><span class="hs-comment">-- The symbol must be exactly 10 characters in length and of the form</span><span>
+</span><span id="line-141"></span><span class="hs-comment">-- __@A123456789@__:</span><span>
+</span><span id="line-142"></span><span class="hs-comment">--</span><span>
+</span><span id="line-143"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;A123456789&quot;</span><span>
+</span><span id="line-144"></span><span class="hs-comment">-- ID.fromSymbol @&quot;A123456789&quot;</span><span>
+</span><span id="line-145"></span><span class="hs-comment">--</span><span>
+</span><span id="line-146"></span><span class="hs-comment">-- More precisely:</span><span>
+</span><span id="line-147"></span><span class="hs-comment">--</span><span>
+</span><span id="line-148"></span><span class="hs-comment">--  - the symbol must match the regular expression __@^[A-Z][1289][0-9]{8}$@__</span><span>
+</span><span id="line-149"></span><span class="hs-comment">--  - the resultant ID must have a valid checksum.</span><span>
+</span><span id="line-150"></span><span class="hs-comment">--</span><span>
+</span><span id="line-151"></span><span class="hs-comment">-- Failure to satisfy these constraints will result in one of the following</span><span>
+</span><span id="line-152"></span><span class="hs-comment">-- __type errors__:</span><span>
+</span><span id="line-153"></span><span class="hs-comment">--</span><span>
+</span><span id="line-154"></span><span class="hs-comment">-- === Invalid lengths</span><span>
+</span><span id="line-155"></span><span class="hs-comment">--</span><span>
+</span><span id="line-156"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;A12345678&quot;</span><span>
+</span><span id="line-157"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-158"></span><span class="hs-comment">-- ... An ID must have exactly 10 characters.</span><span>
+</span><span id="line-159"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-160"></span><span class="hs-comment">--</span><span>
+</span><span id="line-161"></span><span class="hs-comment">-- === Invalid checksums</span><span>
+</span><span id="line-162"></span><span class="hs-comment">--</span><span>
+</span><span id="line-163"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;A123456780&quot;</span><span>
+</span><span id="line-164"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-165"></span><span class="hs-comment">-- ... ID has invalid checksum.</span><span>
+</span><span id="line-166"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-167"></span><span class="hs-comment">--</span><span>
+</span><span id="line-168"></span><span class="hs-comment">-- === Invalid characters</span><span>
+</span><span id="line-169"></span><span class="hs-comment">--</span><span>
+</span><span id="line-170"></span><span class="hs-comment">-- On detection of an invalid character, the resulting type error reports</span><span>
+</span><span id="line-171"></span><span class="hs-comment">-- both the position of the character and the set of characters permitted</span><span>
+</span><span id="line-172"></span><span class="hs-comment">-- at that position.</span><span>
+</span><span id="line-173"></span><span class="hs-comment">--</span><span>
+</span><span id="line-174"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;_123456789&quot;</span><span>
+</span><span id="line-175"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-176"></span><span class="hs-comment">--     &#8226; &quot;_123456789&quot;</span><span>
+</span><span id="line-177"></span><span class="hs-comment">--        ^</span><span>
+</span><span id="line-178"></span><span class="hs-comment">--       Character at this position must be an uppercase letter.</span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-180"></span><span class="hs-comment">--</span><span>
+</span><span id="line-181"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;A_23456789&quot;</span><span>
+</span><span id="line-182"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-183"></span><span class="hs-comment">--     &#8226; &quot;A_23456789&quot;</span><span>
+</span><span id="line-184"></span><span class="hs-comment">--         ^</span><span>
+</span><span id="line-185"></span><span class="hs-comment">--       Character at this position must be a digit from the set {1, 2, 8, 9}.</span><span>
+</span><span id="line-186"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-187"></span><span class="hs-comment">--</span><span>
+</span><span id="line-188"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;A1_3456789&quot;</span><span>
+</span><span id="line-189"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-190"></span><span class="hs-comment">--     &#8226; &quot;A1_3456789&quot;</span><span>
+</span><span id="line-191"></span><span class="hs-comment">--          ^</span><span>
+</span><span id="line-192"></span><span class="hs-comment">--       Character at this position must be a digit in the range [0 .. 9].</span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-194"></span><span class="hs-comment">--</span><span>
+</span><span id="line-195"></span><span class="hs-comment">-- === Missing or empty symbols</span><span>
+</span><span id="line-196"></span><span class="hs-comment">--</span><span>
+</span><span id="line-197"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol</span><span>
+</span><span id="line-198"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-199"></span><span class="hs-comment">-- ... Expected a type-level symbol of the form &quot;A123456789&quot;.</span><span>
+</span><span id="line-200"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-201"></span><span class="hs-comment">--</span><span>
+</span><span id="line-202"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromSymbol @&quot;&quot;</span><span>
+</span><span id="line-203"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-204"></span><span class="hs-comment">-- ... Expected a type-level symbol of the form &quot;A123456789&quot;.</span><span>
+</span><span id="line-205"></span><span class="hs-comment">-- ...</span><span>
+</span><span id="line-206"></span><span class="hs-comment">--</span><span>
+</span><span id="line-207"></span><span class="annot"><a href="Taiwan.ID.html#fromSymbol"><span class="hs-identifier hs-type">fromSymbol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679162962"><span class="annot"><a href="#local-6989586621679162962"><span class="hs-identifier hs-type">s</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span class="hs-special">)</span><span class="hs-operator">.</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#ValidID"><span class="hs-identifier hs-type">ValidID</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162962"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-208"></span><span id="fromSymbol"><span class="annot"><span class="annottext">fromSymbol :: forall (s :: Symbol). ValidID s =&gt; ID
+</span><a href="Taiwan.ID.html#fromSymbol"><span class="hs-identifier hs-var hs-var">fromSymbol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; ID
+</span><a href="Taiwan.ID.html#unsafeFromText"><span class="hs-identifier hs-var">unsafeFromText</span></a></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; ID) -&gt; Text -&gt; ID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Text
+</span><span class="hs-identifier hs-var">T.pack</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; Text) -&gt; String -&gt; Text
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Proxy s -&gt; String
+forall (n :: Symbol) (proxy :: Symbol -&gt; *).
+KnownSymbol n =&gt;
+proxy n -&gt; String
+</span><span class="hs-identifier hs-var">symbolVal</span></span><span> </span><span class="annot"><span class="annottext">(Proxy s -&gt; String) -&gt; Proxy s -&gt; String
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall {k} (t :: k). Proxy t
+forall (t :: Symbol). Proxy t
+</span><span class="hs-identifier hs-var">Proxy</span></span><span> </span><span class="hs-glyph">@</span><span class="annot"><a href="#local-6989586621679162962"><span class="hs-identifier hs-type">s</span></a></span><span>
+</span><span id="line-209"></span><span>
+</span><span id="line-210"></span><span class="hs-comment">-- | Attempts to construct an 'ID' from 'Text'.</span><span>
+</span><span id="line-211"></span><span class="hs-comment">--</span><span>
+</span><span id="line-212"></span><span class="hs-comment">-- The input must be exactly 10 characters in length and of the form</span><span>
+</span><span id="line-213"></span><span class="hs-comment">-- __@A123456789@__:</span><span>
+</span><span id="line-214"></span><span class="hs-comment">--</span><span>
+</span><span id="line-215"></span><span class="hs-comment">-- &gt;&gt;&gt; ID.fromText &quot;A123456789&quot;</span><span>
+</span><span id="line-216"></span><span class="hs-comment">-- Right (ID.fromSymbol @&quot;A123456789&quot;)</span><span>
+</span><span id="line-217"></span><span class="hs-comment">--</span><span>
+</span><span id="line-218"></span><span class="hs-comment">-- More precisely, the input must match the regular expression</span><span>
+</span><span id="line-219"></span><span class="hs-comment">-- __@^[A-Z][1289][0-9]{8}$@__, and the resultant ID must have a valid</span><span>
+</span><span id="line-220"></span><span class="hs-comment">-- checksum.</span><span>
+</span><span id="line-221"></span><span class="hs-comment">--</span><span>
+</span><span id="line-222"></span><span class="hs-comment">-- This function satisfies the following law:</span><span>
+</span><span id="line-223"></span><span class="hs-comment">--</span><span>
+</span><span id="line-224"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-225"></span><span class="hs-comment">-- 'fromText' ('toText' i) '==' 'Right' i</span><span>
+</span><span id="line-226"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-227"></span><span class="hs-comment">--</span><span>
+</span><span id="line-228"></span><span class="annot"><a href="Taiwan.ID.html#fromText"><span class="hs-identifier hs-type">fromText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#FromTextError"><span class="hs-identifier hs-type">FromTextError</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-229"></span><span id="fromText"><span class="annot"><span class="annottext">fromText :: Text -&gt; Either FromTextError ID
+</span><a href="Taiwan.ID.html#fromText"><span class="hs-identifier hs-var hs-var">fromText</span></a></span></span><span> </span><span id="local-6989586621679163278"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679163278"><span class="hs-identifier hs-var">text</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-230"></span><span>    </span><span id="local-6989586621679163279"><span class="annot"><a href="#local-6989586621679163279"><span class="hs-identifier hs-var">unchecked</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(FromTextError -&gt; FromTextError)
+-&gt; Either FromTextError UncheckedID
+-&gt; Either FromTextError UncheckedID
+forall a b c. (a -&gt; b) -&gt; Either a c -&gt; Either b c
+forall (p :: * -&gt; * -&gt; *) a b c.
+Bifunctor p =&gt;
+(a -&gt; b) -&gt; p a c -&gt; p b c
+</span><span class="hs-identifier hs-var">first</span></span><span> </span><span class="annot"><span class="annottext">FromTextError -&gt; FromTextError
+</span><a href="#local-6989586621679163280"><span class="hs-identifier hs-var">fromUncheckedError</span></a></span><span> </span><span class="annot"><span class="annottext">(Either FromTextError UncheckedID
+ -&gt; Either FromTextError UncheckedID)
+-&gt; Either FromTextError UncheckedID
+-&gt; Either FromTextError UncheckedID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Text -&gt; Either FromTextError UncheckedID
+</span><a href="Taiwan.ID.Unchecked.html#fromText"><span class="hs-identifier hs-var">U.fromText</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679163278"><span class="hs-identifier hs-var">text</span></a></span><span>
+</span><span id="line-231"></span><span>    </span><span class="annot"><a href="Taiwan.ID.Utilities.html#guard"><span class="hs-identifier hs-type">guard</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.html#InvalidChecksum"><span class="hs-identifier hs-type">InvalidChecksum</span></a></span><span> </span><span class="annot"><span class="hs-operator hs-type">$</span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#fromUnchecked"><span class="hs-identifier hs-type">fromUnchecked</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679163279"><span class="hs-identifier hs-type">unchecked</span></a></span><span>
+</span><span id="line-232"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-233"></span><span>    </span><span class="annot"><a href="#local-6989586621679163280"><span class="hs-identifier hs-type">fromUncheckedError</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#FromTextError"><span class="hs-identifier hs-type">U.FromTextError</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#FromTextError"><span class="hs-identifier hs-type">FromTextError</span></a></span><span>
+</span><span id="line-234"></span><span>    </span><span id="local-6989586621679163280"><span class="annot"><span class="annottext">fromUncheckedError :: FromTextError -&gt; FromTextError
+</span><a href="#local-6989586621679163280"><span class="hs-identifier hs-var hs-var">fromUncheckedError</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-235"></span><span>      </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#InvalidChar"><span class="hs-identifier hs-type">U.InvalidChar</span></a></span><span> </span><span id="local-6989586621679163285"><span class="annot"><span class="annottext">CharIndex
+</span><a href="#local-6989586621679163285"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679163286"><span class="annot"><span class="annottext">CharSet
+</span><a href="#local-6989586621679163286"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-236"></span><span>        </span><span class="annot"><span class="annottext">CharIndex -&gt; CharSet -&gt; FromTextError
+</span><a href="Taiwan.ID.html#InvalidChar"><span class="hs-identifier hs-var">InvalidChar</span></a></span><span> </span><span class="annot"><span class="annottext">CharIndex
+</span><a href="#local-6989586621679163285"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">CharSet
+</span><a href="#local-6989586621679163286"><span class="hs-identifier hs-var">r</span></a></span><span>
+</span><span id="line-237"></span><span>      </span><span class="annot"><span class="annottext">FromTextError
+</span><a href="Taiwan.ID.Unchecked.html#InvalidLength"><span class="hs-identifier hs-var">U.InvalidLength</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-238"></span><span>        </span><span class="annot"><span class="annottext">FromTextError
+</span><a href="Taiwan.ID.html#InvalidLength"><span class="hs-identifier hs-var">InvalidLength</span></a></span><span>
+</span><span id="line-239"></span><span>
+</span><span id="line-240"></span><span class="annot"><a href="Taiwan.ID.html#unsafeFromText"><span class="hs-identifier hs-type">unsafeFromText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-241"></span><span id="unsafeFromText"><span class="annot"><span class="annottext">unsafeFromText :: Text -&gt; ID
+</span><a href="Taiwan.ID.html#unsafeFromText"><span class="hs-identifier hs-var hs-var">unsafeFromText</span></a></span></span><span> </span><span id="local-6989586621679163290"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679163290"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-242"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Text -&gt; Either FromTextError ID
+</span><a href="Taiwan.ID.html#fromText"><span class="hs-identifier hs-var">fromText</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679163290"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-243"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span class="annot"><span class="annottext">FromTextError
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; ID
+forall a. HasCallStack =&gt; String -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><span class="hs-string">&quot;unsafeFromText&quot;</span></span><span>
+</span><span id="line-244"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span id="local-6989586621679163292"><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163292"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163292"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-245"></span><span>
+</span><span id="line-246"></span><span class="hs-comment">-- | Indicates an error that occurred while constructing an 'ID' from 'Text'.</span><span>
+</span><span id="line-247"></span><span class="hs-comment">--</span><span>
+</span><span id="line-248"></span><span class="hs-keyword">data</span><span> </span><span id="FromTextError"><span class="annot"><a href="Taiwan.ID.html#FromTextError"><span class="hs-identifier hs-var">FromTextError</span></a></span></span><span>
+</span><span id="line-249"></span><span>
+</span><span id="line-250"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="InvalidChar"><span class="annot"><a href="Taiwan.ID.html#InvalidChar"><span class="hs-identifier hs-var">InvalidChar</span></a></span></span><span> </span><span class="annot"><a href="Taiwan.ID.CharIndex.html#CharIndex"><span class="hs-identifier hs-type">CharIndex</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.CharSet.html#CharSet"><span class="hs-identifier hs-type">CharSet</span></a></span><span>
+</span><span id="line-251"></span><span>  </span><span class="hs-comment">-- ^ Indicates that the input text contains a character that is not allowed.</span><span>
+</span><span id="line-252"></span><span>  </span><span class="hs-comment">--</span><span>
+</span><span id="line-253"></span><span>  </span><span class="hs-comment">--   - `CharIndex` specifies the position of the invalid character.</span><span>
+</span><span id="line-254"></span><span>  </span><span class="hs-comment">--   - `CharSet` specifies the set of characters allowed at that position.</span><span>
+</span><span id="line-255"></span><span>
+</span><span id="line-256"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="InvalidChecksum"><span class="annot"><a href="Taiwan.ID.html#InvalidChecksum"><span class="hs-identifier hs-var">InvalidChecksum</span></a></span></span><span>
+</span><span id="line-257"></span><span>  </span><span class="annot"><span class="hs-comment">-- ^ Indicates that the parsed identification number has an invalid checksum.</span></span><span>
+</span><span id="line-258"></span><span>
+</span><span id="line-259"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="InvalidLength"><span class="annot"><a href="Taiwan.ID.html#InvalidLength"><span class="hs-identifier hs-var">InvalidLength</span></a></span></span><span>
+</span><span id="line-260"></span><span>  </span><span class="annot"><span class="hs-comment">-- ^ Indicates that the input text has an invalid length.</span></span><span>
+</span><span id="line-261"></span><span>
+</span><span id="line-262"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679163296"><span id="local-6989586621679163305"><span class="annot"><span class="annottext">FromTextError -&gt; FromTextError -&gt; Bool
+(FromTextError -&gt; FromTextError -&gt; Bool)
+-&gt; (FromTextError -&gt; FromTextError -&gt; Bool) -&gt; Eq FromTextError
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: FromTextError -&gt; FromTextError -&gt; Bool
+== :: FromTextError -&gt; FromTextError -&gt; Bool
+$c/= :: FromTextError -&gt; FromTextError -&gt; Bool
+/= :: FromTextError -&gt; FromTextError -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679163311"><span id="local-6989586621679163317"><span id="local-6989586621679163321"><span id="local-6989586621679163325"><span id="local-6989586621679163328"><span id="local-6989586621679163331"><span id="local-6989586621679163334"><span class="annot"><span class="annottext">Eq FromTextError
+Eq FromTextError =&gt;
+(FromTextError -&gt; FromTextError -&gt; Ordering)
+-&gt; (FromTextError -&gt; FromTextError -&gt; Bool)
+-&gt; (FromTextError -&gt; FromTextError -&gt; Bool)
+-&gt; (FromTextError -&gt; FromTextError -&gt; Bool)
+-&gt; (FromTextError -&gt; FromTextError -&gt; Bool)
+-&gt; (FromTextError -&gt; FromTextError -&gt; FromTextError)
+-&gt; (FromTextError -&gt; FromTextError -&gt; FromTextError)
+-&gt; Ord FromTextError
+FromTextError -&gt; FromTextError -&gt; Bool
+FromTextError -&gt; FromTextError -&gt; Ordering
+FromTextError -&gt; FromTextError -&gt; FromTextError
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: FromTextError -&gt; FromTextError -&gt; Ordering
+compare :: FromTextError -&gt; FromTextError -&gt; Ordering
+$c&lt; :: FromTextError -&gt; FromTextError -&gt; Bool
+&lt; :: FromTextError -&gt; FromTextError -&gt; Bool
+$c&lt;= :: FromTextError -&gt; FromTextError -&gt; Bool
+&lt;= :: FromTextError -&gt; FromTextError -&gt; Bool
+$c&gt; :: FromTextError -&gt; FromTextError -&gt; Bool
+&gt; :: FromTextError -&gt; FromTextError -&gt; Bool
+$c&gt;= :: FromTextError -&gt; FromTextError -&gt; Bool
+&gt;= :: FromTextError -&gt; FromTextError -&gt; Bool
+$cmax :: FromTextError -&gt; FromTextError -&gt; FromTextError
+max :: FromTextError -&gt; FromTextError -&gt; FromTextError
+$cmin :: FromTextError -&gt; FromTextError -&gt; FromTextError
+min :: FromTextError -&gt; FromTextError -&gt; FromTextError
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679163337"><span id="local-6989586621679163344"><span id="local-6989586621679163348"><span class="annot"><span class="annottext">Int -&gt; FromTextError -&gt; ShowS
+[FromTextError] -&gt; ShowS
+FromTextError -&gt; String
+(Int -&gt; FromTextError -&gt; ShowS)
+-&gt; (FromTextError -&gt; String)
+-&gt; ([FromTextError] -&gt; ShowS)
+-&gt; Show FromTextError
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; FromTextError -&gt; ShowS
+showsPrec :: Int -&gt; FromTextError -&gt; ShowS
+$cshow :: FromTextError -&gt; String
+show :: FromTextError -&gt; String
+$cshowList :: [FromTextError] -&gt; ShowS
+showList :: [FromTextError] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-263"></span><span>
+</span><span id="line-264"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-265"></span><span class="hs-comment">-- Conversion</span><span>
+</span><span id="line-266"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-267"></span><span>
+</span><span id="line-268"></span><span class="hs-comment">-- | Converts an 'ID' to 'Text'.</span><span>
+</span><span id="line-269"></span><span class="hs-comment">--</span><span>
+</span><span id="line-270"></span><span class="hs-comment">-- The output is of the form __@A123456789@__.</span><span>
+</span><span id="line-271"></span><span class="hs-comment">--</span><span>
+</span><span id="line-272"></span><span class="hs-comment">-- This function satisfies the following law:</span><span>
+</span><span id="line-273"></span><span class="hs-comment">--</span><span>
+</span><span id="line-274"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-275"></span><span class="hs-comment">-- 'fromText' ('toText' i) '==' 'Right' i</span><span>
+</span><span id="line-276"></span><span class="hs-comment">-- @</span><span>
+</span><span id="line-277"></span><span class="hs-comment">--</span><span>
+</span><span id="line-278"></span><span class="annot"><a href="Taiwan.ID.html#toText"><span class="hs-identifier hs-type">toText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
+</span><span id="line-279"></span><span id="toText"><span class="annot"><span class="annottext">toText :: ID -&gt; Text
+</span><a href="Taiwan.ID.html#toText"><span class="hs-identifier hs-var hs-var">toText</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UncheckedID -&gt; Text
+</span><a href="Taiwan.ID.Unchecked.html#toText"><span class="hs-identifier hs-var">U.toText</span></a></span><span> </span><span class="annot"><span class="annottext">(UncheckedID -&gt; Text) -&gt; (ID -&gt; UncheckedID) -&gt; ID -&gt; Text
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">ID -&gt; UncheckedID
+</span><a href="Taiwan.ID.html#toUnchecked"><span class="hs-identifier hs-var">toUnchecked</span></a></span><span>
+</span><span id="line-280"></span><span>
+</span><span id="line-281"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-282"></span><span class="hs-comment">-- Validity</span><span>
+</span><span id="line-283"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-284"></span><span>
+</span><span id="line-285"></span><span class="hs-comment">-- | Computes the terminal checksum digit of an 'ID'.</span><span>
+</span><span id="line-286"></span><span class="hs-comment">--</span><span>
+</span><span id="line-287"></span><span class="annot"><a href="Taiwan.ID.html#checksum"><span class="hs-identifier hs-type">checksum</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit.html#Digit"><span class="hs-identifier hs-type">Digit</span></a></span><span>
+</span><span id="line-288"></span><span id="checksum"><span class="annot"><span class="annottext">checksum :: ID -&gt; Digit
+</span><a href="Taiwan.ID.html#checksum"><span class="hs-identifier hs-var hs-var">checksum</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span id="local-6989586621679163352"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163352"><span class="hs-identifier hs-var">u0</span></a></span></span><span> </span><span id="local-6989586621679163353"><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163353"><span class="hs-identifier hs-var">u1</span></a></span></span><span> </span><span id="local-6989586621679163354"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163354"><span class="hs-identifier hs-var">u2</span></a></span></span><span> </span><span id="local-6989586621679163355"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163355"><span class="hs-identifier hs-var">u3</span></a></span></span><span> </span><span id="local-6989586621679163356"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163356"><span class="hs-identifier hs-var">u4</span></a></span></span><span> </span><span id="local-6989586621679163357"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163357"><span class="hs-identifier hs-var">u5</span></a></span></span><span> </span><span id="local-6989586621679163358"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163358"><span class="hs-identifier hs-var">u6</span></a></span></span><span> </span><span id="local-6989586621679163359"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163359"><span class="hs-identifier hs-var">u7</span></a></span></span><span> </span><span id="local-6989586621679163360"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163360"><span class="hs-identifier hs-var">u8</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-289"></span><span>  </span><span class="annot"><span class="annottext">Digit -&gt; Digit
+forall a. Num a =&gt; a -&gt; a
+</span><span class="hs-identifier hs-var">negate</span></span><span> </span><span class="annot"><span class="annottext">(Digit -&gt; Digit) -&gt; Digit -&gt; Digit
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UncheckedID -&gt; Digit
+</span><a href="Taiwan.ID.Unchecked.html#checksum"><span class="hs-identifier hs-var">U.checksum</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Letter
+-&gt; Digit1289
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; UncheckedID
+</span><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier hs-var">UncheckedID</span></a></span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163352"><span class="hs-identifier hs-var">u0</span></a></span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163353"><span class="hs-identifier hs-var">u1</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163354"><span class="hs-identifier hs-var">u2</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163355"><span class="hs-identifier hs-var">u3</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163356"><span class="hs-identifier hs-var">u4</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163357"><span class="hs-identifier hs-var">u5</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163358"><span class="hs-identifier hs-var">u6</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163359"><span class="hs-identifier hs-var">u7</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163360"><span class="hs-identifier hs-var">u8</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
+</span><span id="line-290"></span><span>
+</span><span id="line-291"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-292"></span><span class="hs-comment">-- Generation</span><span>
+</span><span id="line-293"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-294"></span><span>
+</span><span id="line-295"></span><span class="hs-comment">-- | Generates a random 'ID'.</span><span>
+</span><span id="line-296"></span><span class="hs-comment">--</span><span>
+</span><span id="line-297"></span><span id="local-6989586621679162995"><span class="annot"><a href="Taiwan.ID.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679162995"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679162995"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span></span><span>
+</span><span id="line-298"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m ID
+</span><a href="Taiwan.ID.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m ID
+forall (m :: * -&gt; *) a.
+(MonadRandom m, Finitary a, 1 &lt;= Cardinality a) =&gt;
+m a
+</span><a href="Taiwan.ID.Utilities.html#randomFinitary"><span class="hs-identifier hs-var">randomFinitary</span></a></span><span>
+</span><span id="line-299"></span><span>
+</span><span id="line-300"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-301"></span><span class="hs-comment">-- Inspection</span><span>
+</span><span id="line-302"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-303"></span><span>
+</span><span id="line-304"></span><span class="hs-comment">-- | Decodes the 'Gender' component of an 'ID'.</span><span>
+</span><span id="line-305"></span><span class="hs-comment">--</span><span>
+</span><span id="line-306"></span><span class="annot"><a href="Taiwan.ID.html#getGender"><span class="hs-identifier hs-type">getGender</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span>
+</span><span id="line-307"></span><span id="getGender"><span class="annot"><span class="annottext">getGender :: ID -&gt; Gender
+</span><a href="Taiwan.ID.html#getGender"><span class="hs-identifier hs-var hs-var">getGender</span></a></span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-special">{</span><span id="local-6989586621679163367"><span class="annot"><span class="annottext">Digit1289
+c1 :: ID -&gt; Digit1289
+c1 :: Digit1289
+</span><a href="Taiwan.ID.html#c1"><span class="hs-identifier hs-var hs-var">c1</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Gender, Nationality) -&gt; Gender
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">((Gender, Nationality) -&gt; Gender)
+-&gt; (Gender, Nationality) -&gt; Gender
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Digit1289 -&gt; (Gender, Nationality)
+</span><a href="Taiwan.ID.html#decodeC1"><span class="hs-identifier hs-var">decodeC1</span></a></span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163367"><span class="hs-identifier hs-var">c1</span></a></span><span>
+</span><span id="line-308"></span><span>
+</span><span id="line-309"></span><span class="hs-comment">-- | Decodes the 'Location' component of an 'ID'.</span><span>
+</span><span id="line-310"></span><span class="hs-comment">--</span><span>
+</span><span id="line-311"></span><span class="annot"><a href="Taiwan.ID.html#getLocation"><span class="hs-identifier hs-type">getLocation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span>
+</span><span id="line-312"></span><span id="getLocation"><span class="annot"><span class="annottext">getLocation :: ID -&gt; Location
+</span><a href="Taiwan.ID.html#getLocation"><span class="hs-identifier hs-var hs-var">getLocation</span></a></span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-special">{</span><span id="local-6989586621679163370"><span class="annot"><span class="annottext">Letter
+c0 :: ID -&gt; Letter
+c0 :: Letter
+</span><a href="Taiwan.ID.html#c0"><span class="hs-identifier hs-var hs-var">c0</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Letter -&gt; Location
+</span><a href="Taiwan.ID.Location.html#fromLetter"><span class="hs-identifier hs-var">Location.fromLetter</span></a></span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163370"><span class="hs-identifier hs-var">c0</span></a></span><span>
+</span><span id="line-313"></span><span>
+</span><span id="line-314"></span><span class="hs-comment">-- | Decodes the 'Nationality' component of an 'ID'.</span><span>
+</span><span id="line-315"></span><span class="hs-comment">--</span><span>
+</span><span id="line-316"></span><span class="annot"><a href="Taiwan.ID.html#getNationality"><span class="hs-identifier hs-type">getNationality</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier hs-type">Nationality</span></a></span><span>
+</span><span id="line-317"></span><span id="getNationality"><span class="annot"><span class="annottext">getNationality :: ID -&gt; Nationality
+</span><a href="Taiwan.ID.html#getNationality"><span class="hs-identifier hs-var hs-var">getNationality</span></a></span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-special">{</span><span id="local-6989586621679163372"><span class="annot"><span class="annottext">Digit1289
+c1 :: ID -&gt; Digit1289
+c1 :: Digit1289
+</span><a href="Taiwan.ID.html#c1"><span class="hs-identifier hs-var hs-var">c1</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Gender, Nationality) -&gt; Nationality
+forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">((Gender, Nationality) -&gt; Nationality)
+-&gt; (Gender, Nationality) -&gt; Nationality
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Digit1289 -&gt; (Gender, Nationality)
+</span><a href="Taiwan.ID.html#decodeC1"><span class="hs-identifier hs-var">decodeC1</span></a></span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163372"><span class="hs-identifier hs-var">c1</span></a></span><span>
+</span><span id="line-318"></span><span>
+</span><span id="line-319"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-320"></span><span class="hs-comment">-- Modification</span><span>
+</span><span id="line-321"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-322"></span><span>
+</span><span id="line-323"></span><span class="hs-comment">-- | Updates the 'Gender' component of an 'ID'.</span><span>
+</span><span id="line-324"></span><span class="hs-comment">--</span><span>
+</span><span id="line-325"></span><span class="annot"><a href="Taiwan.ID.html#setGender"><span class="hs-identifier hs-type">setGender</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-326"></span><span id="setGender"><span class="annot"><span class="annottext">setGender :: Gender -&gt; ID -&gt; ID
+</span><a href="Taiwan.ID.html#setGender"><span class="hs-identifier hs-var hs-var">setGender</span></a></span></span><span> </span><span id="local-6989586621679163374"><span class="annot"><span class="annottext">Gender
+</span><a href="#local-6989586621679163374"><span class="hs-identifier hs-var">gender</span></a></span></span><span> </span><span id="local-6989586621679163375"><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163375"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163375"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Taiwan.ID.html#c1"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Taiwan.ID.html#encodeC1"><span class="hs-identifier hs-type">encodeC1</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679163374"><span class="hs-identifier hs-type">gender</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.html#getNationality"><span class="hs-identifier hs-type">getNationality</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679163375"><span class="hs-identifier hs-type">i</span></a></span><span class="hs-special">)</span><span class="hs-special">}</span><span>
+</span><span id="line-327"></span><span>
+</span><span id="line-328"></span><span class="hs-comment">-- | Updates the 'Location' component of an 'ID'.</span><span>
+</span><span id="line-329"></span><span class="hs-comment">--</span><span>
+</span><span id="line-330"></span><span class="annot"><a href="Taiwan.ID.html#setLocation"><span class="hs-identifier hs-type">setLocation</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#Location"><span class="hs-identifier hs-type">Location</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-331"></span><span id="setLocation"><span class="annot"><span class="annottext">setLocation :: Location -&gt; ID -&gt; ID
+</span><a href="Taiwan.ID.html#setLocation"><span class="hs-identifier hs-var hs-var">setLocation</span></a></span></span><span> </span><span id="local-6989586621679163377"><span class="annot"><span class="annottext">Location
+</span><a href="#local-6989586621679163377"><span class="hs-identifier hs-var">location</span></a></span></span><span> </span><span id="local-6989586621679163378"><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163378"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163378"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Taiwan.ID.html#c0"><span class="hs-identifier hs-var">c0</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Taiwan.ID.Location.html#toLetter"><span class="hs-identifier hs-type">Location.toLetter</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679163377"><span class="hs-identifier hs-type">location</span></a></span><span class="hs-special">}</span><span>
+</span><span id="line-332"></span><span>
+</span><span id="line-333"></span><span class="hs-comment">-- | Updates the 'Nationality' component of an 'ID'.</span><span>
+</span><span id="line-334"></span><span class="hs-comment">--</span><span>
+</span><span id="line-335"></span><span class="annot"><a href="Taiwan.ID.html#setNationality"><span class="hs-identifier hs-type">setNationality</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier hs-type">Nationality</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-336"></span><span id="setNationality"><span class="annot"><span class="annottext">setNationality :: Nationality -&gt; ID -&gt; ID
+</span><a href="Taiwan.ID.html#setNationality"><span class="hs-identifier hs-var hs-var">setNationality</span></a></span></span><span> </span><span id="local-6989586621679163380"><span class="annot"><span class="annottext">Nationality
+</span><a href="#local-6989586621679163380"><span class="hs-identifier hs-var">nationality</span></a></span></span><span> </span><span id="local-6989586621679163381"><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163381"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163381"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Taiwan.ID.html#c1"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Taiwan.ID.html#encodeC1"><span class="hs-identifier hs-type">encodeC1</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.html#getGender"><span class="hs-identifier hs-type">getGender</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679163381"><span class="hs-identifier hs-type">i</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679163380"><span class="hs-identifier hs-type">nationality</span></a></span><span class="hs-special">)</span><span class="hs-special">}</span><span>
+</span><span id="line-337"></span><span>
+</span><span id="line-338"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-339"></span><span class="hs-comment">-- Internal</span><span>
+</span><span id="line-340"></span><span class="hs-comment">--------------------------------------------------------------------------------</span><span>
+</span><span id="line-341"></span><span>
+</span><span id="line-342"></span><span class="annot"><a href="Taiwan.ID.html#decodeC1"><span class="hs-identifier hs-type">decodeC1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit1289.html#Digit1289"><span class="hs-identifier hs-type">Digit1289</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier hs-type">Nationality</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-343"></span><span id="decodeC1"><span class="annot"><span class="annottext">decodeC1 :: Digit1289 -&gt; (Gender, Nationality)
+</span><a href="Taiwan.ID.html#decodeC1"><span class="hs-identifier hs-var hs-var">decodeC1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-344"></span><span>  </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_1"><span class="hs-identifier hs-var">D1289_1</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span><span class="hs-special">,</span><span>    </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#National"><span class="hs-identifier hs-var">National</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-345"></span><span>  </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_2"><span class="hs-identifier hs-var">D1289_2</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span><span class="hs-special">,</span><span>    </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#National"><span class="hs-identifier hs-var">National</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-346"></span><span>  </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_8"><span class="hs-identifier hs-var">D1289_8</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#NonNational"><span class="hs-identifier hs-var">NonNational</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-347"></span><span>  </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_9"><span class="hs-identifier hs-var">D1289_9</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#NonNational"><span class="hs-identifier hs-var">NonNational</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-348"></span><span>
+</span><span id="line-349"></span><span class="annot"><a href="Taiwan.ID.html#encodeC1"><span class="hs-identifier hs-type">encodeC1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Gender.html#Gender"><span class="hs-identifier hs-type">Gender</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Taiwan.ID.Nationality.html#Nationality"><span class="hs-identifier hs-type">Nationality</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Digit1289.html#Digit1289"><span class="hs-identifier hs-type">Digit1289</span></a></span><span>
+</span><span id="line-350"></span><span id="encodeC1"><span class="annot"><span class="annottext">encodeC1 :: (Gender, Nationality) -&gt; Digit1289
+</span><a href="Taiwan.ID.html#encodeC1"><span class="hs-identifier hs-var hs-var">encodeC1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span>
+</span><span id="line-351"></span><span>  </span><span class="hs-special">(</span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span><span class="hs-special">,</span><span>    </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#National"><span class="hs-identifier hs-var">National</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_1"><span class="hs-identifier hs-var">D1289_1</span></a></span><span>
+</span><span id="line-352"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span><span class="hs-special">,</span><span>    </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#National"><span class="hs-identifier hs-var">National</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_2"><span class="hs-identifier hs-var">D1289_2</span></a></span><span>
+</span><span id="line-353"></span><span>  </span><span class="hs-special">(</span><span>  </span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Male"><span class="hs-identifier hs-var">Male</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#NonNational"><span class="hs-identifier hs-var">NonNational</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_8"><span class="hs-identifier hs-var">D1289_8</span></a></span><span>
+</span><span id="line-354"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Gender
+</span><a href="Taiwan.ID.Gender.html#Female"><span class="hs-identifier hs-var">Female</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Nationality
+</span><a href="Taiwan.ID.Nationality.html#NonNational"><span class="hs-identifier hs-var">NonNational</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="Taiwan.ID.Digit1289.html#D1289_9"><span class="hs-identifier hs-var">D1289_9</span></a></span><span>
+</span><span id="line-355"></span><span>
+</span><span id="line-356"></span><span class="annot"><a href="Taiwan.ID.html#fromUnchecked"><span class="hs-identifier hs-type">fromUnchecked</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier hs-type">UncheckedID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span>
+</span><span id="line-357"></span><span id="fromUnchecked"><span class="annot"><span class="annottext">fromUnchecked :: UncheckedID -&gt; Maybe ID
+</span><a href="Taiwan.ID.html#fromUnchecked"><span class="hs-identifier hs-var hs-var">fromUnchecked</span></a></span></span><span> </span><span id="local-6989586621679163390"><span class="annot"><span class="annottext">u :: UncheckedID
+</span><a href="#local-6989586621679163390"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier hs-type">UncheckedID</span></a></span><span> </span><span id="local-6989586621679163391"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163391"><span class="hs-identifier hs-var">u0</span></a></span></span><span> </span><span id="local-6989586621679163392"><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163392"><span class="hs-identifier hs-var">u1</span></a></span></span><span> </span><span id="local-6989586621679163393"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163393"><span class="hs-identifier hs-var">u2</span></a></span></span><span> </span><span id="local-6989586621679163394"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163394"><span class="hs-identifier hs-var">u3</span></a></span></span><span> </span><span id="local-6989586621679163395"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163395"><span class="hs-identifier hs-var">u4</span></a></span></span><span> </span><span id="local-6989586621679163396"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163396"><span class="hs-identifier hs-var">u5</span></a></span></span><span> </span><span id="local-6989586621679163397"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163397"><span class="hs-identifier hs-var">u6</span></a></span></span><span> </span><span id="local-6989586621679163398"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163398"><span class="hs-identifier hs-var">u7</span></a></span></span><span> </span><span id="local-6989586621679163399"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163399"><span class="hs-identifier hs-var">u8</span></a></span></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-358"></span><span>    </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">UncheckedID -&gt; ChecksumValidity
+</span><a href="Taiwan.ID.Unchecked.html#checksumValidity"><span class="hs-identifier hs-var">U.checksumValidity</span></a></span><span> </span><span class="annot"><span class="annottext">UncheckedID
+</span><a href="#local-6989586621679163390"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-359"></span><span>      </span><span class="annot"><span class="annottext">ChecksumValidity
+</span><a href="Taiwan.ID.Unchecked.html#ChecksumValid"><span class="hs-identifier hs-var">U.ChecksumValid</span></a></span><span>   </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">ID -&gt; Maybe ID
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163402"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-360"></span><span>      </span><span class="annot"><span class="annottext">ChecksumValidity
+</span><a href="Taiwan.ID.Unchecked.html#ChecksumInvalid"><span class="hs-identifier hs-var">U.ChecksumInvalid</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Maybe ID
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-361"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-362"></span><span>    </span><span id="local-6989586621679163402"><span class="annot"><span class="annottext">i :: ID
+</span><a href="#local-6989586621679163402"><span class="hs-identifier hs-var hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Letter
+-&gt; Digit1289
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; ID
+</span><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-var">ID</span></a></span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163391"><span class="hs-identifier hs-var">u0</span></a></span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163392"><span class="hs-identifier hs-var">u1</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163393"><span class="hs-identifier hs-var">u2</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163394"><span class="hs-identifier hs-var">u3</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163395"><span class="hs-identifier hs-var">u4</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163396"><span class="hs-identifier hs-var">u5</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163397"><span class="hs-identifier hs-var">u6</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163398"><span class="hs-identifier hs-var">u7</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163399"><span class="hs-identifier hs-var">u8</span></a></span><span>
+</span><span id="line-363"></span><span>
+</span><span id="line-364"></span><span class="annot"><a href="Taiwan.ID.html#toUnchecked"><span class="hs-identifier hs-type">toUnchecked</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier hs-type">UncheckedID</span></a></span><span>
+</span><span id="line-365"></span><span id="toUnchecked"><span class="annot"><span class="annottext">toUnchecked :: ID -&gt; UncheckedID
+</span><a href="Taiwan.ID.html#toUnchecked"><span class="hs-identifier hs-var hs-var">toUnchecked</span></a></span></span><span> </span><span id="local-6989586621679163404"><span class="annot"><span class="annottext">i :: ID
+</span><a href="#local-6989586621679163404"><span class="hs-identifier hs-var">i</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.html#ID"><span class="hs-identifier hs-type">ID</span></a></span><span> </span><span id="local-6989586621679163405"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163405"><span class="hs-identifier hs-var">u0</span></a></span></span><span> </span><span id="local-6989586621679163406"><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163406"><span class="hs-identifier hs-var">u1</span></a></span></span><span> </span><span id="local-6989586621679163407"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163407"><span class="hs-identifier hs-var">u2</span></a></span></span><span> </span><span id="local-6989586621679163408"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163408"><span class="hs-identifier hs-var">u3</span></a></span></span><span> </span><span id="local-6989586621679163409"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163409"><span class="hs-identifier hs-var">u4</span></a></span></span><span> </span><span id="local-6989586621679163410"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163410"><span class="hs-identifier hs-var">u5</span></a></span></span><span> </span><span id="local-6989586621679163411"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163411"><span class="hs-identifier hs-var">u6</span></a></span></span><span> </span><span id="local-6989586621679163412"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163412"><span class="hs-identifier hs-var">u7</span></a></span></span><span> </span><span id="local-6989586621679163413"><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163413"><span class="hs-identifier hs-var">u8</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-366"></span><span>  </span><span class="annot"><span class="annottext">Letter
+-&gt; Digit1289
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; Digit
+-&gt; UncheckedID
+</span><a href="Taiwan.ID.Unchecked.html#UncheckedID"><span class="hs-identifier hs-var">UncheckedID</span></a></span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679163405"><span class="hs-identifier hs-var">u0</span></a></span><span> </span><span class="annot"><span class="annottext">Digit1289
+</span><a href="#local-6989586621679163406"><span class="hs-identifier hs-var">u1</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163407"><span class="hs-identifier hs-var">u2</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163408"><span class="hs-identifier hs-var">u3</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163409"><span class="hs-identifier hs-var">u4</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163410"><span class="hs-identifier hs-var">u5</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163411"><span class="hs-identifier hs-var">u6</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163412"><span class="hs-identifier hs-var">u7</span></a></span><span> </span><span class="annot"><span class="annottext">Digit
+</span><a href="#local-6989586621679163413"><span class="hs-identifier hs-var">u8</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ID -&gt; Digit
+</span><a href="Taiwan.ID.html#checksum"><span class="hs-identifier hs-var">checksum</span></a></span><span> </span><span class="annot"><span class="annottext">ID
+</span><a href="#local-6989586621679163404"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-367"></span></pre></body></html>
