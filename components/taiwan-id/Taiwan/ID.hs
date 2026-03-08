@@ -9,7 +9,7 @@
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module ROC.ID
+module Taiwan.ID
   (
   -- * Type
     ID (..)
@@ -54,47 +54,47 @@ import GHC.Generics
   ( Generic )
 import GHC.TypeLits
   ( Symbol, symbolVal )
-import ROC.ID.CharIndex
+import Taiwan.ID.CharIndex
   ( CharIndex (..) )
-import ROC.ID.CharSet
+import Taiwan.ID.CharSet
   ( CharSet (..) )
-import ROC.ID.Digit
+import Taiwan.ID.Digit
   ( Digit (..) )
-import ROC.ID.Digit1289
+import Taiwan.ID.Digit1289
   ( Digit1289 (..) )
-import ROC.ID.Gender
+import Taiwan.ID.Gender
   ( Gender (..) )
-import ROC.ID.Letter
+import Taiwan.ID.Letter
   ( Letter (..) )
-import ROC.ID.Location
+import Taiwan.ID.Location
   ( Location )
-import ROC.ID.Nationality
+import Taiwan.ID.Nationality
   ( Nationality (..) )
-import ROC.ID.Unchecked
+import Taiwan.ID.Unchecked
   ( UncheckedID (UncheckedID), ValidID )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( guard, randomFinitary )
 import Text.Read
   ( Lexeme (Ident, Symbol, Punc), Read (readPrec), lexP, parens, prec )
 
 import qualified Data.Text as T
-import qualified ROC.ID.Location as Location
-import qualified ROC.ID.Unchecked as U
+import qualified Taiwan.ID.Location as Location
+import qualified Taiwan.ID.Unchecked as U
 
 -- |
 -- $setup
 -- >>> :set -XDataKinds
 -- >>> :set -XOverloadedStrings
 -- >>> :set -XTypeApplications
--- >>> import ROC.ID
--- >>> import qualified ROC.ID as ID
+-- >>> import Taiwan.ID
+-- >>> import qualified Taiwan.ID as ID
 
 --------------------------------------------------------------------------------
 -- Type
 --------------------------------------------------------------------------------
 
--- | Represents a __valid__ 10-digit ROC (Taiwan) Uniform Identification Number
--- (中華民國統一證號) of the form __@A123456789@__.
+-- | Represents a __valid__ 10-digit Taiwan national identification number of
+-- the form __@A123456789@__.
 --
 -- By construction, invalid identification numbers are __not representable__ by
 -- this data type.

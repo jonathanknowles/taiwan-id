@@ -1,26 +1,29 @@
-# `roc-id`
+# `taiwan-id`
 
 [![Latest Release](
-  https://img.shields.io/hackage/v/roc-id?label=Latest%20Release&color=227755
-)](https://hackage.haskell.org/package/roc-id)
+  https://img.shields.io/hackage/v/taiwan-id?label=Latest%20Release&color=227755
+)](https://hackage.haskell.org/package/taiwan-id)
 [![Development Branch](
   https://img.shields.io/badge/Development%20Branch-API%20Documentation-225577
-)](https://jonathanknowles.github.io/roc-id/)
+)](https://jonathanknowles.github.io/taiwan-id/)
 
-This package provides a [Haskell](https://www.haskell.org/) implementation of
-the ROC (Taiwan) Uniform Identification Number (中華民國統一證號) format.
+This package provides a Haskell implementation of the national identification
+number format used in Taiwan, and more broadly, all territories administered
+by the Republic of China (ROC), including Jinmen, Matsu, and Penghu.
 
 This format is used by both National Identification Cards (國民身分證) and
-Alien Resident Certificates (居留證). Each identification number consists of a
-single uppercase letter followed by nine decimal digits, with the final digit
-serving as a checksum, calculated according to a standard algorithm.
+Alien Resident Certificates (外僑居留證).
+
+Each identification number consists of a single uppercase letter followed by
+nine decimal digits, with the final digit serving as a checksum, calculated
+according to a standard algorithm.
 
 Example: `A123456789`
 
 This package offers functions for validating, decoding, and encoding these
 numbers.
 
-For more details of the Uniform Identification Number format, see:
+For more details, see:
 
 * https://zh.wikipedia.org/wiki/中華民國國民身分證
 * https://en.wikipedia.org/wiki/National_identification_card_(Taiwan)

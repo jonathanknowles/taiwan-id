@@ -1,6 +1,6 @@
 {-# LANGUAGE DerivingStrategies #-}
 
-module ROC.ID.CharSet
+module Taiwan.ID.CharSet
   ( CharSet (..)
   )
   where

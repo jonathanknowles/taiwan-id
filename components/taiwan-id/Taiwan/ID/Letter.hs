@@ -5,7 +5,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module ROC.ID.Letter
+module Taiwan.ID.Letter
   ( Letter (..)
   , fromChar
   , toChar
@@ -19,7 +19,7 @@ import Data.Finitary
   ( Finitary )
 import GHC.Generics
   ( Generic )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( randomFinitary )
 import Text.Read
   ( readMaybe )

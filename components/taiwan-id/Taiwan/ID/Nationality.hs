@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
 
-module ROC.ID.Nationality
+module Taiwan.ID.Nationality
   ( Nationality (..)
   , generate
   )
@@ -14,7 +14,7 @@ import Data.Finitary
   ( Finitary )
 import GHC.Generics
   ( Generic )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( randomFinitary )
 
 -- | Specifies a person's nationality.

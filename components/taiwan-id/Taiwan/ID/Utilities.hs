@@ -7,7 +7,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module ROC.ID.Utilities where
+module Taiwan.ID.Utilities where
 
 import Control.Monad.Random.Class
   ( MonadRandom (..) )

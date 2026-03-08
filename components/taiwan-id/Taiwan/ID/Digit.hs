@@ -6,7 +6,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module ROC.ID.Digit
+module Taiwan.ID.Digit
   ( Digit (..)
   , fromChar
   , toChar
@@ -24,7 +24,7 @@ import GHC.Generics
   ( Generic )
 import GHC.TypeNats
   ( Nat )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( maybeFinitary, randomFinitary )
 import Text.Read
   ( Read (readPrec), readMaybe )

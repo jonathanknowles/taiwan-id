@@ -1,10 +1,10 @@
 cabal-version:  3.0
-name:           roc-id
-version:        0.4.0.0
-synopsis:       Implementation of the ROC (Taiwan) Uniform ID Number format.
+name:           taiwan-id
+version:        0.0.0.0
+synopsis:       Implementation of Taiwan's national ID number format.
 category:       Identification
-homepage:       https://github.com/jonathanknowles/roc-id#readme
-bug-reports:    https://github.com/jonathanknowles/roc-id/issues
+homepage:       https://github.com/jonathanknowles/taiwan-id#readme
+bug-reports:    https://github.com/jonathanknowles/taiwan-id/issues
 author:         Jonathan Knowles
 maintainer:     mail@jonathanknowles.net
 copyright:      Jonathan Knowles
@@ -14,22 +14,25 @@ build-type:     Custom
 
 description:
 
-  This package provides an implementation of the ROC (Taiwan) Uniform
-  Identification Number (中華民國統一證號) format.
+  This package provides a Haskell implementation of the national identification
+  number format used in Taiwan, and more broadly, all territories administered
+  by the Republic of China (ROC), including Jinmen, Matsu, and Penghu.
 
   This format is used by both National Identification Cards (國民身分證) and
-  Alien Resident Certificates (居留證). Each identification number consists of
-  a single uppercase letter followed by nine decimal digits, with the final
-  digit serving as a checksum, calculated according to a standard algorithm.
+  Alien Resident Certificates (外僑居留證).
+
+  Each identification number consists of a single uppercase letter followed by
+  nine decimal digits, with the final digit serving as a checksum, calculated
+  according to a standard algorithm.
 
   Example: `A123456789`
 
   This package offers functions for validating, decoding, and encoding these
   numbers.
 
-  See the "ROC.ID" module to get started.
+  See the "Taiwan.ID" module to get started.
 
-  For more details of the Uniform Identification Number format, see:
+  For more details, see:
 
   * https://zh.wikipedia.org/wiki/中華民國國民身分證
   * https://en.wikipedia.org/wiki/National_identification_card_(Taiwan)
@@ -69,7 +72,7 @@ custom-setup
 
 source-repository head
   type: git
-  location: https://github.com/jonathanknowles/roc-id
+  location: https://github.com/jonathanknowles/taiwan-id
 
 library
   import:
@@ -80,25 +83,25 @@ library
     , dependency-nonempty-containers
     , dependency-text
   exposed-modules:
-      ROC.ID
-      ROC.ID.CharIndex
-      ROC.ID.CharSet
-      ROC.ID.Digit
-      ROC.ID.Digit1289
-      ROC.ID.Gender
-      ROC.ID.Language
-      ROC.ID.Letter
-      ROC.ID.Location
-      ROC.ID.Nationality
+      Taiwan.ID
+      Taiwan.ID.CharIndex
+      Taiwan.ID.CharSet
+      Taiwan.ID.Digit
+      Taiwan.ID.Digit1289
+      Taiwan.ID.Gender
+      Taiwan.ID.Language
+      Taiwan.ID.Letter
+      Taiwan.ID.Location
+      Taiwan.ID.Nationality
   other-modules:
-      ROC.ID.Unchecked
-      ROC.ID.Utilities
+      Taiwan.ID.Unchecked
+      Taiwan.ID.Utilities
   hs-source-dirs:
-      components/roc-id
+      components/taiwan-id
   ghc-options: -Wall
   default-language: Haskell2010
 
-test-suite roc-id-test
+test-suite taiwan-id-test
   import:
     , dependency-base
     , dependency-finitary
@@ -114,22 +117,22 @@ test-suite roc-id-test
   other-modules:
       Test.QuickCheck.Classes.Hspec
   hs-source-dirs:
-      components/roc-id-test
+      components/taiwan-id-test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-    , roc-id
+    , taiwan-id
   default-language: Haskell2010
 
-test-suite roc-id-test-docs
+test-suite taiwan-id-test-docs
   import:
     , dependency-base
     , dependency-doctest
   build-depends:
-    , roc-id
+    , taiwan-id
   x-doctest-options: --verbose
   type: exitcode-stdio-1.0
   main-is: Main.hs
   hs-source-dirs:
-    components/roc-id-test-docs
+    components/taiwan-id-test-docs
   ghc-options: -threaded
   default-language: Haskell2010
