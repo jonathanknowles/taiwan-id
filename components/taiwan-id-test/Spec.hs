@@ -22,23 +22,23 @@ import Lens.Micro
   ( Lens', lens, set )
 import Lens.Micro.Extras
   ( view )
-import ROC.ID
+import Taiwan.ID
   ( ID (..) )
-import ROC.ID.CharIndex
+import Taiwan.ID.CharIndex
   ( CharIndex (CharIndex) )
-import ROC.ID.CharSet
+import Taiwan.ID.CharSet
   ( CharSet (..) )
-import ROC.ID.Digit
+import Taiwan.ID.Digit
   ( Digit (..) )
-import ROC.ID.Digit1289
+import Taiwan.ID.Digit1289
   ( Digit1289 (..) )
-import ROC.ID.Gender
+import Taiwan.ID.Gender
   ( Gender (..) )
-import ROC.ID.Letter
+import Taiwan.ID.Letter
   ( Letter (..) )
-import ROC.ID.Location
+import Taiwan.ID.Location
   ( Location )
-import ROC.ID.Nationality
+import Taiwan.ID.Nationality
   ( Nationality (..) )
 import Test.Hspec
   ( Spec, describe, hspec, it, shouldBe, shouldSatisfy )
@@ -63,7 +63,7 @@ import Test.QuickCheck.Classes.Hspec
 import qualified Data.Finitary as Finitary
 import qualified Data.Set.NonEmpty as NESet
 import qualified Data.Text as T
-import qualified ROC.ID as ID
+import qualified Taiwan.ID as ID
 
 instance Arbitrary Digit where
   arbitrary = arbitraryBoundedEnum

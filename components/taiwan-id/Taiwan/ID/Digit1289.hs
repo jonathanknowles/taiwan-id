@@ -7,7 +7,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module ROC.ID.Digit1289
+module Taiwan.ID.Digit1289
   ( Digit1289 (..)
   , fromChar
   , toChar
@@ -26,9 +26,9 @@ import GHC.Generics
   ( Generic )
 import GHC.TypeNats
   ( Nat )
-import ROC.ID.Digit
+import Taiwan.ID.Digit
   ( Digit (..) )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( randomFinitary )
 
 -- | Represents a single decimal digit from the set {@1@, @2@, @8@, @9@}.

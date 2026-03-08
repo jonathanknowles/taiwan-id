@@ -1,7 +1,7 @@
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
-module ROC.ID.CharIndex
+module Taiwan.ID.CharIndex
   ( CharIndex (..)
   )
   where

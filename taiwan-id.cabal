@@ -27,7 +27,7 @@ description:
   This package offers functions for validating, decoding, and encoding these
   numbers.
 
-  See the "ROC.ID" module to get started.
+  See the "Taiwan.ID" module to get started.
 
   For more details of the Uniform Identification Number format, see:
 
@@ -80,19 +80,19 @@ library
     , dependency-nonempty-containers
     , dependency-text
   exposed-modules:
-      ROC.ID
-      ROC.ID.CharIndex
-      ROC.ID.CharSet
-      ROC.ID.Digit
-      ROC.ID.Digit1289
-      ROC.ID.Gender
-      ROC.ID.Language
-      ROC.ID.Letter
-      ROC.ID.Location
-      ROC.ID.Nationality
+      Taiwan.ID
+      Taiwan.ID.CharIndex
+      Taiwan.ID.CharSet
+      Taiwan.ID.Digit
+      Taiwan.ID.Digit1289
+      Taiwan.ID.Gender
+      Taiwan.ID.Language
+      Taiwan.ID.Letter
+      Taiwan.ID.Location
+      Taiwan.ID.Nationality
   other-modules:
-      ROC.ID.Unchecked
-      ROC.ID.Utilities
+      Taiwan.ID.Unchecked
+      Taiwan.ID.Utilities
   hs-source-dirs:
       components/taiwan-id
   ghc-options: -Wall

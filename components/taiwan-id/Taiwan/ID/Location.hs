@@ -5,7 +5,7 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module ROC.ID.Location
+module Taiwan.ID.Location
   ( Location
   , fromLetter
   , toLetter
@@ -21,11 +21,11 @@ import Data.Text
   ( Text )
 import GHC.Generics
   ( Generic )
-import ROC.ID.Language
+import Taiwan.ID.Language
   ( Language (..) )
-import ROC.ID.Letter
+import Taiwan.ID.Letter
   ( Letter (..) )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( randomFinitary )
 import Text.Read
   ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens )

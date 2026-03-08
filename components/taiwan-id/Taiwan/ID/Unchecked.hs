@@ -10,7 +10,7 @@
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE ViewPatterns #-}
 
-module ROC.ID.Unchecked
+module Taiwan.ID.Unchecked
   ( UncheckedID (..)
   , UncheckedIDTuple
   , FromTextError (..)
@@ -41,26 +41,26 @@ import GHC.TypeLits
   ( AppendSymbol, KnownSymbol, Symbol )
 import GHC.TypeNats
   ( CmpNat, Mod, Nat, type (+) )
-import ROC.ID.CharIndex
+import Taiwan.ID.CharIndex
   ( CharIndex (..) )
-import ROC.ID.CharSet
+import Taiwan.ID.CharSet
   ( CharSet (..) )
-import ROC.ID.Digit
+import Taiwan.ID.Digit
   ( Digit (..) )
-import ROC.ID.Digit1289
+import Taiwan.ID.Digit1289
   ( Digit1289 (..) )
-import ROC.ID.Letter
+import Taiwan.ID.Letter
   ( Letter (..) )
-import ROC.ID.Utilities
+import Taiwan.ID.Utilities
   ( FromJust, Fst, ReplicateChar, Snd, SymbolLength, SymbolToCharList, guard )
 
 import qualified Data.Set.NonEmpty as NESet
 import qualified Data.Text as T
 import qualified GHC.TypeError as TypeError
 import qualified GHC.TypeNats as N
-import qualified ROC.ID.Digit as Digit
-import qualified ROC.ID.Digit1289 as Digit1289
-import qualified ROC.ID.Letter as Letter
+import qualified Taiwan.ID.Digit as Digit
+import qualified Taiwan.ID.Digit1289 as Digit1289
+import qualified Taiwan.ID.Letter as Letter
 
 data UncheckedID = UncheckedID
   { c0 :: !Letter
