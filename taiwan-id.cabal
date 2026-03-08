@@ -1,6 +1,6 @@
 cabal-version:  3.0
 name:           taiwan-id
-version:        0.4.0.0
+version:        0.0.0.0
 synopsis:       Implementation of the ROC (Taiwan) Uniform ID Number format.
 category:       Identification
 homepage:       https://github.com/jonathanknowles/taiwan-id#readme
