@@ -30,13 +30,11 @@ import Taiwan.ID.Utilities
 import Text.Read
   ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens )
 
--- | Represents a location, encodable within a Taiwan national identification
---   number.
+-- | Represents a geographical location.
 --
 -- == Location codes
 --
--- Every location that can be represented in a Taiwan national identification
--- number has a unique code:
+-- Every location has a unique letter code:
 --
 -- +------+---------+-------------------+
 -- | Code | Chinese | English           |
