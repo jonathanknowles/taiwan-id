@@ -93,8 +93,8 @@ import qualified Taiwan.ID.Unchecked as U
 -- Type
 --------------------------------------------------------------------------------
 
--- | Represents a __valid__ 10-digit Taiwan national identification number of
--- the form __@A123456789@__.
+-- | Represents a __valid__ 10-digit uniform identification number of the form
+-- __@A123456789@__.
 --
 -- By construction, invalid identification numbers are __not representable__ by
 -- this data type.

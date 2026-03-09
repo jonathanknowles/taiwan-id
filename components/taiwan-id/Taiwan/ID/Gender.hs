@@ -23,8 +23,7 @@ import Taiwan.ID.Language
 import Taiwan.ID.Utilities
   ( randomFinitary )
 
--- | A person's gender, encodable within a Taiwan national identification
---   number.
+-- | A person's gender.
 --
 data Gender = Male | Female
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
