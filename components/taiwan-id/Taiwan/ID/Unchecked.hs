@@ -173,7 +173,7 @@ checksumValidity u =
 
 listToTuple8 :: [a] -> Maybe (a, a, a, a, a, a, a, a)
 listToTuple8 = \case
-  (a0 : a1 : a2 : a3 : a4 : a5 : a6 : a7 : _) ->
+  [a0, a1, a2, a3, a4, a5, a6, a7] ->
     Just (a0, a1, a2, a3, a4, a5, a6, a7)
   _ ->
     Nothing
