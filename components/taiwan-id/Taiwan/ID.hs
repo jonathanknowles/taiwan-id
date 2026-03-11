@@ -31,12 +31,12 @@ module Taiwan.ID
   -- * Inspection
   , getGender
   , getIssuer
-  , getLocation
+  , getRegion
 
   -- * Modification
   , setGender
   , setIssuer
-  , setLocation
+  , setRegion
   )
   where
 
@@ -68,8 +68,8 @@ import Taiwan.ID.Issuer
   ( Issuer (..) )
 import Taiwan.ID.Letter
   ( Letter (..) )
-import Taiwan.ID.Location
-  ( Location )
+import Taiwan.ID.Region
+  ( Region )
 import Taiwan.ID.Unchecked
   ( UncheckedID (UncheckedID), ValidID )
 import Taiwan.ID.Utilities
@@ -78,7 +78,7 @@ import Text.Read
   ( Lexeme (Ident, Symbol, Punc), Read (readPrec), lexP, parens, prec )
 
 import qualified Data.Text as T
-import qualified Taiwan.ID.Location as Location
+import qualified Taiwan.ID.Region as Region
 import qualified Taiwan.ID.Unchecked as U
 
 -- |
@@ -311,10 +311,10 @@ getGender ID {c1} = fst $ decodeC1 c1
 getIssuer :: ID -> Issuer
 getIssuer ID {c1} = snd $ decodeC1 c1
 
--- | Decodes the 'Location' component of an 'ID'.
+-- | Decodes the 'Region' component of an 'ID'.
 --
-getLocation :: ID -> Location
-getLocation ID {c0} = Location.fromLetter c0
+getRegion :: ID -> Region
+getRegion ID {c0} = Region.fromLetter c0
 
 --------------------------------------------------------------------------------
 -- Modification
@@ -330,10 +330,10 @@ setGender gender i = i {c1 = encodeC1 (gender, getIssuer i)}
 setIssuer :: Issuer -> ID -> ID
 setIssuer issuer i = i {c1 = encodeC1 (getGender i, issuer)}
 
--- | Updates the 'Location' component of an 'ID'.
+-- | Updates the 'Region' component of an 'ID'.
 --
-setLocation :: Location -> ID -> ID
-setLocation location i = i {c0 = Location.toLetter location}
+setRegion :: Region -> ID -> ID
+setRegion region i = i {c0 = Region.toLetter region}
 
 --------------------------------------------------------------------------------
 -- Internal

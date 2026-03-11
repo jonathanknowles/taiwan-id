@@ -93,7 +93,7 @@ library
       Taiwan.ID.Issuer
       Taiwan.ID.Language
       Taiwan.ID.Letter
-      Taiwan.ID.Location
+      Taiwan.ID.Region
   other-modules:
       Taiwan.ID.Unchecked
       Taiwan.ID.Utilities
