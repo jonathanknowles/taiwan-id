@@ -7,7 +7,9 @@
 
 module Taiwan.ID.Region
   ( Region
+  , fromChar
   , fromLetter
+  , toChar
   , toLetter
   , toText
   , generate
@@ -29,6 +31,12 @@ import Taiwan.ID.Utilities
   ( randomFinitary )
 import Text.Read
   ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens )
+
+import qualified Taiwan.ID.Letter as Letter
+
+-- |
+-- $setup
+-- >>> import qualified Taiwan.ID.Region as Region
 
 -- | Represents a geographical region.
 --
@@ -117,10 +125,27 @@ instance Show Region where
   showsPrec _ s =
     showString "Region.fromLetter " . shows (toLetter s)
 
+-- | Attempts to construct a 'Region' from its corresponding letter code as a
+-- 'Char'.
+--
+-- >>> Region.fromChar 'A'
+-- Just (Region.fromLetter A)
+--
+-- >>> Region.fromChar '?'
+-- Nothing
+--
+fromChar :: Char -> Maybe Region
+fromChar = fmap fromLetter . Letter.fromChar
+
 -- | Constructs a 'Region' from its corresponding letter code.
 --
 fromLetter :: Letter -> Region
 fromLetter = Region
+
+-- | Converts a 'Region' to its corresponding letter code as a 'Char'.
+--
+toChar :: Region -> Char
+toChar = Letter.toChar . toLetter
 
 -- | Converts a 'Region' to its corresponding letter code.
 --
