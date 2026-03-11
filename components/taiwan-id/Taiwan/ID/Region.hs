@@ -7,7 +7,9 @@
 
 module Taiwan.ID.Region
   ( Region
+  , fromChar
   , fromLetter
+  , toChar
   , toLetter
   , toText
   , generate
@@ -28,7 +30,13 @@ import Taiwan.ID.Letter
 import Taiwan.ID.Utilities
   ( randomFinitary )
 import Text.Read
-  ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens )
+  ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens, prec )
+
+import qualified Taiwan.ID.Letter as Letter
+
+-- |
+-- $setup
+-- >>> import qualified Taiwan.ID.Region as Region
 
 -- | Represents a geographical region.
 --
@@ -107,20 +115,38 @@ newtype Region = Region Letter
   deriving anyclass Finitary
 
 instance Read Region where
-  readPrec = parens $ do
+  readPrec = parens $ prec 10 $ do
     Ident "Region"     <- lexP
     Symbol "."         <- lexP
     Ident "fromLetter" <- lexP
     fromLetter <$> readPrec
 
 instance Show Region where
-  showsPrec _ s =
-    showString "Region.fromLetter " . shows (toLetter s)
+  showsPrec d s =
+    showParen (d > 10) $
+      showString "Region.fromLetter " . shows (toLetter s)
+
+-- | Attempts to construct a 'Region' from its corresponding letter code as a
+-- 'Char'.
+--
+-- >>> Region.fromChar 'A'
+-- Just (Region.fromLetter A)
+--
+-- >>> Region.fromChar '?'
+-- Nothing
+--
+fromChar :: Char -> Maybe Region
+fromChar = fmap fromLetter . Letter.fromChar
 
 -- | Constructs a 'Region' from its corresponding letter code.
 --
 fromLetter :: Letter -> Region
 fromLetter = Region
+
+-- | Converts a 'Region' to its corresponding letter code as a 'Char'.
+--
+toChar :: Region -> Char
+toChar = Letter.toChar . toLetter
 
 -- | Converts a 'Region' to its corresponding letter code.
 --
