@@ -34,12 +34,12 @@ import Taiwan.ID.Digit1289
   ( Digit1289 (..) )
 import Taiwan.ID.Gender
   ( Gender (..) )
+import Taiwan.ID.Issuer
+  ( Issuer (..) )
 import Taiwan.ID.Letter
   ( Letter (..) )
 import Taiwan.ID.Location
   ( Location )
-import Taiwan.ID.Nationality
-  ( Nationality (..) )
 import Test.Hspec
   ( Spec, describe, hspec, it, shouldBe, shouldSatisfy )
 import Test.QuickCheck
@@ -77,19 +77,19 @@ instance Arbitrary Gender where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
-instance Arbitrary Letter where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
-
 instance Arbitrary ID where
   arbitrary = idFromTuple <$> arbitrary
   shrink = shrinkMap idFromTuple idToTuple
 
-instance Arbitrary Location where
+instance Arbitrary Issuer where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
-instance Arbitrary Nationality where
+instance Arbitrary Letter where
+  arbitrary = arbitraryBoundedEnum
+  shrink = shrinkBoundedEnum
+
+instance Arbitrary Location where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
@@ -122,7 +122,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Location
+    testLawsMany @Issuer
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -130,7 +130,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Nationality
+    testLawsMany @Location
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -175,10 +175,10 @@ main = hspec $ do
 
     describe "Gender" $
       checkLensLaws gender
+    describe "Issuer" $
+      checkLensLaws issuer
     describe "Location" $
       checkLensLaws location
-    describe "Nationality" $
-      checkLensLaws nationality
 
   describe "ID.fromText" $ do
 
@@ -280,11 +280,11 @@ checkLensLaws l =
 gender :: Lens' ID Gender
 gender = lens ID.getGender (flip ID.setGender)
 
+issuer :: Lens' ID Issuer
+issuer = lens ID.getIssuer (flip ID.setIssuer)
+
 location :: Lens' ID Location
 location = lens ID.getLocation (flip ID.setLocation)
-
-nationality :: Lens' ID Nationality
-nationality = lens ID.getNationality (flip ID.setNationality)
 
 -- | Replaces a character at a specific position.
 --

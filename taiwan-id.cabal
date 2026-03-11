@@ -90,10 +90,10 @@ library
       Taiwan.ID.Digit
       Taiwan.ID.Digit1289
       Taiwan.ID.Gender
+      Taiwan.ID.Issuer
       Taiwan.ID.Language
       Taiwan.ID.Letter
       Taiwan.ID.Location
-      Taiwan.ID.Nationality
   other-modules:
       Taiwan.ID.Unchecked
       Taiwan.ID.Utilities
