@@ -15,7 +15,7 @@
 </span><span id="line-15"></span><span>  </span><span class="annot"><span class="hs-comment">-- ^ An explicit set of characters.</span></span><span>
 </span><span id="line-16"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="CharRange"><span class="annot"><a href="Taiwan.ID.CharSet.html#CharRange"><span class="hs-identifier hs-var">CharRange</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span>
 </span><span id="line-17"></span><span>  </span><span class="annot"><span class="hs-comment">-- ^ An inclusive range of characters.</span></span><span>
-</span><span id="line-18"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679159900"><span id="local-6989586621679159910"><span class="annot"><span class="annottext">CharSet -&gt; CharSet -&gt; Bool
+</span><span id="line-18"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679159969"><span id="local-6989586621679159979"><span class="annot"><span class="annottext">CharSet -&gt; CharSet -&gt; Bool
 (CharSet -&gt; CharSet -&gt; Bool)
 -&gt; (CharSet -&gt; CharSet -&gt; Bool) -&gt; Eq CharSet
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -23,7 +23,7 @@ $c== :: CharSet -&gt; CharSet -&gt; Bool
 == :: CharSet -&gt; CharSet -&gt; Bool
 $c/= :: CharSet -&gt; CharSet -&gt; Bool
 /= :: CharSet -&gt; CharSet -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159918"><span id="local-6989586621679159925"><span id="local-6989586621679159931"><span id="local-6989586621679159935"><span id="local-6989586621679159938"><span id="local-6989586621679159941"><span id="local-6989586621679159944"><span class="annot"><span class="annottext">Eq CharSet
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159987"><span id="local-6989586621679159994"><span id="local-6989586621679160000"><span id="local-6989586621679160004"><span id="local-6989586621679160007"><span id="local-6989586621679160010"><span id="local-6989586621679160013"><span class="annot"><span class="annottext">Eq CharSet
 Eq CharSet =&gt;
 (CharSet -&gt; CharSet -&gt; Ordering)
 -&gt; (CharSet -&gt; CharSet -&gt; Bool)
@@ -60,7 +60,7 @@ $cmax :: CharSet -&gt; CharSet -&gt; CharSet
 max :: CharSet -&gt; CharSet -&gt; CharSet
 $cmin :: CharSet -&gt; CharSet -&gt; CharSet
 min :: CharSet -&gt; CharSet -&gt; CharSet
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159953"><span id="local-6989586621679159957"><span id="local-6989586621679159960"><span id="local-6989586621679159976"><span class="annot"><span class="annottext">ReadPrec [CharSet]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160022"><span id="local-6989586621679160026"><span id="local-6989586621679160029"><span id="local-6989586621679160045"><span class="annot"><span class="annottext">ReadPrec [CharSet]
 ReadPrec CharSet
 Int -&gt; ReadS CharSet
 ReadS [CharSet]
@@ -80,7 +80,7 @@ $creadPrec :: ReadPrec CharSet
 readPrec :: ReadPrec CharSet
 $creadListPrec :: ReadPrec [CharSet]
 readListPrec :: ReadPrec [CharSet]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679159984"><span id="local-6989586621679159994"><span id="local-6989586621679159998"><span class="annot"><span class="annottext">Int -&gt; CharSet -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160053"><span id="local-6989586621679160063"><span id="local-6989586621679160067"><span class="annot"><span class="annottext">Int -&gt; CharSet -&gt; ShowS
 [CharSet] -&gt; ShowS
 CharSet -&gt; String
 (Int -&gt; CharSet -&gt; ShowS)

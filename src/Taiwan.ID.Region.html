@@ -110,7 +110,7 @@
 </span><span id="line-110"></span><span class="hs-comment">-- To generate a random 'Region', use the 'generate' function.</span><span>
 </span><span id="line-111"></span><span class="hs-comment">--</span><span>
 </span><span id="line-112"></span><span class="hs-keyword">newtype</span><span> </span><span id="Region"><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-var">Region</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Region"><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-var">Region</span></a></span></span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span>
-</span><span id="line-113"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160764"><span id="local-6989586621679160768"><span class="annot"><span class="annottext">Region -&gt; Region -&gt; Bool
+</span><span id="line-113"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160833"><span id="local-6989586621679160837"><span class="annot"><span class="annottext">Region -&gt; Region -&gt; Bool
 (Region -&gt; Region -&gt; Bool)
 -&gt; (Region -&gt; Region -&gt; Bool) -&gt; Eq Region
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -118,7 +118,7 @@ $c== :: Region -&gt; Region -&gt; Bool
 == :: Region -&gt; Region -&gt; Bool
 $c/= :: Region -&gt; Region -&gt; Bool
 /= :: Region -&gt; Region -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160773"><span id="local-6989586621679160775"><span class="annot"><span class="annottext">(forall x. Region -&gt; Rep Region x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160842"><span id="local-6989586621679160844"><span class="annot"><span class="annottext">(forall x. Region -&gt; Rep Region x)
 -&gt; (forall x. Rep Region x -&gt; Region) -&gt; Generic Region
 forall x. Rep Region x -&gt; Region
 forall x. Region -&gt; Rep Region x
@@ -128,7 +128,7 @@ $cfrom :: forall x. Region -&gt; Rep Region x
 from :: forall x. Region -&gt; Rep Region x
 $cto :: forall x. Rep Region x -&gt; Region
 to :: forall x. Rep Region x -&gt; Region
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160783"><span id="local-6989586621679160787"><span id="local-6989586621679160790"><span id="local-6989586621679160794"><span id="local-6989586621679160797"><span id="local-6989586621679160800"><span id="local-6989586621679160803"><span class="annot"><span class="annottext">Eq Region
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160852"><span id="local-6989586621679160856"><span id="local-6989586621679160859"><span id="local-6989586621679160863"><span id="local-6989586621679160866"><span id="local-6989586621679160869"><span id="local-6989586621679160872"><span class="annot"><span class="annottext">Eq Region
 Eq Region =&gt;
 (Region -&gt; Region -&gt; Ordering)
 -&gt; (Region -&gt; Region -&gt; Bool)
@@ -166,14 +166,14 @@ max :: Region -&gt; Region -&gt; Region
 $cmin :: Region -&gt; Region -&gt; Region
 min :: Region -&gt; Region -&gt; Region
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-114"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">newtype</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160811"><span id="local-6989586621679160816"><span class="annot"><span class="annottext">Region
+</span><span id="line-114"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">newtype</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160880"><span id="local-6989586621679160885"><span class="annot"><span class="annottext">Region
 Region -&gt; Region -&gt; Bounded Region
 forall a. a -&gt; a -&gt; Bounded a
 $cminBound :: Region
 minBound :: Region
 $cmaxBound :: Region
 maxBound :: Region
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160824"><span id="local-6989586621679160829"><span id="local-6989586621679160833"><span id="local-6989586621679160837"><span id="local-6989586621679160841"><span id="local-6989586621679160845"><span id="local-6989586621679160849"><span id="local-6989586621679160853"><span class="annot"><span class="annottext">Int -&gt; Region
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160893"><span id="local-6989586621679160898"><span id="local-6989586621679160902"><span id="local-6989586621679160906"><span id="local-6989586621679160910"><span id="local-6989586621679160914"><span id="local-6989586621679160918"><span id="local-6989586621679160922"><span class="annot"><span class="annottext">Int -&gt; Region
 Region -&gt; Int
 Region -&gt; [Region]
 Region -&gt; Region
@@ -215,7 +215,7 @@ enumFromTo :: Region -&gt; Region -&gt; [Region]
 $cenumFromThenTo :: Region -&gt; Region -&gt; Region -&gt; [Region]
 enumFromThenTo :: Region -&gt; Region -&gt; Region -&gt; [Region]
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-115"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679160868"><span id="local-6989586621679160877"><span id="local-6989586621679160885"><span id="local-6989586621679160891"><span id="local-6989586621679160897"><span id="local-6989586621679160900"><span class="annot"><span class="annottext">Eq Region
+</span><span id="line-115"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679160937"><span id="local-6989586621679160946"><span id="local-6989586621679160954"><span id="local-6989586621679160960"><span id="local-6989586621679160966"><span id="local-6989586621679160969"><span class="annot"><span class="annottext">Eq Region
 KnownNat (Cardinality Region)
 (Eq Region, KnownNat (Cardinality Region)) =&gt;
 (Finite (Cardinality Region) -&gt; Region)
@@ -252,8 +252,8 @@ $cnext :: Region -&gt; Maybe Region
 next :: Region -&gt; Maybe Region
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Finitary</span></span></span></span></span></span></span></span><span>
 </span><span id="line-116"></span><span>
-</span><span id="line-117"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679160915"><span id="local-6989586621679160919"><span id="local-6989586621679160923"><span class="annot"><span class="hs-identifier hs-type">Read</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-118"></span><span>  </span><span id="local-6989586621679160949"><span class="annot"><span class="annottext">readPrec :: ReadPrec Region
+</span><span id="line-117"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679160984"><span id="local-6989586621679160988"><span id="local-6989586621679160992"><span class="annot"><span class="hs-identifier hs-type">Read</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-118"></span><span>  </span><span id="local-6989586621679161018"><span class="annot"><span class="annottext">readPrec :: ReadPrec Region
 </span><span class="hs-identifier hs-var hs-var hs-var">readPrec</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReadPrec Region -&gt; ReadPrec Region
 forall a. ReadPrec a -&gt; ReadPrec a
 </span><span class="hs-identifier hs-var">parens</span></span><span> </span><span class="annot"><span class="annottext">(ReadPrec Region -&gt; ReadPrec Region)
@@ -272,14 +272,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-121"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Ident</span></span><span> </span><span class="annot"><span class="hs-string">&quot;fromLetter&quot;</span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="hs-identifier hs-type">lexP</span></span><span>
 </span><span id="line-122"></span><span>    </span><span class="annot"><a href="Taiwan.ID.Region.html#fromLetter"><span class="hs-identifier hs-type">fromLetter</span></a></span><span> </span><span class="annot"><span class="hs-operator hs-type">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">readPrec</span></span><span>
 </span><span id="line-123"></span><span>
-</span><span id="line-124"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679160953"><span id="local-6989586621679160957"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-125"></span><span>  </span><span id="local-6989586621679160966"><span class="annot"><span class="annottext">showsPrec :: Int -&gt; Region -&gt; String -&gt; String
-</span><a href="#local-6989586621679160966"><span class="hs-identifier hs-var hs-var hs-var">showsPrec</span></a></span></span><span> </span><span id="local-6989586621679160968"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679160968"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679160969"><span class="annot"><span class="annottext">Region
-</span><a href="#local-6989586621679160969"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-124"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679161022"><span id="local-6989586621679161026"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-125"></span><span>  </span><span id="local-6989586621679161035"><span class="annot"><span class="annottext">showsPrec :: Int -&gt; Region -&gt; String -&gt; String
+</span><a href="#local-6989586621679161035"><span class="hs-identifier hs-var hs-var hs-var">showsPrec</span></a></span></span><span> </span><span id="local-6989586621679161037"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679161037"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679161038"><span class="annot"><span class="annottext">Region
+</span><a href="#local-6989586621679161038"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-126"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; (String -&gt; String) -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">showParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679160968"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679161037"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">10</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((String -&gt; String) -&gt; String -&gt; String)
@@ -294,7 +294,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall a. Show a =&gt; a -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">shows</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Region -&gt; Letter
 </span><a href="Taiwan.ID.Region.html#toLetter"><span class="hs-identifier hs-var">toLetter</span></a></span><span> </span><span class="annot"><span class="annottext">Region
-</span><a href="#local-6989586621679160969"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679161038"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-128"></span><span>
 </span><span id="line-129"></span><span class="hs-comment">-- | Attempts to construct a 'Region' from its corresponding letter code as a</span><span>
 </span><span id="line-130"></span><span class="hs-comment">-- 'Char'.</span><span>
@@ -338,9 +338,9 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-152"></span><span class="hs-comment">--</span><span>
 </span><span id="line-153"></span><span class="annot"><a href="Taiwan.ID.Region.html#toLetter"><span class="hs-identifier hs-type">toLetter</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Letter.html#Letter"><span class="hs-identifier hs-type">Letter</span></a></span><span>
 </span><span id="line-154"></span><span id="toLetter"><span class="annot"><span class="annottext">toLetter :: Region -&gt; Letter
-</span><a href="Taiwan.ID.Region.html#toLetter"><span class="hs-identifier hs-var hs-var">toLetter</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span id="local-6989586621679160977"><span class="annot"><span class="annottext">Letter
-</span><a href="#local-6989586621679160977"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Letter
-</span><a href="#local-6989586621679160977"><span class="hs-identifier hs-var">letter</span></a></span><span>
+</span><a href="Taiwan.ID.Region.html#toLetter"><span class="hs-identifier hs-var hs-var">toLetter</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span id="local-6989586621679161046"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161046"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161046"><span class="hs-identifier hs-var">letter</span></a></span><span>
 </span><span id="line-155"></span><span>
 </span><span id="line-156"></span><span class="annot"><span class="hs-comment">-- | Prints the specified 'Region'.</span></span><span>
 </span><span id="line-157"></span><span class="annot"><a href="Taiwan.ID.Region.html#toText"><span class="hs-identifier hs-type">toText</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier hs-type">Language</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
@@ -355,9 +355,9 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-161"></span><span>
 </span><span id="line-162"></span><span class="annot"><a href="Taiwan.ID.Region.html#toTextChinese"><span class="hs-identifier hs-type">toTextChinese</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
 </span><span id="line-163"></span><span id="toTextChinese"><span class="annot"><span class="annottext">toTextChinese :: Region -&gt; Text
-</span><a href="Taiwan.ID.Region.html#toTextChinese"><span class="hs-identifier hs-var hs-var">toTextChinese</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span id="local-6989586621679160982"><span class="annot"><span class="annottext">Letter
-</span><a href="#local-6989586621679160982"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter
-</span><a href="#local-6989586621679160982"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="Taiwan.ID.Region.html#toTextChinese"><span class="hs-identifier hs-var hs-var">toTextChinese</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span id="local-6989586621679161051"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161051"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161051"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-164"></span><span>  </span><span class="annot"><span class="annottext">Letter
 </span><a href="Taiwan.ID.Letter.html#A"><span class="hs-identifier hs-var">A</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;&#33274;&#21271;&#24066;&quot;</span></span><span>
@@ -439,9 +439,9 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-190"></span><span>
 </span><span id="line-191"></span><span class="annot"><a href="Taiwan.ID.Region.html#toTextEnglish"><span class="hs-identifier hs-type">toTextEnglish</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span>
 </span><span id="line-192"></span><span id="toTextEnglish"><span class="annot"><span class="annottext">toTextEnglish :: Region -&gt; Text
-</span><a href="Taiwan.ID.Region.html#toTextEnglish"><span class="hs-identifier hs-var hs-var">toTextEnglish</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span id="local-6989586621679161008"><span class="annot"><span class="annottext">Letter
-</span><a href="#local-6989586621679161008"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter
-</span><a href="#local-6989586621679161008"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="Taiwan.ID.Region.html#toTextEnglish"><span class="hs-identifier hs-var hs-var">toTextEnglish</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span><span> </span><span id="local-6989586621679161077"><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161077"><span class="hs-identifier hs-var">letter</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Letter
+</span><a href="#local-6989586621679161077"><span class="hs-identifier hs-var">letter</span></a></span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-193"></span><span>  </span><span class="annot"><span class="annottext">Letter
 </span><a href="Taiwan.ID.Letter.html#A"><span class="hs-identifier hs-var">A</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;Taipei City&quot;</span></span><span>
@@ -523,7 +523,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-219"></span><span>
 </span><span id="line-220"></span><span class="hs-comment">-- | Generates a random 'Region'.</span><span>
 </span><span id="line-221"></span><span class="hs-comment">--</span><span>
-</span><span id="line-222"></span><span id="local-6989586621679160689"><span class="annot"><a href="Taiwan.ID.Region.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679160689"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679160689"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span></span><span>
+</span><span id="line-222"></span><span id="local-6989586621679160758"><span class="annot"><a href="Taiwan.ID.Region.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679160758"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679160758"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Region.html#Region"><span class="hs-identifier hs-type">Region</span></a></span></span><span>
 </span><span id="line-223"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m Region
 </span><a href="Taiwan.ID.Region.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Region
 forall (m :: * -&gt; *) a.
