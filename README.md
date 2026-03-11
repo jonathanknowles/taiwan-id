@@ -11,9 +11,9 @@ This package provides a Haskell implementation of Taiwan's uniform
 identification number format.
 
 This number format is used by both National Identification Cards (國民身分證)
-and Alien Resident Certificates (外僑居留證) issued by the Republic of China
-(ROC) government to individuals, with numbers assigned under each system
-occupying disjoint parts of the same identifier space.
+and Resident Certificates (居留證) issued by the Republic of China (ROC)
+government to individuals, with numbers assigned under each system occupying
+disjoint parts of the same identifier space.
 
 Each identification number consists of a single uppercase letter followed by
 nine decimal digits, with the final digit serving as a checksum calculated
