@@ -30,13 +30,13 @@ module Taiwan.ID
 
   -- * Inspection
   , getGender
-  , getLocation
-  , getNationality
+  , getIssuer
+  , getRegion
 
   -- * Modification
   , setGender
-  , setLocation
-  , setNationality
+  , setIssuer
+  , setRegion
   )
   where
 
@@ -64,12 +64,12 @@ import Taiwan.ID.Digit1289
   ( Digit1289 (..) )
 import Taiwan.ID.Gender
   ( Gender (..) )
+import Taiwan.ID.Issuer
+  ( Issuer (..) )
 import Taiwan.ID.Letter
   ( Letter (..) )
-import Taiwan.ID.Location
-  ( Location )
-import Taiwan.ID.Nationality
-  ( Nationality (..) )
+import Taiwan.ID.Region
+  ( Region )
 import Taiwan.ID.Unchecked
   ( UncheckedID (UncheckedID), ValidID )
 import Taiwan.ID.Utilities
@@ -78,7 +78,7 @@ import Text.Read
   ( Lexeme (Ident, Symbol, Punc), Read (readPrec), lexP, parens, prec )
 
 import qualified Data.Text as T
-import qualified Taiwan.ID.Location as Location
+import qualified Taiwan.ID.Region as Region
 import qualified Taiwan.ID.Unchecked as U
 
 -- |
@@ -306,15 +306,15 @@ generate = randomFinitary
 getGender :: ID -> Gender
 getGender ID {c1} = fst $ decodeC1 c1
 
--- | Decodes the 'Location' component of an 'ID'.
+-- | Decodes the 'Issuer' component of an 'ID'.
 --
-getLocation :: ID -> Location
-getLocation ID {c0} = Location.fromLetter c0
+getIssuer :: ID -> Issuer
+getIssuer ID {c1} = snd $ decodeC1 c1
 
--- | Decodes the 'Nationality' component of an 'ID'.
+-- | Decodes the 'Region' component of an 'ID'.
 --
-getNationality :: ID -> Nationality
-getNationality ID {c1} = snd $ decodeC1 c1
+getRegion :: ID -> Region
+getRegion ID {c0} = Region.fromLetter c0
 
 --------------------------------------------------------------------------------
 -- Modification
@@ -323,35 +323,35 @@ getNationality ID {c1} = snd $ decodeC1 c1
 -- | Updates the 'Gender' component of an 'ID'.
 --
 setGender :: Gender -> ID -> ID
-setGender gender i = i {c1 = encodeC1 (gender, getNationality i)}
+setGender gender i = i {c1 = encodeC1 (gender, getIssuer i)}
 
--- | Updates the 'Location' component of an 'ID'.
+-- | Updates the 'Issuer' component of an 'ID'.
 --
-setLocation :: Location -> ID -> ID
-setLocation location i = i {c0 = Location.toLetter location}
+setIssuer :: Issuer -> ID -> ID
+setIssuer issuer i = i {c1 = encodeC1 (getGender i, issuer)}
 
--- | Updates the 'Nationality' component of an 'ID'.
+-- | Updates the 'Region' component of an 'ID'.
 --
-setNationality :: Nationality -> ID -> ID
-setNationality nationality i = i {c1 = encodeC1 (getGender i, nationality)}
+setRegion :: Region -> ID -> ID
+setRegion region i = i {c0 = Region.toLetter region}
 
 --------------------------------------------------------------------------------
 -- Internal
 --------------------------------------------------------------------------------
 
-decodeC1 :: Digit1289 -> (Gender, Nationality)
+decodeC1 :: Digit1289 -> (Gender, Issuer)
 decodeC1 = \case
-  D1289_1 -> (  Male,    National)
-  D1289_2 -> (Female,    National)
-  D1289_8 -> (  Male, NonNational)
-  D1289_9 -> (Female, NonNational)
+  D1289_1 -> (  Male, HouseholdRegistrationOffice)
+  D1289_2 -> (Female, HouseholdRegistrationOffice)
+  D1289_8 -> (  Male,   NationalImmigrationAgency)
+  D1289_9 -> (Female,   NationalImmigrationAgency)
 
-encodeC1 :: (Gender, Nationality) -> Digit1289
+encodeC1 :: (Gender, Issuer) -> Digit1289
 encodeC1 = \case
-  (  Male,    National) -> D1289_1
-  (Female,    National) -> D1289_2
-  (  Male, NonNational) -> D1289_8
-  (Female, NonNational) -> D1289_9
+  (  Male, HouseholdRegistrationOffice) -> D1289_1
+  (Female, HouseholdRegistrationOffice) -> D1289_2
+  (  Male,   NationalImmigrationAgency) -> D1289_8
+  (Female,   NationalImmigrationAgency) -> D1289_9
 
 fromUnchecked :: UncheckedID -> Maybe ID
 fromUnchecked u@(UncheckedID u0 u1 u2 u3 u4 u5 u6 u7 u8 _) =

@@ -34,12 +34,12 @@ import Taiwan.ID.Digit1289
   ( Digit1289 (..) )
 import Taiwan.ID.Gender
   ( Gender (..) )
+import Taiwan.ID.Issuer
+  ( Issuer (..) )
 import Taiwan.ID.Letter
   ( Letter (..) )
-import Taiwan.ID.Location
-  ( Location )
-import Taiwan.ID.Nationality
-  ( Nationality (..) )
+import Taiwan.ID.Region
+  ( Region )
 import Test.Hspec
   ( Spec, describe, hspec, it, shouldBe, shouldSatisfy )
 import Test.QuickCheck
@@ -77,19 +77,19 @@ instance Arbitrary Gender where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
-instance Arbitrary Letter where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
-
 instance Arbitrary ID where
   arbitrary = idFromTuple <$> arbitrary
   shrink = shrinkMap idFromTuple idToTuple
 
-instance Arbitrary Location where
+instance Arbitrary Issuer where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
-instance Arbitrary Nationality where
+instance Arbitrary Letter where
+  arbitrary = arbitraryBoundedEnum
+  shrink = shrinkBoundedEnum
+
+instance Arbitrary Region where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
@@ -122,7 +122,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Location
+    testLawsMany @Issuer
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -130,7 +130,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Nationality
+    testLawsMany @Region
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -175,10 +175,10 @@ main = hspec $ do
 
     describe "Gender" $
       checkLensLaws gender
-    describe "Location" $
-      checkLensLaws location
-    describe "Nationality" $
-      checkLensLaws nationality
+    describe "Issuer" $
+      checkLensLaws issuer
+    describe "Region" $
+      checkLensLaws region
 
   describe "ID.fromText" $ do
 
@@ -201,10 +201,10 @@ main = hspec $ do
         let invalidID = ID.toText i <> T.pack s
         ID.fromText invalidID `shouldBe` Left ID.InvalidLength
 
-    it "does not parse identification numbers with invalid location codes" $
+    it "does not parse identification numbers with invalid region codes" $
       property $ \(i :: ID) (c :: Int) -> do
-        let invalidLocationCode = intToDigit $ c `mod` 10
-        let invalidID = replaceCharAt 0 invalidLocationCode $ ID.toText i
+        let invalidRegionCode = intToDigit $ c `mod` 10
+        let invalidID = replaceCharAt 0 invalidRegionCode $ ID.toText i
         ID.fromText invalidID `shouldBe`
           Left (ID.InvalidChar 0 (CharRange 'A' 'Z'))
 
@@ -280,11 +280,11 @@ checkLensLaws l =
 gender :: Lens' ID Gender
 gender = lens ID.getGender (flip ID.setGender)
 
-location :: Lens' ID Location
-location = lens ID.getLocation (flip ID.setLocation)
+issuer :: Lens' ID Issuer
+issuer = lens ID.getIssuer (flip ID.setIssuer)
 
-nationality :: Lens' ID Nationality
-nationality = lens ID.getNationality (flip ID.setNationality)
+region :: Lens' ID Region
+region = lens ID.getRegion (flip ID.setRegion)
 
 -- | Replaces a character at a specific position.
 --

@@ -5,8 +5,8 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Taiwan.ID.Location
-  ( Location
+module Taiwan.ID.Region
+  ( Region
   , fromLetter
   , toLetter
   , toText
@@ -30,11 +30,11 @@ import Taiwan.ID.Utilities
 import Text.Read
   ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens )
 
--- | Represents a geographical location.
+-- | Represents a geographical region.
 --
--- == Location codes
+-- == Region codes
 --
--- Every location has a unique letter code:
+-- Every region has a unique letter code:
 --
 -- +------+---------+-------------------+
 -- | Code | Chinese | English           |
@@ -94,47 +94,47 @@ import Text.Read
 --
 -- == Usage
 --
--- To construct a 'Location' from its letter code, use the 'fromLetter'
+-- To construct a 'Region' from its letter code, use the 'fromLetter'
 -- function.
 --
--- To print the full name of a 'Location', use the 'toText' function.
+-- To print the full name of a 'Region', use the 'toText' function.
 --
--- To generate a random 'Location', use the 'generate' function.
+-- To generate a random 'Region', use the 'generate' function.
 --
-newtype Location = Location Letter
+newtype Region = Region Letter
   deriving stock (Eq, Generic, Ord)
   deriving newtype (Bounded, Enum)
   deriving anyclass Finitary
 
-instance Read Location where
+instance Read Region where
   readPrec = parens $ do
-    Ident "Location"   <- lexP
+    Ident "Region"     <- lexP
     Symbol "."         <- lexP
     Ident "fromLetter" <- lexP
     fromLetter <$> readPrec
 
-instance Show Location where
+instance Show Region where
   showsPrec _ s =
-    showString "Location.fromLetter " . shows (toLetter s)
+    showString "Region.fromLetter " . shows (toLetter s)
 
--- | Constructs a 'Location' from its corresponding letter code.
+-- | Constructs a 'Region' from its corresponding letter code.
 --
-fromLetter :: Letter -> Location
-fromLetter = Location
+fromLetter :: Letter -> Region
+fromLetter = Region
 
--- | Converts a 'Location' to its corresponding letter code.
+-- | Converts a 'Region' to its corresponding letter code.
 --
-toLetter :: Location -> Letter
-toLetter (Location letter) = letter
+toLetter :: Region -> Letter
+toLetter (Region letter) = letter
 
--- | Prints the specified 'Location'.
-toText :: Language -> Location -> Text
+-- | Prints the specified 'Region'.
+toText :: Language -> Region -> Text
 toText = \case
   English -> toTextEnglish
   Chinese -> toTextChinese
 
-toTextChinese :: Location -> Text
-toTextChinese (Location letter) = case letter of
+toTextChinese :: Region -> Text
+toTextChinese (Region letter) = case letter of
   A -> "臺北市"
   B -> "臺中市"
   C -> "基隆市"
@@ -162,8 +162,8 @@ toTextChinese (Location letter) = case letter of
   Y -> "陽明山"
   Z -> "連江縣"
 
-toTextEnglish :: Location -> Text
-toTextEnglish (Location letter) = case letter of
+toTextEnglish :: Region -> Text
+toTextEnglish (Region letter) = case letter of
   A -> "Taipei City"
   B -> "Taichung City"
   C -> "Keelung City"
@@ -191,7 +191,7 @@ toTextEnglish (Location letter) = case letter of
   Y -> "Yangmingshan"
   Z -> "Lienchiang County"
 
--- | Generates a random 'Location'.
+-- | Generates a random 'Region'.
 --
-generate :: MonadRandom m => m Location
+generate :: MonadRandom m => m Region
 generate = randomFinitary

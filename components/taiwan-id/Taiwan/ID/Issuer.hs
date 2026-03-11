@@ -2,8 +2,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
 
-module Taiwan.ID.Nationality
-  ( Nationality (..)
+module Taiwan.ID.Issuer
+  ( Issuer (..)
   , generate
   )
   where
@@ -17,13 +17,15 @@ import GHC.Generics
 import Taiwan.ID.Utilities
   ( randomFinitary )
 
--- | Specifies a person's nationality.
+-- | A government authority that issues identification numbers.
 --
-data Nationality = National | NonNational
+data Issuer
+  = HouseholdRegistrationOffice
+  | NationalImmigrationAgency
   deriving stock (Bounded, Enum, Eq, Ord, Generic, Read, Show)
   deriving anyclass Finitary
 
--- | Generates a random 'Nationality'.
+-- | Generates a random 'Issuer'.
 --
-generate :: MonadRandom m => m Nationality
+generate :: MonadRandom m => m Issuer
 generate = randomFinitary
