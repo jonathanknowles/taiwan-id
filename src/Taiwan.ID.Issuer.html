@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679161012"><span id="local-6989586621679161013"></span></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679161095"><span id="local-6989586621679161096"></span></span><span class="hs-pragma">{-# LANGUAGE DeriveAnyClass #-}</span><span>
 </span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE DeriveGeneric #-}</span><span>
 </span><span id="line-3"></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
 </span><span id="line-4"></span><span>
@@ -22,14 +22,14 @@
 </span><span id="line-22"></span><span class="hs-keyword">data</span><span> </span><span id="Issuer"><span class="annot"><a href="Taiwan.ID.Issuer.html#Issuer"><span class="hs-identifier hs-var">Issuer</span></a></span></span><span>
 </span><span id="line-23"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span id="HouseholdRegistrationOffice"><span class="annot"><a href="Taiwan.ID.Issuer.html#HouseholdRegistrationOffice"><span class="hs-identifier hs-var">HouseholdRegistrationOffice</span></a></span></span><span>
 </span><span id="line-24"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="NationalImmigrationAgency"><span class="annot"><a href="Taiwan.ID.Issuer.html#NationalImmigrationAgency"><span class="hs-identifier hs-var">NationalImmigrationAgency</span></a></span></span><span>
-</span><span id="line-25"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679161019"><span id="local-6989586621679161021"><span class="annot"><span class="annottext">Issuer
+</span><span id="line-25"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679161102"><span id="local-6989586621679161104"><span class="annot"><span class="annottext">Issuer
 Issuer -&gt; Issuer -&gt; Bounded Issuer
 forall a. a -&gt; a -&gt; Bounded a
 $cminBound :: Issuer
 minBound :: Issuer
 $cmaxBound :: Issuer
 maxBound :: Issuer
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161027"><span id="local-6989586621679161035"><span id="local-6989586621679161040"><span id="local-6989586621679161046"><span id="local-6989586621679161049"><span id="local-6989586621679161054"><span id="local-6989586621679161061"><span id="local-6989586621679161065"><span class="annot"><span class="annottext">Int -&gt; Issuer
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161110"><span id="local-6989586621679161118"><span id="local-6989586621679161123"><span id="local-6989586621679161129"><span id="local-6989586621679161132"><span id="local-6989586621679161137"><span id="local-6989586621679161144"><span id="local-6989586621679161148"><span class="annot"><span class="annottext">Int -&gt; Issuer
 Issuer -&gt; Int
 Issuer -&gt; [Issuer]
 Issuer -&gt; Issuer
@@ -70,7 +70,7 @@ $cenumFromTo :: Issuer -&gt; Issuer -&gt; [Issuer]
 enumFromTo :: Issuer -&gt; Issuer -&gt; [Issuer]
 $cenumFromThenTo :: Issuer -&gt; Issuer -&gt; Issuer -&gt; [Issuer]
 enumFromThenTo :: Issuer -&gt; Issuer -&gt; Issuer -&gt; [Issuer]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161073"><span id="local-6989586621679161077"><span class="annot"><span class="annottext">Issuer -&gt; Issuer -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161156"><span id="local-6989586621679161160"><span class="annot"><span class="annottext">Issuer -&gt; Issuer -&gt; Bool
 (Issuer -&gt; Issuer -&gt; Bool)
 -&gt; (Issuer -&gt; Issuer -&gt; Bool) -&gt; Eq Issuer
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -78,7 +78,7 @@ $c== :: Issuer -&gt; Issuer -&gt; Bool
 == :: Issuer -&gt; Issuer -&gt; Bool
 $c/= :: Issuer -&gt; Issuer -&gt; Bool
 /= :: Issuer -&gt; Issuer -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161084"><span id="local-6989586621679161086"><span id="local-6989586621679161088"><span id="local-6989586621679161092"><span id="local-6989586621679161095"><span id="local-6989586621679161098"><span id="local-6989586621679161101"><span class="annot"><span class="annottext">Eq Issuer
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161167"><span id="local-6989586621679161169"><span id="local-6989586621679161171"><span id="local-6989586621679161175"><span id="local-6989586621679161178"><span id="local-6989586621679161181"><span id="local-6989586621679161184"><span class="annot"><span class="annottext">Eq Issuer
 Eq Issuer =&gt;
 (Issuer -&gt; Issuer -&gt; Ordering)
 -&gt; (Issuer -&gt; Issuer -&gt; Bool)
@@ -115,7 +115,7 @@ $cmax :: Issuer -&gt; Issuer -&gt; Issuer
 max :: Issuer -&gt; Issuer -&gt; Issuer
 $cmin :: Issuer -&gt; Issuer -&gt; Issuer
 min :: Issuer -&gt; Issuer -&gt; Issuer
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161109"><span id="local-6989586621679161111"><span class="annot"><span class="annottext">(forall x. Issuer -&gt; Rep Issuer x)
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161192"><span id="local-6989586621679161194"><span class="annot"><span class="annottext">(forall x. Issuer -&gt; Rep Issuer x)
 -&gt; (forall x. Rep Issuer x -&gt; Issuer) -&gt; Generic Issuer
 forall x. Rep Issuer x -&gt; Issuer
 forall x. Issuer -&gt; Rep Issuer x
@@ -125,7 +125,7 @@ $cfrom :: forall x. Issuer -&gt; Rep Issuer x
 from :: forall x. Issuer -&gt; Rep Issuer x
 $cto :: forall x. Rep Issuer x -&gt; Issuer
 to :: forall x. Rep Issuer x -&gt; Issuer
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161117"><span id="local-6989586621679161121"><span id="local-6989586621679161124"><span id="local-6989586621679161129"><span class="annot"><span class="annottext">ReadPrec [Issuer]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Generic</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161200"><span id="local-6989586621679161204"><span id="local-6989586621679161207"><span id="local-6989586621679161212"><span class="annot"><span class="annottext">ReadPrec [Issuer]
 ReadPrec Issuer
 Int -&gt; ReadS Issuer
 ReadS [Issuer]
@@ -145,7 +145,7 @@ $creadPrec :: ReadPrec Issuer
 readPrec :: ReadPrec Issuer
 $creadListPrec :: ReadPrec [Issuer]
 readListPrec :: ReadPrec [Issuer]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161136"><span id="local-6989586621679161138"><span id="local-6989586621679161142"><span class="annot"><span class="annottext">Int -&gt; Issuer -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679161219"><span id="local-6989586621679161221"><span id="local-6989586621679161225"><span class="annot"><span class="annottext">Int -&gt; Issuer -&gt; ShowS
 [Issuer] -&gt; ShowS
 Issuer -&gt; String
 (Int -&gt; Issuer -&gt; ShowS)
@@ -159,7 +159,7 @@ show :: Issuer -&gt; String
 $cshowList :: [Issuer] -&gt; ShowS
 showList :: [Issuer] -&gt; ShowS
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679161152"><span id="local-6989586621679161161"><span id="local-6989586621679161169"><span id="local-6989586621679161175"><span id="local-6989586621679161181"><span id="local-6989586621679161184"><span class="annot"><span class="annottext">Eq Issuer
+</span><span id="line-26"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">anyclass</span></span><span> </span><span id="local-6989586621679161235"><span id="local-6989586621679161244"><span id="local-6989586621679161252"><span id="local-6989586621679161258"><span id="local-6989586621679161264"><span id="local-6989586621679161267"><span class="annot"><span class="annottext">Eq Issuer
 KnownNat (Cardinality Issuer)
 (Eq Issuer, KnownNat (Cardinality Issuer)) =&gt;
 (Finite (Cardinality Issuer) -&gt; Issuer)
@@ -198,7 +198,7 @@ next :: Issuer -&gt; Maybe Issuer
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="hs-comment">-- | Generates a random 'Issuer'.</span><span>
 </span><span id="line-29"></span><span class="hs-comment">--</span><span>
-</span><span id="line-30"></span><span id="local-6989586621679161007"><span class="annot"><a href="Taiwan.ID.Issuer.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679161007"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679161007"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Issuer.html#Issuer"><span class="hs-identifier hs-type">Issuer</span></a></span></span><span>
+</span><span id="line-30"></span><span id="local-6989586621679161090"><span class="annot"><a href="Taiwan.ID.Issuer.html#generate"><span class="hs-identifier hs-type">generate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MonadRandom</span></span><span> </span><span class="annot"><a href="#local-6989586621679161090"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679161090"><span class="hs-identifier hs-type">m</span></a></span><span> </span><span class="annot"><a href="Taiwan.ID.Issuer.html#Issuer"><span class="hs-identifier hs-type">Issuer</span></a></span></span><span>
 </span><span id="line-31"></span><span id="generate"><span class="annot"><span class="annottext">generate :: forall (m :: * -&gt; *). MonadRandom m =&gt; m Issuer
 </span><a href="Taiwan.ID.Issuer.html#generate"><span class="hs-identifier hs-var hs-var">generate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">m Issuer
 forall (m :: * -&gt; *) a.
