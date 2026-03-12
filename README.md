@@ -27,5 +27,6 @@ numbers.
 For more details, see:
 
 * https://zh.wikipedia.org/wiki/中華民國國民身分證
+* https://zh.wikipedia.org/wiki/中華民國居留證
 * https://en.wikipedia.org/wiki/National_identification_card_(Taiwan)
 * https://en.wikipedia.org/wiki/Resident_certificate
