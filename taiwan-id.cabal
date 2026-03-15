@@ -72,7 +72,10 @@ source-repository head
   location: https://github.com/jonathanknowles/taiwan-id
 
 flag taiwan-id-test-docs
-  description: Enable the taiwan-id-test-docs test suite
+  description:
+    Enables the `taiwan-id-test-docs` test suite.
+    Requires that the package is built with:
+    write-ghc-environment-files: always
   default:     False
   manual:      True
 
