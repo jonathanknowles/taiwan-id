@@ -10,7 +10,7 @@ maintainer:     mail@jonathanknowles.net
 copyright:      Jonathan Knowles
 license:        BSD-3-Clause
 license-file:   LICENSE
-build-type:     Custom
+build-type:     Simple
 
 description:
 
@@ -46,8 +46,8 @@ extra-doc-files:
 
 common dependency-base
     build-depends:base                      >= 4.17.2.1     && < 4.22
-common dependency-doctest
-    build-depends:doctest                   >= 0.24.2       && < 0.25
+common dependency-doctest-parallel
+    build-depends:doctest-parallel          >= 0.4          && < 0.5
 common dependency-finitary
     build-depends:finitary                  >= 2.2.0.0      && < 2.3
 common dependency-finite-typelits
@@ -67,14 +67,14 @@ common dependency-quickcheck-classes
 common dependency-text
     build-depends:text                      >= 1.2.3.1      && < 2.2
 
-custom-setup
-  setup-depends:
-    , base                                  >= 4.17.2.1     && < 4.22
-    , cabal-doctest                         >= 1.0.12       && < 1.1
-
 source-repository head
   type: git
   location: https://github.com/jonathanknowles/taiwan-id
+
+flag taiwan-id-test-docs
+  description: Enable the taiwan-id-test-docs test suite
+  default:     False
+  manual:      True
 
 library
   import:
@@ -128,10 +128,11 @@ test-suite taiwan-id-test
 test-suite taiwan-id-test-docs
   import:
     , dependency-base
-    , dependency-doctest
+    , dependency-doctest-parallel
+  if !flag(taiwan-id-test-docs)
+    buildable: False
   build-depends:
     , taiwan-id
-  x-doctest-options: --verbose
   type: exitcode-stdio-1.0
   main-is: Main.hs
   hs-source-dirs:
