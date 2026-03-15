@@ -1,9 +1,6 @@
 module Main where
 
-import Build_doctests
-  ( flags, pkgs, module_sources )
-import Test.DocTest
-  ( doctest )
+import Test.DocTest (mainFromCabal)
 
 main :: IO ()
-main = doctest (flags ++ pkgs ++ module_sources)
+main = mainFromCabal "taiwan-id" []

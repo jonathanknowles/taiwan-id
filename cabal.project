@@ -1,1 +1,6 @@
 packages: taiwan-id.cabal
+
+write-ghc-environment-files: always
+
+package taiwan-id
+  flags: +taiwan-id-test-docs
