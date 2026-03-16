@@ -1,0 +1,5 @@
+$ taiwan-id decode P!62558171
+Invalid character:
+P!62558171
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

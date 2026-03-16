@@ -1,0 +1,5 @@
+$ taiwan-id validate H125#45071
+Invalid character:
+H125#45071
+    ^
+Character at this position must be a character in the range [0 .. 9].

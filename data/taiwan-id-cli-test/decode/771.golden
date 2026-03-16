@@ -1,0 +1,5 @@
+$ taiwan-id decode O978#02721
+Invalid character:
+O978#02721
+    ^
+Character at this position must be a character in the range [0 .. 9].

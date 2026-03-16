@@ -1,0 +1,5 @@
+$ taiwan-id decode J918^47245 --language English
+Invalid character:
+J918^47245
+    ^
+Character at this position must be a character in the range [0 .. 9].

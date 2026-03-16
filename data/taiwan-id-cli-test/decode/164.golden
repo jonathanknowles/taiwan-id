@@ -1,0 +1,5 @@
+$ taiwan-id decode E&28059851 --language=English
+Invalid character:
+E&28059851
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

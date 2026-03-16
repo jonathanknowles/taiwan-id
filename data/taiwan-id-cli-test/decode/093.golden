@@ -1,0 +1,3 @@
+$ taiwan-id decode S861671047873 --language=Chinese
+Invalid length.
+An identification number must be exactly 10 characters in length.

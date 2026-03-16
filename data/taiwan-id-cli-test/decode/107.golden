@@ -1,0 +1,5 @@
+$ taiwan-id decode S1)5629364 --language English
+Invalid character:
+S1)5629364
+  ^
+Character at this position must be a character in the range [0 .. 9].

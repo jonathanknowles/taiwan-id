@@ -1,0 +1,5 @@
+$ taiwan-id validate P16%775836
+Invalid character:
+P16%775836
+   ^
+Character at this position must be a character in the range [0 .. 9].

@@ -1,0 +1,5 @@
+$ taiwan-id decode X19*403563 --language English
+Invalid character:
+X19*403563
+   ^
+Character at this position must be a character in the range [0 .. 9].

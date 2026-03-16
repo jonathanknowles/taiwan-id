@@ -1,0 +1,5 @@
+$ taiwan-id validate O1197(6357
+Invalid character:
+O1197(6357
+     ^
+Character at this position must be a character in the range [0 .. 9].

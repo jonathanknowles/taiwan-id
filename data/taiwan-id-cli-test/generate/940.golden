@@ -1,0 +1,2 @@
+$ taiwan-id generate --count=0 --seed=45541
+Count argument should be a non-zero natural number.

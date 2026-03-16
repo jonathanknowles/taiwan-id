@@ -1,0 +1,5 @@
+$ taiwan-id validate T182^31983
+Invalid character:
+T182^31983
+    ^
+Character at this position must be a character in the range [0 .. 9].

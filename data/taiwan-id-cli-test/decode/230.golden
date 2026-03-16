@@ -1,0 +1,5 @@
+$ taiwan-id decode T8298!3580 --language=English
+Invalid character:
+T8298!3580
+     ^
+Character at this position must be a character in the range [0 .. 9].

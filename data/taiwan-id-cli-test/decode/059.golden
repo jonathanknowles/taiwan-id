@@ -1,0 +1,5 @@
+$ taiwan-id decode P84105(572 --language Chinese
+Invalid character:
+P84105(572
+      ^
+Character at this position must be a character in the range [0 .. 9].

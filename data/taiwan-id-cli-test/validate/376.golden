@@ -1,0 +1,5 @@
+$ taiwan-id validate K1114(1786
+Invalid character:
+K1114(1786
+     ^
+Character at this position must be a character in the range [0 .. 9].

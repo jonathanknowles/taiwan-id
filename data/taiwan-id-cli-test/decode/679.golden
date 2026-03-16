@@ -1,0 +1,5 @@
+$ taiwan-id decode U246712#32 --language English
+Invalid character:
+U246712#32
+       ^
+Character at this position must be a character in the range [0 .. 9].

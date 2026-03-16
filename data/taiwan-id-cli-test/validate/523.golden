@@ -1,0 +1,5 @@
+$ taiwan-id validate M814(61114
+Invalid character:
+M814(61114
+    ^
+Character at this position must be a character in the range [0 .. 9].

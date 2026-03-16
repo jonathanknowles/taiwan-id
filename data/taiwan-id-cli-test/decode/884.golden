@@ -1,0 +1,5 @@
+$ taiwan-id decode G22699!770
+Invalid character:
+G22699!770
+      ^
+Character at this position must be a character in the range [0 .. 9].

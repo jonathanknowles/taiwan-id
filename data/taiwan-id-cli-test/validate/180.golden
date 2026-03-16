@@ -1,0 +1,5 @@
+$ taiwan-id validate F$88129668
+Invalid character:
+F$88129668
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

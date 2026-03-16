@@ -1,0 +1,5 @@
+$ taiwan-id decode S26%178776 --language=English
+Invalid character:
+S26%178776
+   ^
+Character at this position must be a character in the range [0 .. 9].

@@ -1,0 +1,5 @@
+$ taiwan-id validate C2729$3493
+Invalid character:
+C2729$3493
+     ^
+Character at this position must be a character in the range [0 .. 9].

@@ -1,0 +1,5 @@
+$ taiwan-id decode N#07416326 --language=Chinese
+Invalid character:
+N#07416326
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

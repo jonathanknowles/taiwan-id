@@ -1,0 +1,5 @@
+$ taiwan-id decode E9924250%0 --language=Chinese
+Invalid character:
+E9924250%0
+        ^
+Character at this position must be a character in the range [0 .. 9].

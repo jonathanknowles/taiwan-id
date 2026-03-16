@@ -1,0 +1,5 @@
+$ taiwan-id decode C90@461044 --language=English
+Invalid character:
+C90@461044
+   ^
+Character at this position must be a character in the range [0 .. 9].

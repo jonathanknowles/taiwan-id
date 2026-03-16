@@ -1,0 +1,5 @@
+$ taiwan-id validate O&48087243
+Invalid character:
+O&48087243
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

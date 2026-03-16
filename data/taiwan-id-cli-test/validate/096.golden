@@ -1,0 +1,5 @@
+$ taiwan-id validate X18751)236
+Invalid character:
+X18751)236
+      ^
+Character at this position must be a character in the range [0 .. 9].
