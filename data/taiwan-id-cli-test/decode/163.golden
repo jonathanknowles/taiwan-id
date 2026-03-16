@@ -1,0 +1,5 @@
+$ taiwan-id decode !235514986
+Invalid character:
+!235514986
+^
+Character at this position must be a character in the range [A .. Z].

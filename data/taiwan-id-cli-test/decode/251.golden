@@ -1,0 +1,5 @@
+$ taiwan-id decode U89422#091
+Invalid character:
+U89422#091
+      ^
+Character at this position must be a character in the range [0 .. 9].

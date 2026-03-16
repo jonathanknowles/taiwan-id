@@ -1,0 +1,5 @@
+$ taiwan-id decode P18!368286 --language=English
+Invalid character:
+P18!368286
+   ^
+Character at this position must be a character in the range [0 .. 9].

@@ -1,0 +1,3 @@
+$ taiwan-id validate Y8448
+Invalid length.
+An identification number must be exactly 10 characters in length.

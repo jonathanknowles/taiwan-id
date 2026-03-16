@@ -1,0 +1,5 @@
+$ taiwan-id decode N137232!49
+Invalid character:
+N137232!49
+       ^
+Character at this position must be a character in the range [0 .. 9].

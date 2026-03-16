@@ -1,0 +1,5 @@
+$ taiwan-id decode Z1335!2188 --language Chinese
+Invalid character:
+Z1335!2188
+     ^
+Character at this position must be a character in the range [0 .. 9].

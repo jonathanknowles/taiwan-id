@@ -1,0 +1,5 @@
+$ taiwan-id decode J1638^8129
+Invalid character:
+J1638^8129
+     ^
+Character at this position must be a character in the range [0 .. 9].

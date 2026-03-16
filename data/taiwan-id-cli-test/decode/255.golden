@@ -1,0 +1,5 @@
+$ taiwan-id decode S94945%241
+Invalid character:
+S94945%241
+      ^
+Character at this position must be a character in the range [0 .. 9].

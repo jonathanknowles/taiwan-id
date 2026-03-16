@@ -1,0 +1,3 @@
+$ taiwan-id validate E9
+Invalid length.
+An identification number must be exactly 10 characters in length.

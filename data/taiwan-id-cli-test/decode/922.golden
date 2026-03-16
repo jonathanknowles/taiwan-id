@@ -1,0 +1,5 @@
+$ taiwan-id decode M20+818907 --language Chinese
+Invalid character:
+M20+818907
+   ^
+Character at this position must be a character in the range [0 .. 9].

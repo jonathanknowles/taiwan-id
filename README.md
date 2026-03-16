@@ -21,8 +21,9 @@ according to a standard algorithm.
 
 Example: `A123456789`
 
-This package offers functions for validating, decoding, and encoding these
-numbers.
+This package offers a library with functions for validating, decoding, and
+encoding these numbers, as well as a command-line tool for working with them
+interactively.
 
 For more details, see:
 

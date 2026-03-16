@@ -1,0 +1,5 @@
+$ taiwan-id decode +143581548 --language Chinese
+Invalid character:
++143581548
+^
+Character at this position must be a character in the range [A .. Z].

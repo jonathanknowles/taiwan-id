@@ -1,0 +1,5 @@
+$ taiwan-id validate L^53281371
+Invalid character:
+L^53281371
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

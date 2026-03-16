@@ -1,0 +1,5 @@
+$ taiwan-id validate X988414^50
+Invalid character:
+X988414^50
+       ^
+Character at this position must be a character in the range [0 .. 9].

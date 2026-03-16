@@ -1,0 +1,3 @@
+$ taiwan-id validate C8876767454
+Invalid length.
+An identification number must be exactly 10 characters in length.

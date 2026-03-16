@@ -1,0 +1,5 @@
+$ taiwan-id decode O215&83905 --language Chinese
+Invalid character:
+O215&83905
+    ^
+Character at this position must be a character in the range [0 .. 9].

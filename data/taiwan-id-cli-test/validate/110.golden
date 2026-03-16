@@ -1,0 +1,5 @@
+$ taiwan-id validate P9801$4806
+Invalid character:
+P9801$4806
+     ^
+Character at this position must be a character in the range [0 .. 9].

@@ -1,0 +1,5 @@
+$ taiwan-id decode I18506!247 --language Chinese
+Invalid character:
+I18506!247
+      ^
+Character at this position must be a character in the range [0 .. 9].

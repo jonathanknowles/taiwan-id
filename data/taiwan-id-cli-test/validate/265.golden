@@ -1,0 +1,5 @@
+$ taiwan-id validate H18794555#
+Invalid character:
+H18794555#
+         ^
+Character at this position must be a character in the range [0 .. 9].

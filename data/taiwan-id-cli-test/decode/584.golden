@@ -1,0 +1,5 @@
+$ taiwan-id decode *801846890
+Invalid character:
+*801846890
+^
+Character at this position must be a character in the range [A .. Z].

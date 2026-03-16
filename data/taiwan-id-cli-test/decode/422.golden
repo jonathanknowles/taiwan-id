@@ -1,0 +1,5 @@
+$ taiwan-id decode T894!05072 --language=English
+Invalid character:
+T894!05072
+    ^
+Character at this position must be a character in the range [0 .. 9].

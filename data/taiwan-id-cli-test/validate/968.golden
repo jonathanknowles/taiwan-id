@@ -1,0 +1,3 @@
+$ taiwan-id validate I92
+Invalid length.
+An identification number must be exactly 10 characters in length.

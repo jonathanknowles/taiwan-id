@@ -1,0 +1,5 @@
+$ taiwan-id decode Z974#75472
+Invalid character:
+Z974#75472
+    ^
+Character at this position must be a character in the range [0 .. 9].

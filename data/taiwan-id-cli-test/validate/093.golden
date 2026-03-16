@@ -1,0 +1,3 @@
+$ taiwan-id validate B1611
+Invalid length.
+An identification number must be exactly 10 characters in length.

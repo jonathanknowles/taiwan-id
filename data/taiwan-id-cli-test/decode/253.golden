@@ -1,0 +1,5 @@
+$ taiwan-id decode V114$91232 --language=English
+Invalid character:
+V114$91232
+    ^
+Character at this position must be a character in the range [0 .. 9].

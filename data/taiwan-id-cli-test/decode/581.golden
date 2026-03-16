@@ -1,0 +1,5 @@
+$ taiwan-id decode U83367+411
+Invalid character:
+U83367+411
+      ^
+Character at this position must be a character in the range [0 .. 9].

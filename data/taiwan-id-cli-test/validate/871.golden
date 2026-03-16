@@ -1,0 +1,5 @@
+$ taiwan-id validate Z*29937073
+Invalid character:
+Z*29937073
+ ^
+Character at this position must be a character from the set {1, 2, 8, 9}.

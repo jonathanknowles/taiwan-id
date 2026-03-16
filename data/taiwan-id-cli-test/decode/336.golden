@@ -1,0 +1,5 @@
+$ taiwan-id decode Z8014@2020 --language=Chinese
+Invalid character:
+Z8014@2020
+     ^
+Character at this position must be a character in the range [0 .. 9].
