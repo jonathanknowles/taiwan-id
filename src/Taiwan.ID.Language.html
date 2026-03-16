@@ -1,6 +1,134 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html"><span class="hs-identifier">Taiwan.ID.Language</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679160213"><span id="local-6989586621679160214"></span></span><span class="hs-pragma">{-# LANGUAGE DerivingStrategies #-}</span><span>
 </span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-comment">-- | A language into which values can be localized when pretty printing.</span><span>
-</span><span id="line-4"></span><span class="hs-comment">--</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">data</span><span> </span><span id="Language"><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier hs-var">Language</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="English"><span class="annot"><a href="Taiwan.ID.Language.html#English"><span class="hs-identifier hs-var">English</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Chinese"><span class="annot"><a href="Taiwan.ID.Language.html#Chinese"><span class="hs-identifier hs-var">Chinese</span></a></span></span><span>
-</span><span id="line-6"></span></pre></body></html>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="annot"><a href="Taiwan.ID.Language.html"><span class="hs-identifier">Taiwan.ID.Language</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="annot"><span class="hs-comment">-- | A language into which values can be localized when pretty printing.</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">data</span><span> </span><span id="Language"><span class="annot"><a href="Taiwan.ID.Language.html#Language"><span class="hs-identifier hs-var">Language</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="English"><span class="annot"><a href="Taiwan.ID.Language.html#English"><span class="hs-identifier hs-var">English</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Chinese"><span class="annot"><a href="Taiwan.ID.Language.html#Chinese"><span class="hs-identifier hs-var">Chinese</span></a></span></span><span>
+</span><span id="line-7"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="annot"><span class="hs-keyword">stock</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679160218"><span id="local-6989586621679160220"><span class="annot"><span class="annottext">Language
+Language -&gt; Language -&gt; Bounded Language
+forall a. a -&gt; a -&gt; Bounded a
+$cminBound :: Language
+minBound :: Language
+$cmaxBound :: Language
+maxBound :: Language
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160226"><span id="local-6989586621679160234"><span id="local-6989586621679160239"><span id="local-6989586621679160245"><span id="local-6989586621679160248"><span id="local-6989586621679160253"><span id="local-6989586621679160260"><span id="local-6989586621679160264"><span class="annot"><span class="annottext">Int -&gt; Language
+Language -&gt; Int
+Language -&gt; [Language]
+Language -&gt; Language
+Language -&gt; Language -&gt; [Language]
+Language -&gt; Language -&gt; Language -&gt; [Language]
+(Language -&gt; Language)
+-&gt; (Language -&gt; Language)
+-&gt; (Int -&gt; Language)
+-&gt; (Language -&gt; Int)
+-&gt; (Language -&gt; [Language])
+-&gt; (Language -&gt; Language -&gt; [Language])
+-&gt; (Language -&gt; Language -&gt; [Language])
+-&gt; (Language -&gt; Language -&gt; Language -&gt; [Language])
+-&gt; Enum Language
+forall a.
+(a -&gt; a)
+-&gt; (a -&gt; a)
+-&gt; (Int -&gt; a)
+-&gt; (a -&gt; Int)
+-&gt; (a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; [a])
+-&gt; (a -&gt; a -&gt; a -&gt; [a])
+-&gt; Enum a
+$csucc :: Language -&gt; Language
+succ :: Language -&gt; Language
+$cpred :: Language -&gt; Language
+pred :: Language -&gt; Language
+$ctoEnum :: Int -&gt; Language
+toEnum :: Int -&gt; Language
+$cfromEnum :: Language -&gt; Int
+fromEnum :: Language -&gt; Int
+$cenumFrom :: Language -&gt; [Language]
+enumFrom :: Language -&gt; [Language]
+$cenumFromThen :: Language -&gt; Language -&gt; [Language]
+enumFromThen :: Language -&gt; Language -&gt; [Language]
+$cenumFromTo :: Language -&gt; Language -&gt; [Language]
+enumFromTo :: Language -&gt; Language -&gt; [Language]
+$cenumFromThenTo :: Language -&gt; Language -&gt; Language -&gt; [Language]
+enumFromThenTo :: Language -&gt; Language -&gt; Language -&gt; [Language]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160272"><span id="local-6989586621679160276"><span class="annot"><span class="annottext">Language -&gt; Language -&gt; Bool
+(Language -&gt; Language -&gt; Bool)
+-&gt; (Language -&gt; Language -&gt; Bool) -&gt; Eq Language
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+$c== :: Language -&gt; Language -&gt; Bool
+== :: Language -&gt; Language -&gt; Bool
+$c/= :: Language -&gt; Language -&gt; Bool
+/= :: Language -&gt; Language -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160283"><span id="local-6989586621679160285"><span id="local-6989586621679160287"><span id="local-6989586621679160291"><span id="local-6989586621679160294"><span id="local-6989586621679160297"><span id="local-6989586621679160300"><span class="annot"><span class="annottext">Eq Language
+Eq Language =&gt;
+(Language -&gt; Language -&gt; Ordering)
+-&gt; (Language -&gt; Language -&gt; Bool)
+-&gt; (Language -&gt; Language -&gt; Bool)
+-&gt; (Language -&gt; Language -&gt; Bool)
+-&gt; (Language -&gt; Language -&gt; Bool)
+-&gt; (Language -&gt; Language -&gt; Language)
+-&gt; (Language -&gt; Language -&gt; Language)
+-&gt; Ord Language
+Language -&gt; Language -&gt; Bool
+Language -&gt; Language -&gt; Ordering
+Language -&gt; Language -&gt; Language
+forall a.
+Eq a =&gt;
+(a -&gt; a -&gt; Ordering)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; Bool)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; (a -&gt; a -&gt; a)
+-&gt; Ord a
+$ccompare :: Language -&gt; Language -&gt; Ordering
+compare :: Language -&gt; Language -&gt; Ordering
+$c&lt; :: Language -&gt; Language -&gt; Bool
+&lt; :: Language -&gt; Language -&gt; Bool
+$c&lt;= :: Language -&gt; Language -&gt; Bool
+&lt;= :: Language -&gt; Language -&gt; Bool
+$c&gt; :: Language -&gt; Language -&gt; Bool
+&gt; :: Language -&gt; Language -&gt; Bool
+$c&gt;= :: Language -&gt; Language -&gt; Bool
+&gt;= :: Language -&gt; Language -&gt; Bool
+$cmax :: Language -&gt; Language -&gt; Language
+max :: Language -&gt; Language -&gt; Language
+$cmin :: Language -&gt; Language -&gt; Language
+min :: Language -&gt; Language -&gt; Language
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160308"><span id="local-6989586621679160312"><span id="local-6989586621679160315"><span id="local-6989586621679160320"><span class="annot"><span class="annottext">ReadPrec [Language]
+ReadPrec Language
+Int -&gt; ReadS Language
+ReadS [Language]
+(Int -&gt; ReadS Language)
+-&gt; ReadS [Language]
+-&gt; ReadPrec Language
+-&gt; ReadPrec [Language]
+-&gt; Read Language
+forall a.
+(Int -&gt; ReadS a)
+-&gt; ReadS [a] -&gt; ReadPrec a -&gt; ReadPrec [a] -&gt; Read a
+$creadsPrec :: Int -&gt; ReadS Language
+readsPrec :: Int -&gt; ReadS Language
+$creadList :: ReadS [Language]
+readList :: ReadS [Language]
+$creadPrec :: ReadPrec Language
+readPrec :: ReadPrec Language
+$creadListPrec :: ReadPrec [Language]
+readListPrec :: ReadPrec [Language]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Read</span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679160327"><span id="local-6989586621679160329"><span id="local-6989586621679160333"><span class="annot"><span class="annottext">Int -&gt; Language -&gt; ShowS
+[Language] -&gt; ShowS
+Language -&gt; String
+(Int -&gt; Language -&gt; ShowS)
+-&gt; (Language -&gt; String) -&gt; ([Language] -&gt; ShowS) -&gt; Show Language
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+$cshowsPrec :: Int -&gt; Language -&gt; ShowS
+showsPrec :: Int -&gt; Language -&gt; ShowS
+$cshow :: Language -&gt; String
+show :: Language -&gt; String
+$cshowList :: [Language] -&gt; ShowS
+showList :: [Language] -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span></pre></body></html>
