@@ -60,10 +60,14 @@ common dependency-MonadRandom
     build-depends:MonadRandom               >= 0.5.1.1      && < 0.7
 common dependency-nonempty-containers
     build-depends:nonempty-containers       >= 0.3.5.0      && < 0.4
+common dependency-optparse-applicative
+    build-depends:optparse-applicative      >= 0.17         && < 0.19
 common dependency-QuickCheck
     build-depends:QuickCheck                >= 2.13.2       && < 2.18
 common dependency-quickcheck-classes
     build-depends:quickcheck-classes        >= 0.6.5.0      && < 0.7
+common dependency-random
+    build-depends:random                    >= 1.2.0        && < 1.3
 common dependency-text
     build-depends:text                      >= 2.1.2        && < 2.2
 
@@ -105,6 +109,24 @@ library
       components/taiwan-id
   ghc-options: -Wall
   default-language: Haskell2010
+
+library taiwan-id-cli
+  import:
+    , dependency-base
+    , dependency-MonadRandom
+    , dependency-nonempty-containers
+    , dependency-optparse-applicative
+    , dependency-random
+    , dependency-text
+  build-depends:
+    , taiwan-id
+  exposed-modules:
+      Taiwan.ID.CLI
+  hs-source-dirs:
+      components/taiwan-id-cli-lib
+  ghc-options: -Wall
+  default-language: Haskell2010
+  visibility: private
 
 test-suite taiwan-id-test
   import:
