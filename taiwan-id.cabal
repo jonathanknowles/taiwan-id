@@ -164,3 +164,16 @@ test-suite taiwan-id-test-docs
     components/taiwan-id-test-docs
   ghc-options: -threaded
   default-language: Haskell2010
+
+executable taiwan-id
+  import:
+    , dependency-base
+    , dependency-MonadRandom
+    , dependency-text
+  build-depends:
+    , taiwan-id-cli
+  main-is: Main.hs
+  hs-source-dirs:
+      components/taiwan-id-cli-exe
+  ghc-options: -Wall
+  default-language: Haskell2010
