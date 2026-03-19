@@ -47,30 +47,38 @@ extra-doc-files:
 
 common dependency-base
     build-depends:base                      >= 4.17.2.1     && < 4.22
+common dependency-bytestring
+    build-depends:bytestring                >= 0.11.5.3     && < 0.13
 common dependency-doctest-parallel
-    build-depends:doctest-parallel          >= 0.4          && < 0.5
+    build-depends:doctest-parallel          >= 0.4.1        && < 0.5
+common dependency-filepath
+    build-depends:filepath                  >= 1.4.2.2      && < 1.6
 common dependency-finitary
     build-depends:finitary                  >= 2.2.0.0      && < 2.3
 common dependency-finite-typelits
     build-depends:finite-typelits           >= 0.2.1.0      && < 0.3
 common dependency-hspec
-    build-depends:hspec                     >= 2.5.5        && < 2.12
+    build-depends:hspec                     >= 2.11.17      && < 2.12
 common dependency-microlens
     build-depends:microlens                 >= 0.5.0.0      && < 0.6
 common dependency-MonadRandom
-    build-depends:MonadRandom               >= 0.5.1.1      && < 0.7
+    build-depends:MonadRandom               >= 0.6.2.1      && < 0.7
 common dependency-nonempty-containers
     build-depends:nonempty-containers       >= 0.3.5.0      && < 0.4
 common dependency-optparse-applicative
-    build-depends:optparse-applicative      >= 0.17         && < 0.19
+    build-depends:optparse-applicative      >= 0.19.0.0     && < 0.20
 common dependency-QuickCheck
-    build-depends:QuickCheck                >= 2.13.2       && < 2.18
+    build-depends:QuickCheck                >= 2.16.0.0     && < 2.17
 common dependency-quickcheck-classes
     build-depends:quickcheck-classes        >= 0.6.5.0      && < 0.7
 common dependency-random
-    build-depends:random                    >= 1.2.0        && < 1.3
+    build-depends:random                    >= 1.3.1        && < 1.4
+common dependency-tasty
+    build-depends:tasty                     >= 1.5.3        && < 1.6
+common dependency-tasty-golden
+    build-depends:tasty-golden              >= 2.3.6        && < 2.4
 common dependency-text
-    build-depends:text                      >= 2.1.2        && < 2.2
+    build-depends:text                      >= 2.1.4        && < 2.2
 
 source-repository head
   type: git
@@ -167,8 +175,14 @@ test-suite taiwan-id-test
 test-suite taiwan-id-cli-test
   import:
     , dependency-base
+    , dependency-bytestring
+    , dependency-filepath
+    , dependency-MonadRandom
     , dependency-QuickCheck
     , dependency-quickcheck-classes
+    , dependency-random
+    , dependency-tasty
+    , dependency-tasty-golden
     , dependency-text
   type: exitcode-stdio-1.0
   main-is: Spec.hs
@@ -177,14 +191,8 @@ test-suite taiwan-id-cli-test
       components/test/taiwan-id-cli-test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-    , bytestring
-    , filepath
-    , MonadRandom
-    , random
     , taiwan-id
     , taiwan-id-cli
-    , tasty
-    , tasty-golden
   default-language: Haskell2010
 
 test-suite taiwan-id-doc-test
