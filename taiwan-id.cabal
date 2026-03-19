@@ -124,7 +124,7 @@ library taiwan-id-cli
   exposed-modules:
       Taiwan.ID.CLI
   hs-source-dirs:
-      components/taiwan-id-cli-lib
+      components/lib/taiwan-id-cli
   ghc-options: -Wall
   default-language: Haskell2010
   visibility: private
