@@ -137,6 +137,21 @@ library taiwan-id-cli
   default-language: Haskell2010
   visibility: private
 
+library taiwan-id-test-common
+  import:
+    , dependency-base
+    , dependency-QuickCheck
+    , dependency-text
+  build-depends:
+    , taiwan-id
+  exposed-modules:
+      Taiwan.ID.Test
+  hs-source-dirs:
+      components/lib/taiwan-id-test-common
+  ghc-options: -Wall
+  default-language: Haskell2010
+  visibility: private
+
 executable taiwan-id
   import:
     , dependency-base
