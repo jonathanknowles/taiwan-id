@@ -107,7 +107,7 @@ library
       Taiwan.ID.Unchecked
       Taiwan.ID.Utilities
   hs-source-dirs:
-      components/taiwan-id
+      components/lib/taiwan-id
   ghc-options: -Wall
   default-language: Haskell2010
 
