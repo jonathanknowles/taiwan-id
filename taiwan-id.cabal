@@ -185,6 +185,7 @@ test-suite taiwan-id-test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
     , taiwan-id
+    , taiwan-id-test-common
   default-language: Haskell2010
 
 test-suite taiwan-id-cli-test

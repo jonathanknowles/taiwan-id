@@ -1,23 +1,15 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 {- HLINT ignore "Redundant bracket" -}
 
 module Main (main) where
 
-import Data.Bifunctor
-  ( Bifunctor (second) )
-import Data.Char
-  ( intToDigit )
-import Data.List.NonEmpty
-  ( NonEmpty ((:|)) )
-import Data.Text
-  ( Text )
 import Lens.Micro
   ( Lens', lens, set )
 import Lens.Micro.Extras
@@ -42,19 +34,18 @@ import Taiwan.ID.Letter
   ( Letter (..) )
 import Taiwan.ID.Region
   ( Region )
+import Taiwan.ID.Test
+  ( unsafePokeChar )
 import Test.Hspec
   ( Spec, describe, hspec, it, shouldBe, shouldSatisfy )
 import Test.QuickCheck
   ( Arbitrary (..)
   , NonEmptyList (..)
   , Property
-  , arbitraryBoundedEnum
   , choose
   , elements
   , forAll
   , property
-  , shrinkBoundedEnum
-  , shrinkMap
   , (===)
   )
 import Test.QuickCheck.Classes
@@ -66,38 +57,39 @@ import qualified Data.Finitary as Finitary
 import qualified Data.Set.NonEmpty as NESet
 import qualified Data.Text as T
 import qualified Taiwan.ID as ID
+import qualified Taiwan.ID.Test as Test
 
 instance Arbitrary Digit where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genDigit
+  shrink = Test.shrinkDigit
 
 instance Arbitrary Digit1289 where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genDigit1289
+  shrink = Test.shrinkDigit1289
 
 instance Arbitrary Gender where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genGender
+  shrink = Test.shrinkGender
 
 instance Arbitrary ID where
-  arbitrary = idFromTuple <$> arbitrary
-  shrink = shrinkMap idFromTuple idToTuple
+  arbitrary = Test.genID
+  shrink = Test.shrinkID
 
 instance Arbitrary Issuer where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genIssuer
+  shrink = Test.shrinkIssuer
 
 instance Arbitrary Language where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genLanguage
+  shrink = Test.shrinkLanguage
 
 instance Arbitrary Letter where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genLetter
+  shrink = Test.shrinkLetter
 
 instance Arbitrary Region where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
+  arbitrary = Test.genRegion
+  shrink = Test.shrinkRegion
 
 main :: IO ()
 main = hspec $ do
@@ -214,66 +206,57 @@ main = hspec $ do
 
     it "successfully parses known-valid identification numbers" $
       forAll (elements knownValidIDs) $ \i ->
-        ID.fromText (ID.toText i) `shouldBe` Right i
+      ID.fromText (ID.toText i) `shouldBe` Right i
 
     it "successfully parses valid identification numbers" $
-      property $ \(i :: ID) ->
-        ID.fromText (ID.toText i) `shouldBe` Right i
+      property $
+      forAll Test.genID $ \validID ->
+      ID.fromText (ID.toText validID) `shouldBe` Right validID
 
     it "does not parse identification numbers that are too short" $
-      property $ \(i :: ID) n -> do
-        let newLength = n `mod` 10
-        let invalidID = T.take newLength $ ID.toText i
-        ID.fromText invalidID `shouldBe` Left ID.InvalidLength
+      property $
+      forAll Test.genIDTextInvalidLengthTooShort $ \invalidID ->
+      ID.fromText invalidID `shouldBe` Left ID.InvalidLength
 
     it "does not parse identification numbers that are too long" $
-      property $ \(i :: ID) (NonEmpty s) -> do
-        let invalidID = ID.toText i <> T.pack s
-        ID.fromText invalidID `shouldBe` Left ID.InvalidLength
+      property $
+      forAll Test.genIDTextInvalidLengthTooLong $ \invalidID ->
+      ID.fromText invalidID `shouldBe` Left ID.InvalidLength
 
     it "does not parse identification numbers with invalid region codes" $
-      property $ \(i :: ID) (c :: Int) -> do
-        let invalidRegionCode = intToDigit $ c `mod` 10
-        let invalidID = replaceCharAt 0 invalidRegionCode $ ID.toText i
-        ID.fromText invalidID `shouldBe`
-          Left (ID.InvalidChar 0 (CharRange 'A' 'Z'))
+      property $
+      forAll (Test.genIDTextInvalidCharAtIndex 0) $ \invalidID ->
+      ID.fromText invalidID `shouldBe` Left
+        (ID.InvalidChar 0 (CharRange 'A' 'Z'))
 
     it "does not parse identification numbers with invalid initial digits" $
-      property $ \(i :: ID) ->
-        forAll (elements ['0', '3', '4', '5', '6', '7']) $ \initialDigit -> do
-          let invalidID = replaceCharAt 1 initialDigit (ID.toText i)
-          let expectedError =
-                ID.InvalidChar 1
-                  (CharSet $ NESet.fromList $ '1' :| ['2', '8', '9'])
-          ID.fromText invalidID `shouldBe` Left expectedError
+      property $
+      forAll (Test.genIDTextInvalidCharAtIndex 1) $ \invalidID ->
+      ID.fromText invalidID `shouldBe` Left
+        (ID.InvalidChar 1 (CharSet $ NESet.fromList ['1', '2', '8', '9']))
 
     it "does not parse identification numbers with invalid checksums" $
-      property $ \(i :: ID) (c :: Int) -> do
-        let invalidChecksumDigit = intToDigit $
-              ((c `mod` 9) + fromEnum (ID.checksum i) + 1) `mod` 10
-        let invalidID =
-              T.take 9 (ID.toText i) <> T.pack [invalidChecksumDigit]
-        ID.fromText invalidID `shouldBe` Left ID.InvalidChecksum
+      property $
+      forAll Test.genIDTextInvalidChecksum $ \invalidID ->
+      ID.fromText invalidID `shouldBe` Left ID.InvalidChecksum
 
     it "reports invalid characters even when input is too short" $
       property $ \(i :: ID) ->
+      forAll Test.genInvalidChar $ \invalidChar ->
       forAll (choose (1, 9)) $ \truncatedLength ->
       forAll (choose (0, truncatedLength - 1)) $ \invalidCharIndex -> do
-        let textTruncated = T.take truncatedLength (ID.toText i)
-        let textInvalid = replaceCharAt invalidCharIndex 'x' textTruncated
-        ID.fromText textInvalid `shouldSatisfy` \case
-          Left (ID.InvalidChar (CharIndex index) _)
-            | index == invalidCharIndex -> True
-          _ -> False
+      let truncatedID = T.take truncatedLength (ID.toText i)
+      let invalidID = unsafePokeChar invalidCharIndex truncatedID invalidChar
+      ID.fromText invalidID `shouldSatisfy` \case
+        Left (ID.InvalidChar (CharIndex index) _)
+          | index == invalidCharIndex -> True
+        _ -> False
 
     it "does not report invalid characters if input is too long" $
-      property $ \(i :: ID) (NonEmpty trailingExcess) ->
-      forAll (choose (0, 9)) $ \invalidCharIndex -> do
-        let textInvalid =
-              replaceCharAt invalidCharIndex 'x' (ID.toText i)
-              <>
-              T.pack trailingExcess
-        ID.fromText textInvalid `shouldBe` Left ID.InvalidLength
+      property $ \(NonEmpty trailingExcess) ->
+      forAll Test.genIDTextInvalidChar $ \invalidID ->
+      ID.fromText (invalidID <> T.pack trailingExcess) `shouldBe`
+        Left ID.InvalidLength
 
 checkLensLaws
   :: forall i v. (Arbitrary i, Arbitrary v, Eq i, Eq v, Show i, Show v)
@@ -316,15 +299,6 @@ issuer = lens ID.getIssuer (flip ID.setIssuer)
 region :: Lens' ID Region
 region = lens ID.getRegion (flip ID.setRegion)
 
--- | Replaces a character at a specific position.
---
-replaceCharAt :: Int -> Char -> Text -> Text
-replaceCharAt i c t
-    | i < 0 || i >= T.length t = error "replaceCharAt: invalid index"
-    | otherwise = prefix <> T.singleton c <> suffix
-  where
-    (prefix, suffix) = second (T.drop 1) (T.splitAt i t)
-
 -- | A set of known-valid ID numbers.
 --
 -- Generated with 身分證字號產生器.
@@ -360,11 +334,3 @@ knownValidIDs =
   , ID.fromSymbol @"Y140531128"
   , ID.fromSymbol @"Z250358466"
   ]
-
-idFromTuple :: Digit ~ d => (Letter, Digit1289, d, d, d, d, d, d, d) -> ID
-idFromTuple (x0, x1, x2, x3, x4, x5, x6, x7, x8) =
-  ID x0 x1 x2 x3 x4 x5 x6 x7 x8
-
-idToTuple :: Digit ~ d => ID -> (Letter, Digit1289, d, d, d, d, d, d, d)
-idToTuple (ID x0 x1 x2 x3 x4 x5 x6 x7 x8) =
-  (x0, x1, x2, x3, x4, x5, x6, x7, x8)
