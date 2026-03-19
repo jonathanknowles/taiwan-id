@@ -138,6 +138,14 @@ main = hspec $ do
         , showReadLaws
         ]
 
+    testLawsMany @Letter
+        [ boundedEnumLaws
+        , eqLaws
+        , ordLaws
+        , showLaws
+        , showReadLaws
+        ]
+
     testLawsMany @Region
         [ boundedEnumLaws
         , eqLaws
