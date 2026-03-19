@@ -107,6 +107,14 @@ main = hspec $ do
         , showReadLaws
         ]
 
+    testLawsMany @Digit1289
+        [ boundedEnumLaws
+        , eqLaws
+        , ordLaws
+        , showLaws
+        , showReadLaws
+        ]
+
     testLawsMany @Gender
         [ boundedEnumLaws
         , eqLaws
