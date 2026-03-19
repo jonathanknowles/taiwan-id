@@ -161,7 +161,7 @@ test-suite taiwan-id-cli-test
   main-is: Spec.hs
   other-modules:
   hs-source-dirs:
-      components/taiwan-id-cli-test
+      components/test/taiwan-id-cli-test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:
     , bytestring
