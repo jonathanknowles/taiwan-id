@@ -7,6 +7,7 @@
 {-# LANGUAGE NumericUnderscores #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
@@ -16,9 +17,13 @@ module Main where
 
 import Control.Monad
   ( replicateM
+  , unless
   )
 import Control.Monad.Random
   ( evalRand
+  )
+import Data.Data
+  ( Proxy (Proxy)
   )
 import Data.Functor.Identity
   ( Identity (Identity, runIdentity)
@@ -28,6 +33,10 @@ import Data.Text
   )
 import GHC.Stack
   ( HasCallStack
+  )
+import System.Directory
+  ( createDirectoryIfMissing
+  , doesFileExist
   )
 import System.FilePath
   ( (<.>)
@@ -40,7 +49,7 @@ import Taiwan.ID
   ( ID (ID)
   )
 import Taiwan.ID.CLI
-  ( Command (Decode, Generate, Validate)
+  ( Command
   , CommandLineResult (CommandLineFailure, CommandLineSuccess)
   , DecodeCommand (DecodeCommand, language)
   , GenerateCommand (GenerateCommand, count, seed)
@@ -69,7 +78,6 @@ import Test.QuickCheck
   , oneof
   , shrinkBoundedEnum
   , shrinkMap
-  , vectorOf
   )
 import Test.QuickCheck.Gen
   ( unGen
@@ -79,21 +87,30 @@ import Test.QuickCheck.Random
   )
 import Test.Tasty
   ( TestTree
-  , defaultMain
+  , askOption
+  , defaultIngredients
+  , defaultMainWithIngredients
+  , includingOptions
   , testGroup
   )
-import Test.Tasty.Golden
-  ( goldenVsString
+import Test.Tasty.HUnit
+  ( assertFailure
+  , testCase
+  )
+import Test.Tasty.Options
+  ( IsOption (..)
+  , OptionDescription (Option)
+  , mkOptionCLParser
   )
 import Text.Printf
   ( printf
   )
 
-import qualified Data.ByteString.Lazy as LBS
 import qualified Data.Text as Text
-import qualified Data.Text.Encoding as Text
+import qualified Data.Text.IO as TIO
 import qualified Taiwan.ID as ID
 import qualified Taiwan.ID.CLI as CLI
+import qualified Taiwan.ID.CLI as Command
 import qualified Taiwan.ID.Digit as Digit
 
 --------------------------------------------------------------------------------
@@ -103,96 +120,251 @@ import qualified Taiwan.ID.Digit as Digit
 testRootDirectory :: FilePath
 testRootDirectory = "data" </> "taiwan-id-cli-test"
 
-testSeed :: Int
-testSeed = 0
+-- | Number of golden tests for each command type.
+testsPerCommand :: Int
+testsPerCommand = 1000
 
--- | The number of times to invoke each command with random arguments.
-invocationsPerCommand :: Int
-invocationsPerCommand = 1000
+-- | Seed for random number generation when executing CLI commands in tests.
+-- Ensures that commands without an explicit '--seed' parameter produce
+-- deterministic output.
+executionSeed :: Int
+executionSeed = 0
+
+-- | Seed for QuickCheck generators that produce test command invocations.
+generatorSeed :: Int
+generatorSeed = 0
+
+-- | QuickCheck size parameter used by generators.
+generatorSize :: Int
+generatorSize = 10
+
+--------------------------------------------------------------------------------
+-- Modes
+--------------------------------------------------------------------------------
+
+-- | The mode in which the test suite runs.
+--
+-- The default mode (if none is specified) is 'Verify'.
+data Mode
+  = -- | Create golden files from randomly-generated command invocations.
+    -- Existing golden files are never overwritten.
+    Create
+  | -- | Run each recorded command invocation and overwrite the golden file
+    -- with the observed output if it differs from the expected output.
+    Update
+  | -- | Run each recorded command invocation and fail if the observed output
+    -- differs from the expected output recorded in the golden file.
+    Verify
+  deriving stock (Bounded, Enum, Eq, Show)
+
+instance IsOption Mode where
+  defaultValue = Verify
+  optionName = pure "mode"
+  optionHelp = pure modeHelpText
+  optionCLParser = mkOptionCLParser mempty
+  parseValue = \case
+    "create" -> Just Create
+    "update" -> Just Update
+    "verify" -> Just Verify
+    _ -> Nothing
+
+modeHelpText :: String
+modeHelpText =
+  "Test mode: create, update, or verify (default)"
 
 --------------------------------------------------------------------------------
 -- Main
 --------------------------------------------------------------------------------
 
+data CommandSpec = CommandSpec
+  { commandName :: String
+  , commandGen :: Gen CommandInvocation
+  }
+
+commands :: [CommandSpec]
+commands =
+  [ CommandSpec "decode" genCommandDecode
+  , CommandSpec "generate" genCommandGenerate
+  , CommandSpec "validate" genCommandValidate
+  ]
+
 main :: IO ()
-main =
-  defaultMain $
-    testGroup
-      "CLI"
-      [ makeTestTree
-          "decode"
-          genCommandDecode
-      , makeTestTree
-          "generate"
-          genCommandGenerate
-      , makeTestTree
-          "validate"
-          genCommandValidate
-      ]
-
-makeTestTree :: String -> Gen CommandInvocation -> TestTree
-makeTestTree commandName genInvocation =
-  testGroup commandName $
-    [ makeTest commandName i invocation
-    | (i, invocation) <- zip [0 ..] invocations
-    ]
+main = defaultMainWithIngredients ingredients testTree
   where
-    invocations :: [CommandInvocation]
-    invocations =
-      unGen
-        (vectorOf invocationsPerCommand genInvocation)
-        (mkQCGen testSeed)
-        10
+    ingredients = includingOptions [Option (Proxy @Mode)] : defaultIngredients
+    testTree =
+      testGroup "CLI"
+        [ testGroup commandName (testsFromDirectory spec)
+        | spec@CommandSpec{commandName} <- commands
+        ]
 
-makeTest :: String -> Int -> CommandInvocation -> TestTree
-makeTest commandName invocationIndex invocation =
-  goldenVsString testName testFilePath (pure testFileContent)
+testsFromDirectory :: CommandSpec -> [TestTree]
+testsFromDirectory spec =
+  [ testFromIndex spec index
+  | index <- take testsPerCommand [0 ..]
+  ]
+
+testFromIndex :: CommandSpec -> Int -> TestTree
+testFromIndex CommandSpec {commandName, commandGen} index =
+  askOption $ \mode ->
+    testCase testFilePath $
+      case mode of
+        Create -> create
+        Update -> update
+        Verify -> verify
   where
-    testName :: String
-    testName = case invocation of
-      CommandInvocation {command, optionStyle} ->
-        "taiwan-id "
-          <> Text.unpack
-            (Text.unwords $ renderInvocationArgs optionStyle command)
+    testDirectoryPath :: FilePath
+    testDirectoryPath = testRootDirectory </> commandName
 
     testFilePath :: FilePath
-    testFilePath =
-      testRootDirectory
-        </> commandName
-        </> paddedIndex <.> "golden"
+    testFilePath = testDirectoryPath </> padIndex index <.> "golden"
       where
-        paddedIndex :: FilePath
-        paddedIndex = printf "%03d" invocationIndex
+        padIndex :: Int -> FilePath
+        padIndex = printf "%03d"
 
-    testFileContent :: LBS.LazyByteString
-    testFileContent =
-      LBS.fromStrict $
-        Text.encodeUtf8 $
-          Text.unlines $
-            renderInvocationWithResult invocation
+    create :: IO ()
+    create = do
+      exists <- doesFileExist testFilePath
+      unless exists $ do
+        createDirectoryIfMissing True testDirectoryPath
+        writeCommandExpectationToFile testFilePath expectation
+      where
+        expectation :: CommandExpectation
+        expectation = commandInvocationToExpectation invocation
+
+        invocation :: CommandInvocation
+        invocation =
+          unGen commandGen (mkQCGen (generatorSeed + index)) generatorSize
+
+    update :: IO ()
+    update = do
+      expectation <- readCommandExpectationFromFile testFilePath
+      let observedOutputLines =
+            runCommandLine (inputCommandLineArgs expectation)
+      unless (observedOutputLines == expectedOutputLines expectation) $
+        writeCommandExpectationToFile
+          testFilePath
+          expectation {expectedOutputLines = observedOutputLines}
+
+    verify :: IO ()
+    verify = do
+      CommandExpectation
+        { inputCommandLineArgs
+        , expectedOutputLines
+        } <-
+        readCommandExpectationFromFile testFilePath
+      let observedOutputLines = runCommandLine inputCommandLineArgs
+      unless (observedOutputLines == expectedOutputLines) $
+        assertFailure $
+          Text.unpack $
+            Text.unlines
+              [ "path:"
+              , blockIndent [Text.pack testFilePath]
+              , "input:"
+              , blockIndent [renderPrompt inputCommandLineArgs]
+              , "output expected:"
+              , blockIndent expectedOutputLines
+              , "output observed:"
+              , blockIndent observedOutputLines
+              ]
+      where
+        blockIndent :: [Text] -> Text
+        blockIndent = Text.unlines . map ("  " <>)
+
+--------------------------------------------------------------------------------
+-- Command expectations
+--------------------------------------------------------------------------------
+
+-- | Bundles a command with the output we expect from running the command.
+data CommandExpectation = CommandExpectation
+  { inputCommandLineArgs :: [Text]
+  , expectedOutputLines :: [Text]
+  }
+
+writeCommandExpectationToFile :: FilePath -> CommandExpectation -> IO ()
+writeCommandExpectationToFile
+  path
+  CommandExpectation {inputCommandLineArgs, expectedOutputLines} =
+    TIO.writeFile path $
+      Text.unlines $
+        renderPrompt inputCommandLineArgs : expectedOutputLines
+
+readCommandExpectationFromFile
+  :: HasCallStack => FilePath -> IO CommandExpectation
+readCommandExpectationFromFile path = do
+  contents <- TIO.readFile path
+  case Text.lines contents of
+    [] -> reportEmptyFile
+    (prompt : expectedOutputLines) ->
+      case parsePrompt prompt of
+        Just inputCommandLineArgs ->
+          pure CommandExpectation {inputCommandLineArgs, expectedOutputLines}
+        Nothing ->
+          reportInvalidPrompt
+  where
+    reportEmptyFile =
+      assertFailure $
+        unwords
+          [ "readCommandExpectationFromFile: empty file:"
+          , path
+          ]
+    reportInvalidPrompt =
+      assertFailure $
+        unwords
+          [ "readCommandExpectationFromFile: invalid prompt line in:"
+          , path
+          ]
+
+-- | The prefix used for prompt lines in golden files.
+promptPrefix :: Text
+promptPrefix = "$ taiwan-id "
+
+-- | Parse the arguments from a prompt line of the form:
+-- @$ taiwan-id <args...>@
+-- Returns 'Nothing' if the line does not have the expected prefix.
+parsePrompt :: Text -> Maybe [Text]
+parsePrompt = fmap Text.words . Text.stripPrefix promptPrefix
+
+-- | Render a list of arguments as a prompt line of the form:
+-- @$ taiwan-id <args...>@
+renderPrompt :: [Text] -> Text
+renderPrompt args = promptPrefix <> Text.intercalate " " args
+
+--------------------------------------------------------------------------------
+-- CLI execution
+--------------------------------------------------------------------------------
+
+runCommandLine :: [Text] -> [Text]
+runCommandLine args =
+  case result of
+    CommandLineSuccess ls -> ls
+    CommandLineFailure ls -> ls
+  where
+    result =
+      evalRand
+        (CLI.run (map Text.unpack args))
+        (mkStdGen executionSeed)
+
+commandInvocationToExpectation :: CommandInvocation -> CommandExpectation
+commandInvocationToExpectation CommandInvocation {command, optionStyle} =
+  CommandExpectation
+    { inputCommandLineArgs
+    , expectedOutputLines = runCommandLine inputCommandLineArgs
+    }
+  where
+    inputCommandLineArgs = renderInvocationArgs optionStyle command
 
 renderInvocationArgs :: OptionStyle -> Command Raw -> [Text]
 renderInvocationArgs style = \case
-  Decode DecodeCommand {idText, language} ->
+  Command.Decode DecodeCommand {idText, language} ->
     ["decode", runIdentity idText]
       ++ renderOption style "language" language
-  Generate GenerateCommand {count, seed} ->
+  Command.Generate GenerateCommand {count, seed} ->
     ["generate"]
       ++ renderOption style "count" count
       ++ renderOption style "seed" seed
-  Validate ValidateCommand {idText} ->
+  Command.Validate ValidateCommand {idText} ->
     ["validate", runIdentity idText]
-
-renderInvocationWithResult :: CommandInvocation -> [Text]
-renderInvocationWithResult CommandInvocation {command, optionStyle} =
-  prompt : output
-  where
-    args = renderInvocationArgs optionStyle command
-    result = evalRand (CLI.run (map Text.unpack args)) (mkStdGen testSeed)
-    prompt = "$ taiwan-id " <> Text.unwords args
-    output = case result of
-      CommandLineSuccess ls -> ls
-      CommandLineFailure ls -> ls
 
 renderOption :: Show a => OptionStyle -> Text -> Maybe a -> [Text]
 renderOption _ _ Nothing = []
@@ -222,7 +394,7 @@ data OptionStyle
 genCommandDecode :: Gen CommandInvocation
 genCommandDecode =
   CommandInvocation
-    <$> (Decode <$> genCommand)
+    <$> (Command.Decode <$> genCommand)
     <*> arbitraryBoundedEnum
   where
     genCommand =
@@ -233,7 +405,7 @@ genCommandDecode =
 genCommandGenerate :: Gen CommandInvocation
 genCommandGenerate =
   CommandInvocation
-    <$> (Generate <$> genCommand)
+    <$> (Command.Generate <$> genCommand)
     <*> arbitraryBoundedEnum
   where
     genCommand = do
@@ -244,7 +416,7 @@ genCommandGenerate =
 genCommandValidate :: Gen CommandInvocation
 genCommandValidate =
   CommandInvocation
-    <$> (Validate <$> genCommand)
+    <$> (Command.Validate <$> genCommand)
     <*> arbitraryBoundedEnum
   where
     genCommand =
