@@ -36,6 +36,8 @@ import Taiwan.ID.Gender
   ( Gender (..) )
 import Taiwan.ID.Issuer
   ( Issuer (..) )
+import Taiwan.ID.Language
+  ( Language (..) )
 import Taiwan.ID.Letter
   ( Letter (..) )
 import Taiwan.ID.Region
@@ -85,6 +87,10 @@ instance Arbitrary Issuer where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
 
+instance Arbitrary Language where
+  arbitrary = arbitraryBoundedEnum
+  shrink = shrinkBoundedEnum
+
 instance Arbitrary Letter where
   arbitrary = arbitraryBoundedEnum
   shrink = shrinkBoundedEnum
@@ -131,6 +137,14 @@ main = hspec $ do
         ]
 
     testLawsMany @Issuer
+        [ boundedEnumLaws
+        , eqLaws
+        , ordLaws
+        , showLaws
+        , showReadLaws
+        ]
+
+    testLawsMany @Language
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
