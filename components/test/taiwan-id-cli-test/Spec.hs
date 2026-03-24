@@ -193,9 +193,10 @@ main = defaultMainWithIngredients ingredients testTree
   where
     ingredients = includingOptions [Option (Proxy @Mode)] : defaultIngredients
     testTree =
-      testGroup "CLI"
+      testGroup
+        "CLI"
         [ testGroup commandName (testsFromDirectory spec)
-        | spec@CommandSpec{commandName} <- commands
+        | spec@CommandSpec {commandName} <- commands
         ]
 
 testsFromDirectory :: CommandSpec -> [TestTree]
