@@ -162,7 +162,7 @@ test-suite taiwan-id-test
     , dependency-quickcheck-classes
     , dependency-text
   type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  main-is: Main.hs
   other-modules:
       Test.QuickCheck.Classes.Hspec
   hs-source-dirs:
@@ -185,7 +185,7 @@ test-suite taiwan-id-cli-test
     , dependency-tasty-hunit
     , dependency-text
   type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  main-is: Main.hs
   other-modules:
   hs-source-dirs:
       components/test/taiwan-id-cli-test
