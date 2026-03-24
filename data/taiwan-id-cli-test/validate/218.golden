@@ -1,3 +1,7 @@
-$ taiwan-id validate 
-Invalid length.
-An identification number must be exactly 10 characters in length.
+$ taiwan-id validate
+Usage: taiwan-id validate ID
+
+  Validate an identification number
+
+Available options:
+  -h,--help                Show this help text
