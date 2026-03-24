@@ -8,7 +8,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 {- HLINT ignore "Redundant bracket" -}
 
-module Main where
+module Main (main) where
 
 import Data.Bifunctor
   ( Bifunctor (second) )
