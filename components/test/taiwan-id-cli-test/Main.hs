@@ -309,7 +309,7 @@ parsePrompt = fmap Text.words . Text.stripPrefix promptPrefix
 -- | Render a list of arguments as a prompt line of the form:
 -- @$ taiwan-id <args...>@
 renderPrompt :: [Text] -> Text
-renderPrompt args = promptPrefix <> Text.intercalate " " args
+renderPrompt args = promptPrefix <> Text.unwords args
 
 --------------------------------------------------------------------------------
 -- CLI execution
@@ -336,16 +336,20 @@ commandInvocationToExpectation CommandInvocation {command, optionStyle} =
     inputCommandLineArgs = renderInvocationArgs optionStyle command
 
 renderInvocationArgs :: OptionStyle -> Command Raw -> [Text]
-renderInvocationArgs style = \case
-  Command.Decode DecodeCommand {idText, language} ->
-    ["decode", runIdentity idText]
-      ++ renderOption style "language" language
-  Command.Generate GenerateCommand {count, seed} ->
-    ["generate"]
-      ++ renderOption style "count" count
-      ++ renderOption style "seed" seed
-  Command.Validate ValidateCommand {idText} ->
-    ["validate", runIdentity idText]
+renderInvocationArgs style =
+  removeEmptyArgs . \case
+    Command.Decode DecodeCommand {idText, language} ->
+      ["decode", runIdentity idText]
+        ++ renderOption style "language" language
+    Command.Generate GenerateCommand {count, seed} ->
+      ["generate"]
+        ++ renderOption style "count" count
+        ++ renderOption style "seed" seed
+    Command.Validate ValidateCommand {idText} ->
+      ["validate", runIdentity idText]
+  where
+    removeEmptyArgs :: [Text] -> [Text]
+    removeEmptyArgs = filter (not . Text.null)
 
 renderOption :: Show a => OptionStyle -> Text -> Maybe a -> [Text]
 renderOption _ _ Nothing = []
