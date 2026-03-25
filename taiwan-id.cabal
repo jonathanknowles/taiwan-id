@@ -1,6 +1,6 @@
 cabal-version:  3.0
 name:           taiwan-id
-version:        0.1.0.0
+version:        0.1.1.0
 synopsis:       Implementation of Taiwan's uniform ID number format.
 category:       Identification
 homepage:       https://github.com/jonathanknowles/taiwan-id#readme
