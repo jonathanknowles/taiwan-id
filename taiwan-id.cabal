@@ -1,6 +1,6 @@
 cabal-version:  3.0
 name:           taiwan-id
-version:        0.1.0.0
+version:        0.1.1.0
 synopsis:       Implementation of Taiwan's uniform ID number format.
 category:       Identification
 homepage:       https://github.com/jonathanknowles/taiwan-id#readme
@@ -130,8 +130,11 @@ library taiwan-id-cli
   build-depends:
     , taiwan-id
   exposed-modules:
-      Paths_taiwan_id
       Taiwan.ID.CLI
+  other-modules:
+      Paths_taiwan_id
+  autogen-modules:
+      Paths_taiwan_id
   hs-source-dirs:
       components/lib/taiwan-id-cli
   ghc-options: -Wall

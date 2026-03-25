@@ -1,3 +1,19 @@
+# 0.1.1.0
+
+- Added a `taiwan-id` command-line tool with three commands:
+  - `decode`
+    decodes the attributes of an identification number
+  - `generate`
+    generates one or more valid identification numbers
+  - `validate`
+    checks whether an identification number is valid
+
+- Switched the documentation testing infrastructure from `doctest` +
+  `cabal-doctest` (with a custom `Setup.hs`) to `doctest-parallel`.
+
+- Added an internal `taiwan-id-test-common` library to share common testing
+  functionality across test suites.
+
 # 0.1.0.0
 
 - Replaced the `Location` type with a new `Region` type, reflecting the fact
