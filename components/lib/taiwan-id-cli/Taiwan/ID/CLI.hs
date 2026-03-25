@@ -159,7 +159,7 @@ run args =
 topLevelParser :: ParserInfo (Command Raw)
 topLevelParser =
   info
-    (commandParser <**> helpOption <**> simpleVersioner (showVersion version))
+    (commandParser <**> helpOption <**> versionOption)
     $ mconcat
       [ fullDesc
       , progDesc "Tools for working with Taiwan uniform identification numbers"
@@ -173,6 +173,8 @@ topLevelParser =
           , help "Show this help text"
           , hidden
           ]
+    versionOption =
+      simpleVersioner (showVersion version)
 
 commandParser :: CommandParser Command
 commandParser =
