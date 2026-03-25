@@ -37,6 +37,9 @@ import Data.Maybe
 import Data.Text
   ( Text
   )
+import Data.Version
+  ( showVersion
+  )
 import Options.Applicative
   ( CommandFields
   , Mod
@@ -62,8 +65,12 @@ import Options.Applicative
   , progDesc
   , renderFailure
   , showHelpOnEmpty
+  , simpleVersioner
   , str
   , (<**>)
+  )
+import Paths_taiwan_id
+  ( version
   )
 import System.Random
   ( mkStdGen
@@ -149,7 +156,7 @@ run args =
 topLevelParser :: ParserInfo (Command Raw)
 topLevelParser =
   info
-    (commandParser <**> helper)
+    (commandParser <**> helper <**> simpleVersioner (showVersion version))
     $ mconcat
       [ fullDesc
       , progDesc "Tools for working with Taiwan uniform identification numbers"

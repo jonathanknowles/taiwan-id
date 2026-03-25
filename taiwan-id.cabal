@@ -130,6 +130,7 @@ library taiwan-id-cli
   build-depends:
     , taiwan-id
   exposed-modules:
+      Paths_taiwan_id
       Taiwan.ID.CLI
   hs-source-dirs:
       components/lib/taiwan-id-cli
