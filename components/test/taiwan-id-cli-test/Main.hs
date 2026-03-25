@@ -8,7 +8,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE TypeOperators #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 {- HLINT ignore "Functor law" -}
@@ -16,8 +15,7 @@
 module Main (main) where
 
 import Control.Monad
-  ( replicateM
-  , unless
+  ( unless
   )
 import Control.Monad.Random
   ( evalRand
@@ -26,7 +24,7 @@ import Data.Data
   ( Proxy (Proxy)
   )
 import Data.Functor.Identity
-  ( Identity (Identity, runIdentity)
+  ( Identity (runIdentity)
   )
 import Data.Text
   ( Text
@@ -45,9 +43,6 @@ import System.FilePath
 import System.Random
   ( mkStdGen
   )
-import Taiwan.ID
-  ( ID (ID)
-  )
 import Taiwan.ID.CLI
   ( Command
   , CommandLineResult (CommandLineFailure, CommandLineSuccess)
@@ -56,28 +51,11 @@ import Taiwan.ID.CLI
   , Stage (Raw)
   , ValidateCommand (ValidateCommand, idText)
   )
-import Taiwan.ID.Digit
-  ( Digit
-  )
-import Taiwan.ID.Digit1289
-  ( Digit1289
-  )
-import Taiwan.ID.Language
-  ( Language
-  )
-import Taiwan.ID.Letter
-  ( Letter
-  )
 import Test.QuickCheck
-  ( Arbitrary (arbitrary, shrink)
-  , Arbitrary1 (liftArbitrary)
+  ( Arbitrary1 (liftArbitrary)
   , Gen
   , arbitraryBoundedEnum
   , choose
-  , elements
-  , oneof
-  , shrinkBoundedEnum
-  , shrinkMap
   )
 import Test.QuickCheck.Gen
   ( unGen
@@ -108,10 +86,9 @@ import Text.Printf
 
 import qualified Data.Text as Text
 import qualified Data.Text.IO as TIO
-import qualified Taiwan.ID as ID
 import qualified Taiwan.ID.CLI as CLI
 import qualified Taiwan.ID.CLI as Command
-import qualified Taiwan.ID.Digit as Digit
+import qualified Taiwan.ID.Test as Test
 
 --------------------------------------------------------------------------------
 -- Constants
@@ -396,18 +373,18 @@ genCommandDecode :: Gen CommandInvocation
 genCommandDecode =
   CommandInvocation
     <$> (Command.Decode <$> genCommand)
-    <*> arbitraryBoundedEnum
+    <*> genOptionStyle
   where
     genCommand =
       DecodeCommand
-        <$> (Identity <$> genIdText)
-        <*> arbitrary
+        <$> liftArbitrary Test.genIDText
+        <*> liftArbitrary Test.genLanguage
 
 genCommandGenerate :: Gen CommandInvocation
 genCommandGenerate =
   CommandInvocation
     <$> (Command.Generate <$> genCommand)
-    <*> arbitraryBoundedEnum
+    <*> genOptionStyle
   where
     genCommand = do
       count <- liftArbitrary (choose (-1, 4))
@@ -418,118 +395,11 @@ genCommandValidate :: Gen CommandInvocation
 genCommandValidate =
   CommandInvocation
     <$> (Command.Validate <$> genCommand)
-    <*> arbitraryBoundedEnum
+    <*> genOptionStyle
   where
     genCommand =
       ValidateCommand
-        <$> (Identity <$> genIdText)
+        <$> liftArbitrary Test.genIDText
 
-genIdText :: Gen Text
-genIdText =
-  oneof
-    [ genIdTextValid
-    , genIdTextInvalid
-    ]
-
-genIdTextValid :: Gen Text
-genIdTextValid = ID.toText . idFromTuple <$> arbitrary
-
-genIdTextInvalid :: Gen Text
-genIdTextInvalid =
-  oneof
-    [ genIdTextInvalidChar
-    , genIdTextInvalidChecksum
-    , genIdTextInvalidLengthTooLong
-    , genIdTextInvalidLengthTooShort
-    ]
-
-genIdTextInvalidChar :: Gen Text
-genIdTextInvalidChar = do
-  idTextValid <- genIdTextValid
-  charIndex <- choose (0, 9)
-  invalidChar <- elements "+!@#$%^&*()"
-  pure $ unsafePokeChar charIndex idTextValid invalidChar
-
-genIdTextInvalidChecksum :: Gen Text
-genIdTextInvalidChecksum = do
-  idTextValid <- genIdTextValid
-  charIndex <- choose (2, 9)
-  let charOld = unsafePeekChar charIndex idTextValid
-  let charNew = Digit.toChar (unsafeDigitFromChar charOld + 1)
-  pure $ unsafePokeChar charIndex idTextValid charNew
-
-genIdTextInvalidLengthTooShort :: Gen Text
-genIdTextInvalidLengthTooShort = do
-  idTextValid <- genIdTextValid
-  invalidLength <- choose (0, 9)
-  pure (Text.take invalidLength idTextValid)
-
-genIdTextInvalidLengthTooLong :: Gen Text
-genIdTextInvalidLengthTooLong = do
-  idTextValid <- genIdTextValid
-  extraCharCount <- choose (1, 4)
-  extraChars <- Text.pack <$> replicateM extraCharCount genChar
-  pure (idTextValid <> extraChars)
-  where
-    genChar = choose ('0', '9')
-
---------------------------------------------------------------------------------
--- Arbitrary instances
---------------------------------------------------------------------------------
-
-instance Arbitrary Digit where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
-
-instance Arbitrary Digit1289 where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
-
-instance Arbitrary ID where
-  arbitrary = idFromTuple <$> arbitrary
-  shrink = shrinkMap idFromTuple idToTuple
-
-instance Arbitrary Language where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
-
-instance Arbitrary Letter where
-  arbitrary = arbitraryBoundedEnum
-  shrink = shrinkBoundedEnum
-
---------------------------------------------------------------------------------
--- Utilities
---------------------------------------------------------------------------------
-
-unsafeDigitFromChar :: HasCallStack => Char -> Digit
-unsafeDigitFromChar c = case Digit.fromChar c of
-  Nothing -> error "unsafeDigitFromChar"
-  Just d -> d
-
-unsafePeekChar :: HasCallStack => Int -> Text -> Char
-unsafePeekChar i t
-  | i < indexMin = outOfBoundsError
-  | i > indexMax = outOfBoundsError
-  | otherwise = Text.index t i
-  where
-    indexMin = 0
-    indexMax = Text.length t - 1
-    outOfBoundsError = error "unsafePeekChar: index out of bounds"
-
-unsafePokeChar :: HasCallStack => Int -> Text -> Char -> Text
-unsafePokeChar i t c
-  | i < indexMin = outOfBoundsError
-  | i > indexMax = outOfBoundsError
-  | otherwise = Text.take i t <> Text.singleton c <> Text.drop (i + 1) t
-  where
-    indexMin = 0
-    indexMax = Text.length t - 1
-    outOfBoundsError = error "unsafePokeChar: index out of bounds"
-
-idFromTuple :: Digit ~ d => (Letter, Digit1289, d, d, d, d, d, d, d) -> ID
-idFromTuple (x0, x1, x2, x3, x4, x5, x6, x7, x8) =
-  ID x0 x1 x2 x3 x4 x5 x6 x7 x8
-
-idToTuple :: Digit ~ d => ID -> (Letter, Digit1289, d, d, d, d, d, d, d)
-idToTuple (ID x0 x1 x2 x3 x4 x5 x6 x7 x8) =
-  (x0, x1, x2, x3, x4, x5, x6, x7, x8)
+genOptionStyle :: Gen OptionStyle
+genOptionStyle = arbitraryBoundedEnum
