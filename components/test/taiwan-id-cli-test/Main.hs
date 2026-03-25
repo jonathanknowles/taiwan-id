@@ -155,11 +155,11 @@ modeHelpText =
 
 data CommandSpec = CommandSpec
   { commandName :: String
-  , commandGen :: Gen CommandInvocation
+  , commandGen :: Gen (Command Raw)
   }
 
-commands :: [CommandSpec]
-commands =
+commandSpecs :: [CommandSpec]
+commandSpecs =
   [ CommandSpec "decode" genCommandDecode
   , CommandSpec "generate" genCommandGenerate
   , CommandSpec "validate" genCommandValidate
@@ -172,8 +172,8 @@ main = defaultMainWithIngredients ingredients testTree
     testTree =
       testGroup
         "CLI"
-        [ testGroup commandName (testsFromDirectory spec)
-        | spec@CommandSpec {commandName} <- commands
+        [ testGroup commandName (testsFromDirectory commandSpec)
+        | commandSpec@CommandSpec {commandName} <- commandSpecs
         ]
 
 testsFromDirectory :: CommandSpec -> [TestTree]
@@ -212,7 +212,10 @@ testFromIndex CommandSpec {commandName, commandGen} index =
 
         invocation :: CommandInvocation
         invocation =
-          unGen commandGen (mkQCGen (generatorSeed + index)) generatorSize
+          unGen
+            (genCommandInvocation commandGen)
+            (mkQCGen (generatorSeed + index))
+            generatorSize
 
     update :: IO ()
     update = do
@@ -369,37 +372,28 @@ data OptionStyle
 -- Generators
 --------------------------------------------------------------------------------
 
-genCommandDecode :: Gen CommandInvocation
-genCommandDecode =
+genCommandInvocation :: Gen (Command Raw) -> Gen CommandInvocation
+genCommandInvocation genCommand =
   CommandInvocation
-    <$> (Command.Decode <$> genCommand)
+    <$> genCommand
     <*> genOptionStyle
-  where
-    genCommand =
-      DecodeCommand
-        <$> liftArbitrary Test.genIDText
-        <*> liftArbitrary Test.genLanguage
 
-genCommandGenerate :: Gen CommandInvocation
-genCommandGenerate =
-  CommandInvocation
-    <$> (Command.Generate <$> genCommand)
-    <*> genOptionStyle
-  where
-    genCommand = do
-      count <- liftArbitrary (choose (-1, 4))
-      seed <- liftArbitrary (choose (1, 1_000_000))
-      pure GenerateCommand {count, seed}
+genCommandDecode :: Gen (Command Raw)
+genCommandDecode = do
+  idText <- liftArbitrary Test.genIDText
+  language <- liftArbitrary Test.genLanguage
+  pure $ Command.Decode $ DecodeCommand {idText, language}
 
-genCommandValidate :: Gen CommandInvocation
-genCommandValidate =
-  CommandInvocation
-    <$> (Command.Validate <$> genCommand)
-    <*> genOptionStyle
-  where
-    genCommand =
-      ValidateCommand
-        <$> liftArbitrary Test.genIDText
+genCommandGenerate :: Gen (Command Raw)
+genCommandGenerate = do
+  count <- liftArbitrary (choose (-1, 4))
+  seed <- liftArbitrary (choose (1, 1_000_000))
+  pure $ Command.Generate $ GenerateCommand {count, seed}
+
+genCommandValidate :: Gen (Command Raw)
+genCommandValidate = do
+  idText <- liftArbitrary Test.genIDText
+  pure $ Command.Validate $ ValidateCommand {idText}
 
 genOptionStyle :: Gen OptionStyle
 genOptionStyle = arbitraryBoundedEnum
