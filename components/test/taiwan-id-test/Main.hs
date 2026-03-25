@@ -235,6 +235,13 @@ main = hspec $ do
       ID.fromText invalidID `shouldBe` Left
         (ID.InvalidChar 1 (CharSet $ NESet.fromList ['1', '2', '8', '9']))
 
+    it "does not parse identification numbers with invalid serial digits" $
+      property $
+      forAll (choose (2, 9)) $ \invalidCharIndex ->
+      forAll (Test.genIDTextInvalidCharAtIndex invalidCharIndex) $ \invalidID ->
+      ID.fromText invalidID `shouldBe` Left
+        (ID.InvalidChar (CharIndex invalidCharIndex) (CharRange '0' '9'))
+
     it "does not parse identification numbers with invalid checksums" $
       property $
       forAll Test.genIDTextInvalidChecksum $ \invalidID ->
