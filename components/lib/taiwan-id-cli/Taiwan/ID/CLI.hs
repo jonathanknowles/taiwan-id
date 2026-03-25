@@ -54,7 +54,7 @@ import Options.Applicative
   , fullDesc
   , header
   , help
-  , helper
+  , hidden
   , hsubparser
   , info
   , long
@@ -68,6 +68,9 @@ import Options.Applicative
   , simpleVersioner
   , str
   , (<**>)
+  )
+import Options.Applicative.Extra
+  ( helperWith
   )
 import Paths_taiwan_id
   ( version
@@ -156,12 +159,22 @@ run args =
 topLevelParser :: ParserInfo (Command Raw)
 topLevelParser =
   info
-    (commandParser <**> helper <**> simpleVersioner (showVersion version))
+    (commandParser <**> helpOption <**> versionOption)
     $ mconcat
       [ fullDesc
       , progDesc "Tools for working with Taiwan uniform identification numbers"
       , header "taiwan-id - Taiwan uniform identification number tools"
       ]
+  where
+    helpOption =
+      helperWith $
+        mconcat
+          [ long "help"
+          , help "Show this help text"
+          , hidden
+          ]
+    versionOption =
+      simpleVersioner (showVersion version)
 
 commandParser :: CommandParser Command
 commandParser =
