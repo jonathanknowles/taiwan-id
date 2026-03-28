@@ -181,6 +181,7 @@ expression that, when evaluated, produces the original value. As a result,
 `read . show` roundtrips faithfully:
 
 ```haskell
+>>> let i = ID.fromSymbol @"A123456789"
 >>> read (show i) == i
 True
 ```
