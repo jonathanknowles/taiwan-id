@@ -72,8 +72,8 @@ Usage examples assume the following extensions and imports:
 >>> :set -XDataKinds
 >>> :set -XOverloadedStrings
 >>> :set -XTypeApplications
->>> import qualified Taiwan.ID as ID
->>> import qualified Taiwan.ID.Region as ID.Region
+>>> import Taiwan.ID qualified as ID
+>>> import Taiwan.ID.Region qualified as ID.Region
 >>> import Taiwan.ID.Language (Language (..))
 ```
 
