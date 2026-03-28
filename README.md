@@ -22,6 +22,7 @@ Matsu, and Penghu.
          2. [Compile-time parsing](#compile-time-parsing)
       2. [Inspecting attributes](#inspecting-attributes)
    2. [Design philosophy](#design-philosophy)
+      1. [Correctness by construction](#correctness-by-construction)
 3. [Command-line tool](#command-line-tool)
    1. [Installation](#installation)
    2. [Usage](#usage-1)
@@ -152,7 +153,7 @@ Male
 
 ## Design philosophy
 
-### Correct-by-construction types
+### Correctness by construction
 
 The library is built around the principle that **invalid states should be
 unrepresentable**. This applies not just to the top-level `ID` type, but to
