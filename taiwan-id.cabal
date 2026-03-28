@@ -1,7 +1,7 @@
 cabal-version:  3.0
 name:           taiwan-id
 version:        0.1.1.0
-synopsis:       Implementation of Taiwan's uniform ID number format.
+synopsis:       Library and CLI for working with ID numbers issued in Taiwan.
 category:       Identification
 homepage:       https://github.com/jonathanknowles/taiwan-id#readme
 bug-reports:    https://github.com/jonathanknowles/taiwan-id/issues
@@ -14,13 +14,14 @@ build-type:     Simple
 
 description:
 
-  This package provides a Haskell implementation of Taiwan's uniform
-  identification number format.
+  This package provides both a library and a command-line tool (CLI) for
+  working with identification numbers issued to residents of Taiwan, as well
+  as the other territories of the Republic of China (ROC), including Kinmen,
+  Matsu, and Penghu.
 
-  This number format is used by both National Identification Cards (國民身分證)
-  and Resident Certificates (居留證) issued by the Republic of China (ROC)
-  government to individuals, with numbers assigned under each system occupying
-  disjoint parts of the same identifier space.
+  Identification numbers are issued under two systems — National Identification
+  Cards (國民身分證) and Resident Certificates (居留證) — with numbers assigned
+  under each system occupying disjoint parts of the same number space.
 
   Each identification number consists of a single uppercase letter followed by
   nine decimal digits, with the final digit serving as a checksum calculated
@@ -28,11 +29,7 @@ description:
 
   Example: `A123456789`
 
-  This package offers a library with functions for validating, decoding, and
-  encoding these numbers, as well as a command-line tool for working with them
-  interactively.
-
-  See the "Taiwan.ID" module to get started.
+  See `README.md` or the "Taiwan.ID" module to get started.
 
   For more details, see:
 
