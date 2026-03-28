@@ -8,20 +8,28 @@
 )](https://jonathanknowles.github.io/taiwan-id/)
 
 This package provides both a **Haskell library** and a **command-line tool**
-(CLI) for working with identification numbers used in Taiwan and the Republic
-of China (ROC) as a whole.
+(CLI) for working with identification numbers issued to residents of Taiwan, as
+well as the other territories of the Republic of China (ROC), including Kinmen,
+Matsu, and Penghu.
 
 # Contents
 
 1. [Background](#background)
 2. [Library](#library)
    1. [Usage](#usage)
-      1. [Run-time parsing](#run-time-parsing)
-      1. [Compile-time parsing](#compile-time-parsing)
+      1. [Parsing](#parsing)
+         1. [Run-time parsing](#run-time-parsing)
+         2. [Compile-time parsing](#compile-time-parsing)
+      2. [Inspecting attributes](#inspecting-attributes)
    2. [Design philosophy](#design-philosophy)
+      1. [Correctness by construction](#correctness-by-construction)
+      2. [Lawful class instances](#lawful-class-instances)
 3. [Command-line tool](#command-line-tool)
    1. [Installation](#installation)
    2. [Usage](#usage-1)
+      1. [Validation](#validation)
+      2. [Decoding](#decoding)
+      3. [Generation](#generation)
 4. [References](#references)
 
 # Background
@@ -58,15 +66,28 @@ Immigration Agency). The final digit serves as a **checksum**.
 
 ## Usage
 
-At the heart of this library is the ability to parse and validate
-identification numbers from textual input, accepting only those that are
-well-formed according to the standard.
+Usage examples assume the following extensions and imports:
 
-This library provides two functions for this purpose: `fromText`, which parses
+```haskell
+>>> :set -XDataKinds
+>>> :set -XOverloadedStrings
+>>> :set -XTypeApplications
+>>> import qualified Taiwan.ID as ID
+>>> import qualified Taiwan.ID.Region as ID.Region
+>>> import Taiwan.ID.Language (Language (..))
+```
+
+### Parsing
+
+At the heart of the library is the ability to parse and validate identification
+numbers from textual input, accepting only those that are well-formed according
+to the standard.
+
+The library provides two functions for this purpose: `fromText`, which parses
 a `Text` value at run time, and `fromSymbol`, which parses a type-level
 `Symbol` at compile time.
 
-### Run-time parsing
+#### Run-time parsing
 
 To parse an `ID` from `Text`, use the `fromText` function:
 
@@ -89,7 +110,7 @@ Left InvalidChecksum
 Left (InvalidChar (CharIndex 2) (CharRange '0' '9'))
 ```
 
-### Compile-time parsing
+#### Compile-time parsing
 
 The `fromSymbol` function constructs an `ID` from a type-level `Symbol`,
 validated entirely at **compile time**:
@@ -130,13 +151,13 @@ HouseholdRegistrationOffice
 >>> ID.getGender i
 Male
 
->>> Region.toText English (ID.getRegion i)
+>>> ID.Region.toText English (ID.getRegion i)
 "Taipei City"
 ```
 
 ## Design philosophy
 
-### Correct-by-construction types
+### Correctness by construction
 
 The library is built around the principle that **invalid states should be
 unrepresentable**. This applies not just to the top-level `ID` type, but to
@@ -158,7 +179,7 @@ This means that the type of `ID` itself acts as a proof of validity. If you
 hold a value of type `ID`, you know — without any further checking — that it
 represents a well-formed identification number.
 
-### Lawful `Show` and `Read` instances
+### Lawful class instances
 
 The existence of `fromSymbol` makes it possible to offer `Show` and `Read`
 instances that are genuinely lawful in a way that naive implementations often
@@ -176,6 +197,7 @@ expression that, when evaluated, produces the original value. As a result,
 `read . show` roundtrips faithfully:
 
 ```haskell
+>>> let i = ID.fromSymbol @"A123456789"
 >>> read (show i) == i
 True
 ```
@@ -184,8 +206,8 @@ True
 
 ## Installation
 
-First, install the Haskell toolchain. One popular way to do this is via
-[`ghcup`](https://www.haskell.org/ghcup/).
+First, install the [Haskell toolchain](https://www.haskell.org/). One popular
+way to do this is via [`ghcup`](https://www.haskell.org/ghcup/).
 
 Then run:
 
@@ -195,16 +217,23 @@ cabal install taiwan-id
 
 ## Usage
 
-The `taiwan-id` command-line tool provides three subcommands.
+The `taiwan-id` command-line tool provides three commands.
 
-### `validate`
+### Validation
 
-Checks whether an identification number is valid. Exits with code `0` on
-success, code `1` on failure (along with an error message on `stderr`).
+The `validate` command checks whether an identification number is valid.
+
+If an identification number is valid, it exits with code `0` and no further
+output:
 
 ```
 $ taiwan-id validate P833485645
+```
 
+If an identification number is not valid, it exits with code `1` and emits an
+error message to `stderr`:
+
+```
 $ taiwan-id validate N140792413
 Invalid checksum.
 
@@ -219,10 +248,10 @@ C25171445&
 Character at this position must be a character in the range [0 .. 9].
 ```
 
-### `decode`
+### Decoding
 
-Decodes the attributes of an identification number. Output is available in
-English (the default) or Chinese:
+The `decode` command decodes the attributes of an identification number.
+Output is available in English (the default) or Chinese:
 
 ```
 $ taiwan-id decode H271789449
@@ -236,9 +265,9 @@ $ taiwan-id decode Y175974499 --language=Chinese
 地區　　：陽明山
 ```
 
-### `generate`
+### Generation
 
-Generates one or more random identification numbers:
+The `generate` command generates one or more random identification numbers:
 
 ```
 $ taiwan-id generate
@@ -252,6 +281,7 @@ K207816302
 ```
 
 For deterministic output, you can specify a seed:
+
 ```
 $ taiwan-id generate --count 4 --seed 888
 X207421526
