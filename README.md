@@ -8,8 +8,9 @@
 )](https://jonathanknowles.github.io/taiwan-id/)
 
 This package provides both a **Haskell library** and a **command-line tool**
-(CLI) for working with identification numbers used in Taiwan and the Republic
-of China (ROC) as a whole.
+(CLI) for working with identification numbers issued to residents of Taiwan, as
+well as the other territories of the Republic of China (ROC), including Kinmen,
+Matsu, and Penghu.
 
 # Contents
 
