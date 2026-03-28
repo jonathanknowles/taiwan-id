@@ -23,6 +23,7 @@ Matsu, and Penghu.
       2. [Inspecting attributes](#inspecting-attributes)
    2. [Design philosophy](#design-philosophy)
       1. [Correctness by construction](#correctness-by-construction)
+      2. [Lawful class instances](#lawful-class-instances)
 3. [Command-line tool](#command-line-tool)
    1. [Installation](#installation)
    2. [Usage](#usage-1)
@@ -175,7 +176,7 @@ This means that the type of `ID` itself acts as a proof of validity. If you
 hold a value of type `ID`, you know — without any further checking — that it
 represents a well-formed identification number.
 
-### Lawful `Show` and `Read` instances
+### Lawful class instances
 
 The existence of `fromSymbol` makes it possible to offer `Show` and `Read`
 instances that are genuinely lawful in a way that naive implementations often
