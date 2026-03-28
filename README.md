@@ -27,6 +27,9 @@ Matsu, and Penghu.
 3. [Command-line tool](#command-line-tool)
    1. [Installation](#installation)
    2. [Usage](#usage-1)
+      1. [Validation](#validation)
+      2. [Decoding](#decoding)
+      3. [Generation](#generation)
 4. [References](#references)
 
 # Background
@@ -214,16 +217,23 @@ cabal install taiwan-id
 
 ## Usage
 
-The `taiwan-id` command-line tool provides three subcommands.
+The `taiwan-id` command-line tool provides three commands.
 
-### `validate`
+### Validation
 
-Checks whether an identification number is valid. Exits with code `0` on
-success, code `1` on failure (along with an error message on `stderr`).
+The `validate` command checks whether an identification number is valid.
+
+If an identification number is valid, it exits with code `0` and no further
+output:
 
 ```
 $ taiwan-id validate P833485645
+```
 
+If an identification number is not valid, it exits with code `1` and emits an
+error message to `stderr`:
+
+```
 $ taiwan-id validate N140792413
 Invalid checksum.
 
@@ -238,10 +248,10 @@ C25171445&
 Character at this position must be a character in the range [0 .. 9].
 ```
 
-### `decode`
+### Decoding
 
-Decodes the attributes of an identification number. Output is available in
-English (the default) or Chinese:
+The `decode` command decodes the attributes of an identification number.
+Output is available in English (the default) or Chinese:
 
 ```
 $ taiwan-id decode H271789449
@@ -255,9 +265,9 @@ $ taiwan-id decode Y175974499 --language=Chinese
 地區　　：陽明山
 ```
 
-### `generate`
+### Generation
 
-Generates one or more random identification numbers:
+The `generate` command generates one or more random identification numbers:
 
 ```
 $ taiwan-id generate
@@ -271,6 +281,7 @@ K207816302
 ```
 
 For deterministic output, you can specify a seed:
+
 ```
 $ taiwan-id generate --count 4 --seed 888
 X207421526
