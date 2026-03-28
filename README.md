@@ -206,8 +206,8 @@ True
 
 ## Installation
 
-First, install the Haskell toolchain. One popular way to do this is via
-[`ghcup`](https://www.haskell.org/ghcup/).
+First, install the [Haskell toolchain](https://www.haskell.org/). One popular
+way to do this is via [`ghcup`](https://www.haskell.org/ghcup/).
 
 Then run:
 
