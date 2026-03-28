@@ -61,6 +61,17 @@ Immigration Agency). The final digit serves as a **checksum**.
 
 ## Usage
 
+Usage examples assume the following extensions and imports:
+
+```haskell
+>>> :set -XDataKinds
+>>> :set -XOverloadedStrings
+>>> :set -XTypeApplications
+>>> import qualified Taiwan.ID as ID
+>>> import qualified Taiwan.ID.Region as ID.Region
+>>> import Taiwan.ID.Language (Language (..))
+```
+
 ### Parsing
 
 At the heart of the library is the ability to parse and validate identification
