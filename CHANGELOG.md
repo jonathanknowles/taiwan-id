@@ -1,3 +1,7 @@
+# 0.1.1.1
+
+- Improved `README.md` and package description.
+
 # 0.1.1.0
 
 - Added a `taiwan-id` command-line tool with three commands:
