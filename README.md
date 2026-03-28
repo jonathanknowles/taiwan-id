@@ -17,9 +17,10 @@ Matsu, and Penghu.
 1. [Background](#background)
 2. [Library](#library)
    1. [Usage](#usage)
-      1. [Run-time parsing](#run-time-parsing)
-      2. [Compile-time parsing](#compile-time-parsing)
-      3. [Inspecting attributes](#inspecting-attributes)
+      1. [Parsing](#parsing)
+         1. [Run-time parsing](#run-time-parsing)
+         2. [Compile-time parsing](#compile-time-parsing)
+      2. [Inspecting attributes](#inspecting-attributes)
    2. [Design philosophy](#design-philosophy)
 3. [Command-line tool](#command-line-tool)
    1. [Installation](#installation)
@@ -60,15 +61,17 @@ Immigration Agency). The final digit serves as a **checksum**.
 
 ## Usage
 
-At the heart of this library is the ability to parse and validate
-identification numbers from textual input, accepting only those that are
-well-formed according to the standard.
+### Parsing
 
-This library provides two functions for this purpose: `fromText`, which parses
+At the heart of the library is the ability to parse and validate identification
+numbers from textual input, accepting only those that are well-formed according
+to the standard.
+
+The library provides two functions for this purpose: `fromText`, which parses
 a `Text` value at run time, and `fromSymbol`, which parses a type-level
 `Symbol` at compile time.
 
-### Run-time parsing
+#### Run-time parsing
 
 To parse an `ID` from `Text`, use the `fromText` function:
 
@@ -91,7 +94,7 @@ Left InvalidChecksum
 Left (InvalidChar (CharIndex 2) (CharRange '0' '9'))
 ```
 
-### Compile-time parsing
+#### Compile-time parsing
 
 The `fromSymbol` function constructs an `ID` from a type-level `Symbol`,
 validated entirely at **compile time**:
