@@ -135,7 +135,7 @@ HouseholdRegistrationOffice
 >>> ID.getGender i
 Male
 
->>> Region.toText English (ID.getRegion i)
+>>> ID.Region.toText English (ID.getRegion i)
 "Taipei City"
 ```
 
