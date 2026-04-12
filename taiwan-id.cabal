@@ -56,6 +56,8 @@ common dependency-finite-typelits
     build-depends:finite-typelits           >= 0.2.1.0      && < 0.3
 common dependency-hspec
     build-depends:hspec                     >= 2.11.17      && < 2.12
+common dependency-hspec-quickcheck-classes
+    build-depends:hspec-quickcheck-classes  >= 0.0.0.0      && < 0.1
 common dependency-microlens
     build-depends:microlens                 >= 0.5.0.0      && < 0.6
 common dependency-MonadRandom
@@ -171,6 +173,7 @@ test-suite taiwan-id-test
     , dependency-base
     , dependency-finitary
     , dependency-hspec
+    , dependency-hspec-quickcheck-classes
     , dependency-MonadRandom
     , dependency-microlens
     , dependency-nonempty-containers
