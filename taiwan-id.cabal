@@ -183,7 +183,6 @@ test-suite taiwan-id-test
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
-      Test.QuickCheck.Classes.Hspec
   hs-source-dirs:
       components/test/taiwan-id-test
   ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
