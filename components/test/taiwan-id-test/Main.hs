@@ -50,8 +50,8 @@ import Test.QuickCheck
   )
 import Test.QuickCheck.Classes
   ( boundedEnumLaws, eqLaws, numLaws, ordLaws, showLaws, showReadLaws )
-import Test.QuickCheck.Classes.Hspec
-  ( testLawsMany )
+import Test.Hspec.QuickCheck.Classes
+  ( testLaws )
 
 import qualified Data.Finitary as Finitary
 import qualified Data.Set.NonEmpty as NESet
@@ -96,7 +96,7 @@ main = hspec $ do
 
   describe "Class laws" $ do
 
-    testLawsMany @Digit
+    testLaws @Digit
         [ boundedEnumLaws
         , eqLaws
         , numLaws
@@ -105,7 +105,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Digit1289
+    testLaws @Digit1289
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -113,7 +113,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Gender
+    testLaws @Gender
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -121,14 +121,14 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @ID
+    testLaws @ID
         [ eqLaws
         , ordLaws
         , showLaws
         , showReadLaws
         ]
 
-    testLawsMany @Issuer
+    testLaws @Issuer
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -136,7 +136,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Language
+    testLaws @Language
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -144,7 +144,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Letter
+    testLaws @Letter
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
@@ -152,7 +152,7 @@ main = hspec $ do
         , showReadLaws
         ]
 
-    testLawsMany @Region
+    testLaws @Region
         [ boundedEnumLaws
         , eqLaws
         , ordLaws
