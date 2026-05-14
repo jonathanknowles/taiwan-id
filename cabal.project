@@ -2,5 +2,8 @@ packages: taiwan-id.cabal
 
 write-ghc-environment-files: always
 
+allow-newer:
+  parsec:base
+
 package taiwan-id
   flags: +taiwan-id-doc-test
