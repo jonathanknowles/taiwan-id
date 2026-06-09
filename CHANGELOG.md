@@ -1,3 +1,7 @@
+# 0.1.1.2
+
+- Added support for GHC 9.14.
+
 # 0.1.1.1
 
 - Improved `README.md` and package description.
