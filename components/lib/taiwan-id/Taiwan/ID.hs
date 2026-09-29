@@ -1,10 +1,10 @@
-{-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE RequiredTypeArguments #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeFamilies #-}
@@ -75,7 +75,7 @@ import Taiwan.ID.Unchecked
 import Taiwan.ID.Utilities
   ( guard, randomFinitary )
 import Text.Read
-  ( Lexeme (Ident, Symbol, Punc), Read (readPrec), lexP, parens, prec )
+  ( Lexeme (Ident, Symbol), Read (readPrec), lexP, parens, prec )
 
 import qualified Data.Text as T
 import qualified Taiwan.ID.Region as Region
@@ -83,8 +83,10 @@ import qualified Taiwan.ID.Unchecked as U
 
 -- |
 -- $setup
+-- >>> :set -XConstraintKinds
 -- >>> :set -XDataKinds
 -- >>> :set -XOverloadedStrings
+-- >>> :set -XRequiredTypeArguments
 -- >>> :set -XTypeApplications
 -- >>> import Taiwan.ID
 -- >>> import qualified Taiwan.ID as ID
@@ -123,13 +125,12 @@ instance Read ID where
     Ident  "ID"         <- lexP
     Symbol "."          <- lexP
     Ident  "fromSymbol" <- lexP
-    Punc   "@"          <- lexP
     unsafeFromText <$> readPrec
 
 instance Show ID where
   showsPrec d s =
     showParen (d > 10) $
-      showString "ID.fromSymbol @" . shows (toText s)
+      showString "ID.fromSymbol " . shows (toText s)
 
 --------------------------------------------------------------------------------
 -- Construction
@@ -140,8 +141,8 @@ instance Show ID where
 -- The symbol must be exactly 10 characters in length and of the form
 -- __@A123456789@__:
 --
--- >>> ID.fromSymbol @"A123456789"
--- ID.fromSymbol @"A123456789"
+-- >>> ID.fromSymbol "A123456789"
+-- ID.fromSymbol "A123456789"
 --
 -- More precisely:
 --
@@ -153,14 +154,14 @@ instance Show ID where
 --
 -- === Invalid lengths
 --
--- >>> ID.fromSymbol @"A12345678"
+-- >>> ID.fromSymbol "A12345678"
 -- ...
 -- ... An ID must have exactly 10 characters.
 -- ...
 --
 -- === Invalid checksums
 --
--- >>> ID.fromSymbol @"A123456780"
+-- >>> ID.fromSymbol "A123456780"
 -- ...
 -- ... ID has invalid checksum.
 -- ...
@@ -171,21 +172,21 @@ instance Show ID where
 -- both the position of the character and the set of characters permitted
 -- at that position.
 --
--- >>> ID.fromSymbol @"_123456789"
+-- >>> ID.fromSymbol "_123456789"
 -- ...
 --     • "_123456789"
 --        ^
 --       Character at this position must be an uppercase letter.
 -- ...
 --
--- >>> ID.fromSymbol @"A_23456789"
+-- >>> ID.fromSymbol "A_23456789"
 -- ...
 --     • "A_23456789"
 --         ^
 --       Character at this position must be a digit from the set {1, 2, 8, 9}.
 -- ...
 --
--- >>> ID.fromSymbol @"A1_3456789"
+-- >>> ID.fromSymbol "A1_3456789"
 -- ...
 --     • "A1_3456789"
 --          ^
@@ -199,13 +200,13 @@ instance Show ID where
 -- ... Expected a type-level symbol of the form "A123456789".
 -- ...
 --
--- >>> ID.fromSymbol @""
+-- >>> ID.fromSymbol ""
 -- ...
 -- ... Expected a type-level symbol of the form "A123456789".
 -- ...
 --
-fromSymbol :: forall (s :: Symbol). ValidID s => ID
-fromSymbol = unsafeFromText $ T.pack $ symbolVal $ Proxy @s
+fromSymbol :: forall (s :: Symbol) -> ValidID s => ID
+fromSymbol (type s) = unsafeFromText $ T.pack $ symbolVal $ Proxy @s
 
 -- | Attempts to construct an 'ID' from 'Text'.
 --
@@ -213,7 +214,7 @@ fromSymbol = unsafeFromText $ T.pack $ symbolVal $ Proxy @s
 -- __@A123456789@__:
 --
 -- >>> ID.fromText "A123456789"
--- Right (ID.fromSymbol @"A123456789")
+-- Right (ID.fromSymbol "A123456789")
 --
 -- More precisely, the input must match the regular expression
 -- __@^[A-Z][1289][0-9]{8}$@__, and the resultant ID must have a valid

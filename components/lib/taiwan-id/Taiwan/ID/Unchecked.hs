@@ -1,6 +1,7 @@
 {-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE PolyKinds #-}
@@ -9,6 +10,7 @@
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Taiwan.ID.Unchecked
   ( UncheckedID (..)
@@ -36,7 +38,7 @@ import Data.Type.Bool
 import Data.Type.Equality
   ( type (==) )
 import GHC.TypeError
-  ( Assert, TypeError )
+  ( Assert, TypeError, Unsatisfiable )
 import GHC.TypeLits
   ( AppendSymbol, KnownSymbol, Symbol )
 import GHC.TypeNats
@@ -295,11 +297,25 @@ type family InvalidCharError
           TypeError.:$$:
           TypeError.Text message
         )
-
+{-
 type ValidID s =
   ( KnownSymbol s
   , ChecksumValid (SymbolToId (ConcreteSymbol s))
   ) :: Constraint
+-}
+
+class (IsNonEmptySymbol s, KnownSymbol s) => ValidID (s :: Symbol)
+
+instance
+  ( IsNonEmptySymbol s
+  , KnownSymbol s
+  , ChecksumValid (SymbolToId (ConcreteSymbol s))
+  ) => ValidID s
+
+class IsNonEmptySymbol symbol
+instance {-# OVERLAPPING #-} Unsatisfiable (TypeError.Text "Expected a non-empty string") => IsNonEmptySymbol ""
+instance IsNonEmptySymbol a
+
 
 -- | Ensures the existence of a concrete symbol, or else raises a type error.
 --

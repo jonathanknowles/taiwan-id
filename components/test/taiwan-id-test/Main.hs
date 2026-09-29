@@ -175,19 +175,19 @@ main = hspec $ do
 
       it "start" $
           start
-            `shouldBe` ID.fromSymbol @"A100000001"
+            `shouldBe` ID.fromSymbol "A100000001"
 
       it "next start" $
           next start
-            `shouldBe` Just (ID.fromSymbol @"A100000010")
+            `shouldBe` Just (ID.fromSymbol "A100000010")
 
       it "previous end" $
           previous end
-            `shouldBe` Just (ID.fromSymbol @"Z999999987")
+            `shouldBe` Just (ID.fromSymbol "Z999999987")
 
       it "end" $
           end
-            `shouldBe` ID.fromSymbol @"Z999999996"
+            `shouldBe` ID.fromSymbol "Z999999996"
 
       it "next end" $
           next end
@@ -314,30 +314,30 @@ region = lens ID.getRegion (flip ID.setRegion)
 --
 knownValidIDs :: [ID]
 knownValidIDs =
-  [ ID.fromSymbol @"A123961383"
-  , ID.fromSymbol @"B210742224"
-  , ID.fromSymbol @"C120930548"
-  , ID.fromSymbol @"D257991149"
-  , ID.fromSymbol @"E127379116"
-  , ID.fromSymbol @"F235628112"
-  , ID.fromSymbol @"G105851924"
-  , ID.fromSymbol @"H247910878"
-  , ID.fromSymbol @"I118949082"
-  , ID.fromSymbol @"J218475156"
-  , ID.fromSymbol @"K150252170"
-  , ID.fromSymbol @"L298479266"
-  , ID.fromSymbol @"M114415878"
-  , ID.fromSymbol @"N242846162"
-  , ID.fromSymbol @"O184333688"
-  , ID.fromSymbol @"P257366789"
-  , ID.fromSymbol @"Q163999855"
-  , ID.fromSymbol @"R275744925"
-  , ID.fromSymbol @"S158047168"
-  , ID.fromSymbol @"T296696104"
-  , ID.fromSymbol @"U108929984"
-  , ID.fromSymbol @"V245356279"
-  , ID.fromSymbol @"W127612989"
-  , ID.fromSymbol @"X234128072"
-  , ID.fromSymbol @"Y140531128"
-  , ID.fromSymbol @"Z250358466"
+  [ ID.fromSymbol "A123961383"
+  , ID.fromSymbol "B210742224"
+  , ID.fromSymbol "C120930548"
+  , ID.fromSymbol "D257991149"
+  , ID.fromSymbol "E127379116"
+  , ID.fromSymbol "F235628112"
+  , ID.fromSymbol "G105851924"
+  , ID.fromSymbol "H247910878"
+  , ID.fromSymbol "I118949082"
+  , ID.fromSymbol "J218475156"
+  , ID.fromSymbol "K150252170"
+  , ID.fromSymbol "L298479266"
+  , ID.fromSymbol "M114415878"
+  , ID.fromSymbol "N242846162"
+  , ID.fromSymbol "O184333688"
+  , ID.fromSymbol "P257366789"
+  , ID.fromSymbol "Q163999855"
+  , ID.fromSymbol "R275744925"
+  , ID.fromSymbol "S158047168"
+  , ID.fromSymbol "T296696104"
+  , ID.fromSymbol "U108929984"
+  , ID.fromSymbol "V245356279"
+  , ID.fromSymbol "W127612989"
+  , ID.fromSymbol "X234128072"
+  , ID.fromSymbol "Y140531128"
+  , ID.fromSymbol "Z250358466"
   ]
