@@ -1,3 +1,7 @@
+# 0.1.1.3
+
+- Added support for `nonempty-containers` version `0.4`.
+
 # 0.1.1.2
 
 - Added support for GHC 9.14.
