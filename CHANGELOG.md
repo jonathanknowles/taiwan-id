@@ -1,3 +1,7 @@
+# 0.1.1.4
+
+- Added support for `QuickCheck` version `2.19`.
+
 # 0.1.1.3
 
 - Added support for `nonempty-containers` version `0.4`.
